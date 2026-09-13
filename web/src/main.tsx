@@ -3,6 +3,8 @@ import {createRoot} from 'react-dom/client';
 import {loadSimulation,type Snapshot} from './wasm/sim';
 import {ConnectomeLoader} from './components/ConnectomeLoader';
 import {Session} from './game/session';
+import type {PopulationCoverage} from './brain/population_display';
+import type {ActivityScale} from './brain/activity_display';
 import {BrainRenderer} from './render/brain';
 import {drawGame} from './render/game';
 import {loadGeometry} from './brain/geometry';
@@ -14,6 +16,8 @@ import './style.css';
 const dummy=new URLSearchParams(location.search).get('controller')==='dummy';
 const format=(n:number)=>n.toLocaleString('en-US');
 function App(){
+ const [populationView,setPopulationView]=useState(false),[populationCoverage,setPopulationCoverage]=useState<PopulationCoverage|null>(null);
+ const rendererRef=useRef<BrainRenderer|null>(null),[activityScale,setActivityScale]=useState<ActivityScale>('log');
  const [geometry,setGeometry]=useState<BrainGeometry|null>(null),[geometryWarning,setGeometryWarning]=useState('');
  const gameCanvas=useRef<HTMLCanvasElement>(null),brainCanvas=useRef<HTMLCanvasElement>(null),session=useRef<Session|null>(null);
  const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[frame,setFrame]=useState<BrainFrame|null>(null),[running,setRunning]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState('Loading'),[fps,setFps]=useState({game:0,render:0,brain:0}),[science,setScience]=useState(false),[preparation,setPreparation]=useState('Loading simulation and anatomy…');
@@ -23,7 +27,7 @@ function App(){
   const init=async()=>{try{
    const [sim,loaded]=await Promise.all([loadSimulation(),loadGeometry()]);if(disposed)return;
    const geometry=loaded.geometry;setGeometry(geometry);setGeometryWarning(loaded.warning);
-   renderer=new BrainRenderer(brainCanvas.current!,geometry);setMode(renderer.mode);
+   renderer=new BrainRenderer(brainCanvas.current!,geometry,!dummy);rendererRef.current=renderer;setMode(renderer.mode);
    worker=dummy?new Worker(new URL('./workers/brain.worker.ts',import.meta.url),{type:'module'}):new Worker(new URL('./workers/male_cns.worker.ts',import.meta.url),{type:'module'});
    if(!dummy){
     if(!geometry.measured?.graph_identity)throw Error('Measured anatomy is required for the neural controller. Reload to retry.');
@@ -31,7 +35,7 @@ function App(){
     await new Promise<void>((resolve,reject)=>{
      worker!.onerror=()=>reject(Error('Neural controller worker failed. Reload to retry.'));
      worker!.onmessage=e=>{if(disposed)return;const m=e.data;
-      if(m.type==='ready')resolve();else if(m.type==='error')reject(Error(m.message));
+      if(m.type==='ready'){try{setPopulationCoverage(renderer!.setPopulations(m.populations));resolve();}catch(e){reject(e);}}else if(m.type==='error')reject(Error(m.message));
       else if(m.type==='progress')setPreparation(m.phase==='validating'?'Validating neural graph…':`Preparing neural graph · ${Math.floor(100*m.received/m.total)}%`);
      };
      worker!.postMessage({type:'initialize',base:new URL(`${import.meta.env.BASE_URL}connectome-graph/`,location.href).href,identity:geometry.measured!.graph_identity});
@@ -75,10 +79,11 @@ function App(){
      </div>
     </section>
     <section className="brain-panel" aria-label={dummy?'Anatomy with synthetic controller activity':'Measured anatomy with neural model activity'}>
-     <div className="panel-title"><span><b className="index">02</b> ANATOMY & ACTIVITY</span><span className="synthetic">{dummy?'SYNTHETIC ACTIVITY':'MODEL ACTIVITY'}</span></div>
-     <div className="brain-view"><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':'Measured MaleCNS soma positions with model activity'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':'Model activity · Calibrated readout'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key"><i/> inactive <i/> active</div></div>
+     <div className="panel-title"><span><b className="index">02</b> ANATOMY & ACTIVITY</span><span className="synthetic">{dummy?'SYNTHETIC ACTIVITY':populationView?'CONTROLLER POPULATIONS':'MODEL ACTIVITY'}</span></div>
+     <div className="brain-view"><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':populationView?'Measured MaleCNS soma positions with controller populations':'Measured MaleCNS soma positions with model activity'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':populationView?'Static membership · Not activity':'Model activity · Calibrated readout'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key">{populationView?<><i className="drive-key"/> drive <i className="readout-key"/> readout · not activity</>:<><i/> zero <i/> {dummy?'synthetic activity':'higher model activity'}</>}</div></div>
+     {!dummy&&<div className="activity-explanation"><label className="population-toggle"><input type="checkbox" checked={populationView} disabled={!populationCoverage} onChange={e=>{setPopulationView(e.target.checked);rendererRef.current?.setPopulationView(e.target.checked);}}/> Highlight drive &amp; readout populations</label>{populationView&&populationCoverage&&<div data-testid="population-coverage"><p>Static controller membership, independent of current activity. Colors do not represent spikes or biological function.</p><p><b>Blue · Drive:</b> {format(populationCoverage.drive.positioned)} positioned / {format(populationCoverage.drive.total)} total · {format(populationCoverage.drive.unpositioned)} unpositioned. Visual projection only.</p><p><b>Orange · Readout:</b> {format(populationCoverage.readout.positioned)} positioned / {format(populationCoverage.readout.total)} total · {format(populationCoverage.readout.unpositioned)} unpositioned. Descending + VNC motor.</p></div>}<label>Model activity scale <select disabled={mode==='Loading'||populationView} aria-label="Model activity scale" value={activityScale} onChange={e=>{const scale=e.target.value as ActivityScale;setActivityScale(scale);rendererRef.current?.setScale(scale);}}><option value="log">Fixed log</option><option value="linear">Linear</option></select></label>{!populationView&&<p>{activityScale==='log'?'Brightness = log(1 + byte) / log(256).':'Brightness = byte / 255.'} Byte = min(255, round(rate / 128)); zero stays zero. Latest model values held between updates; not spikes.</p>}<p>Active count includes unpositioned nodes and means byte ≥ 1. V2 drives visual-projection nodes only; descending + VNC motor nodes supply readout. Dim VNC points can reflect weak model drive.</p></div>}
      <div className="brain-stats"><div><strong>{format((geometry?.positions.length??0)/3)}</strong><span>{geometry?.measured?'MEASURED SOMA POSITIONS':'SYNTHETIC SAMPLES'}</span></div><div><strong data-testid="active-count">{format(frame?.active_neuron_count||0)}</strong><span>ACTIVE MODEL NODES</span></div><div><strong>{geometry?.measured?format(geometry.measured.missing):'—'}</strong><span>UNPOSITIONED NEURONS</span></div></div>
-     <div className="geometry-note" data-testid="geometry-status">{geometry?.measured?<>{format(geometry.neuron_count!)} retained neurons · {format(geometry.measured.edges)} connections in the measured graph. {dummy?'Prepare data and run an artificial neural experiment below. This display uses dummy activity.':'Live model activity drives both this display and Fly controls. Unpositioned neurons participate in dynamics.'}</>:'Generated geometry; no measured anatomy loaded.'}</div>
+     <div className="geometry-note" data-testid="geometry-status">{geometry?.measured?<>{format(geometry.neuron_count!)} retained neurons · {format(geometry.measured.edges)} connections in the measured graph. {dummy?'Prepare data and run an artificial neural experiment below. This display uses dummy activity.':populationView?'Showing static controller membership. Unpositioned neurons participate in dynamics.':'Live model activity drives both this display and Fly controls. Unpositioned neurons participate in dynamics.'}</>:'Generated geometry; no measured anatomy loaded.'}</div>
     </section>
    </div>
    {geometryWarning&&<div className="geometry-warning" role="status">{geometryWarning}</div>}

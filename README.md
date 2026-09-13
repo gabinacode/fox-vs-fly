@@ -77,4 +77,7 @@ Default gameplay uses [MaleCNSBrain](docs/NEURAL_GAMEPLAY.md); the optional rese
 
 For the registered Sites host, run `node scripts/prepare_deploy.mjs` after the normal web build. It stages byte-identical output in root dist/, the static directory accepted by Sites; development remains in web/.
 
+## LinkedIn brain cinematic
+Isolated MaleCNS soma reveal for video editing (not gameplay): `npm run cinematic` opens `/cinematic/`. Export PNGs/videos with `npm run cinematic:export`. See [docs/CINEMATIC.md](docs/CINEMATIC.md).
+
 Controller V2 replaces the saturated LIF baseline with a stable WASM activation model and calibrated readout. It now tracks both directions, attacks in reach and encodes stage recovery. The graph is not trained to play Melee; these interfaces remain explicit modeling assumptions. See docs/NEURAL_GAMEPLAY.md and data/controller-behavior.json.

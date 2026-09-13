@@ -1,0 +1,1850 @@
+{
+  "schema": 1,
+  "controller": "V2 authored stable rate model over measured MaleCNS wiring",
+  "provenance": {
+    "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+    "calibrationSha256": "97d861aad85b6b45779d735697d1ad52db2502dc9989075a92d32a8fd8f8aec4",
+    "neuralWasmSha256": "c58d71e447e7f694cfb30511cb81941d161f614985ee2fa8063f0664a7f4a934",
+    "simulationWasmSha256": "2ee01bc507cf969116d5b49ade29178f2c75edf00729f25570c100ce6aa19f7a",
+    "opponentsSha256": "ff41d6c6599b4c91a3d9e4d1589db1a42a37b755fc167cd042097c216a8723f8"
+  },
+  "protocol": {
+    "gameHz": 60,
+    "modelHz": 30,
+    "maxCombatFrames": 3600,
+    "maxShuttleFrames": 7200,
+    "seeds": [
+      7,
+      29
+    ],
+    "seedMeaning": "Opponent pulse/waypoint phase only; simulation initial state always seed 42, Fox left/Fly right",
+    "damageMeaning": "Sum of observed positive post-step damage changes; a hit followed by stock reset in the same step can be omitted",
+    "recoveryMeaning": "Fly airborne outside x +/-68 or below y=0; closes on stage landing or stock loss; does not establish recoverability",
+    "limitations": "Scripted policies, one stage and spawn orientation; timeouts retained, no human win-rate or biological claim",
+    "trace": "SHA-256 over every full packed activity array, motor values, opponent input and game hash"
+  },
+  "matches": [
+    {
+      "opponent": "stationary",
+      "phaseSeed": 7,
+      "frameLimit": 3600,
+      "frames": 423,
+      "observedDamage": {
+        "fox": 32,
+        "fly": 0
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 0
+      },
+      "requestedActionFrames": {
+        "jump": 4,
+        "attack": 5,
+        "fastfall": 2
+      },
+      "axisReversals": 7,
+      "longestNoDamageFrames": 139,
+      "activeNodes": {
+        "min": 1534,
+        "max": 140944,
+        "mean": 121838.41134751773
+      },
+      "recovery": {
+        "started": 2,
+        "landed": 2,
+        "stockLost": 0,
+        "open": 0,
+        "maxFrames": 42,
+        "actionableFrames": 83,
+        "framesWithJumpAvailable": 11,
+        "jumpRequestFrames": 4
+      },
+      "stockEvents": [
+        {
+          "tick": 89,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -109.52,
+          "priorY": -63.288
+        },
+        {
+          "tick": 277,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 16,
+          "priorX": 114.352,
+          "priorY": -40.92
+        },
+        {
+          "tick": 423,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": -109.52,
+          "priorY": -63.288
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 133676,
+          "meanPackedByte": 2.039796040791842,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 7.05,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 3
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 85940109,
+      "traceSha256": "64ea28cec4c6ac1e36131a84fde1d8730b93417c333c06f9a9afc4859d69f6c2",
+      "prefix600": null
+    },
+    {
+      "opponent": "stationary",
+      "phaseSeed": 29,
+      "frameLimit": 3600,
+      "frames": 423,
+      "observedDamage": {
+        "fox": 32,
+        "fly": 0
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 0
+      },
+      "requestedActionFrames": {
+        "jump": 4,
+        "attack": 5,
+        "fastfall": 2
+      },
+      "axisReversals": 7,
+      "longestNoDamageFrames": 139,
+      "activeNodes": {
+        "min": 1534,
+        "max": 140944,
+        "mean": 121838.41134751773
+      },
+      "recovery": {
+        "started": 2,
+        "landed": 2,
+        "stockLost": 0,
+        "open": 0,
+        "maxFrames": 42,
+        "actionableFrames": 83,
+        "framesWithJumpAvailable": 11,
+        "jumpRequestFrames": 4
+      },
+      "stockEvents": [
+        {
+          "tick": 89,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -109.52,
+          "priorY": -63.288
+        },
+        {
+          "tick": 277,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 16,
+          "priorX": 114.352,
+          "priorY": -40.92
+        },
+        {
+          "tick": 423,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": -109.52,
+          "priorY": -63.288
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 133676,
+          "meanPackedByte": 2.039796040791842,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 7.05,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 3
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 85940109,
+      "traceSha256": "64ea28cec4c6ac1e36131a84fde1d8730b93417c333c06f9a9afc4859d69f6c2",
+      "prefix600": null
+    },
+    {
+      "opponent": "rushdown",
+      "phaseSeed": 7,
+      "frameLimit": 3600,
+      "frames": 876,
+      "observedDamage": {
+        "fox": 8,
+        "fly": 64
+      },
+      "stockLosses": {
+        "fox": 0,
+        "fly": 3
+      },
+      "requestedActionFrames": {
+        "jump": 8,
+        "attack": 17,
+        "fastfall": 48
+      },
+      "axisReversals": 12,
+      "longestNoDamageFrames": 167,
+      "activeNodes": {
+        "min": 1534,
+        "max": 145676,
+        "mean": 131673.59360730593
+      },
+      "recovery": {
+        "started": 3,
+        "landed": 0,
+        "stockLost": 3,
+        "open": 0,
+        "maxFrames": 73,
+        "actionableFrames": 187,
+        "framesWithJumpAvailable": 26,
+        "jumpRequestFrames": 8
+      },
+      "stockEvents": [
+        {
+          "tick": 452,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 40,
+          "priorX": -70.862,
+          "priorY": -63.06,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9987276792526245,
+              0,
+              0.004337583668529987,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 661,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 16,
+          "priorX": -74.914,
+          "priorY": -62.852,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9991015195846558,
+              0,
+              0.00887288711965084,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 876,
+          "player": "fly",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": 60.078,
+          "priorY": -62.056,
+          "lastControl": {
+            "axis": -982,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9820417165756226,
+              0,
+              0,
+              0.009175647981464863,
+              0
+            ]
+          }
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 138062,
+          "meanPackedByte": 2.2585722855428916,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 129788,
+          "meanPackedByte": 2.7982783443311336,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 14.6,
+      "outcome": "fly_loss",
+      "finalStocks": {
+        "fox": 3,
+        "fly": 0
+      },
+      "finalDamage": {
+        "fox": 8,
+        "fly": 0
+      },
+      "finalGameHash": 1128776202,
+      "traceSha256": "e9550251098ba5a37640c0e91772c9c50e526d4d67d909864b239ff3c7bb02d7",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "bfdfc7e83952cdd44fbea25102925fecb3f44006c7a6f92474e0fd5712acc09b",
+        "gameHash": 1003514536
+      }
+    },
+    {
+      "opponent": "rushdown",
+      "phaseSeed": 29,
+      "frameLimit": 3600,
+      "frames": 1184,
+      "observedDamage": {
+        "fox": 16,
+        "fly": 88
+      },
+      "stockLosses": {
+        "fox": 1,
+        "fly": 3
+      },
+      "requestedActionFrames": {
+        "jump": 8,
+        "attack": 25,
+        "fastfall": 92
+      },
+      "axisReversals": 21,
+      "longestNoDamageFrames": 174,
+      "activeNodes": {
+        "min": 1534,
+        "max": 146227,
+        "mean": 131541.96114864864
+      },
+      "recovery": {
+        "started": 4,
+        "landed": 1,
+        "stockLost": 3,
+        "open": 0,
+        "maxFrames": 63,
+        "actionableFrames": 147,
+        "framesWithJumpAvailable": 34,
+        "jumpRequestFrames": 6
+      },
+      "stockEvents": [
+        {
+          "tick": 462,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 40,
+          "priorX": -47.47,
+          "priorY": -62.76,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9986132383346558,
+              0,
+              0.01065321359783411,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 837,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 24,
+          "priorX": 43.773,
+          "priorY": -63.16,
+          "lastControl": {
+            "axis": -967,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 6,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9667211174964905,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 994,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 16,
+          "priorX": 67.855,
+          "priorY": -62.852
+        },
+        {
+          "tick": 1184,
+          "player": "fly",
+          "stocks": 0,
+          "priorDamage": 24,
+          "priorX": -113.121,
+          "priorY": 3.6,
+          "lastControl": {
+            "axis": 905,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 1,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9052224159240723,
+              0,
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 137457,
+          "meanPackedByte": 2.3611637672465506,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 131799,
+          "meanPackedByte": 2.6301919616076783,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 900,
+          "active": 132046,
+          "meanPackedByte": 2.182963407318536,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 19.733333333333334,
+      "outcome": "fly_loss",
+      "finalStocks": {
+        "fox": 2,
+        "fly": 0
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 2441323070,
+      "traceSha256": "d495e1ce4528e7b20f79ade416d1d139c34f66c290da289b70b65bad224a75ad",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "b3031261ad1aef2090d3303eac00e8febb168f318a3f8122ed272313bc9310bd",
+        "gameHash": 1107997061
+      }
+    },
+    {
+      "opponent": "retreat_punish",
+      "phaseSeed": 7,
+      "frameLimit": 3600,
+      "frames": 852,
+      "observedDamage": {
+        "fox": 16,
+        "fly": 32
+      },
+      "stockLosses": {
+        "fox": 2,
+        "fly": 3
+      },
+      "requestedActionFrames": {
+        "jump": 13,
+        "attack": 10,
+        "fastfall": 22
+      },
+      "axisReversals": 13,
+      "longestNoDamageFrames": 208,
+      "activeNodes": {
+        "min": 1534,
+        "max": 145291,
+        "mean": 129235.57042253521
+      },
+      "recovery": {
+        "started": 5,
+        "landed": 2,
+        "stockLost": 3,
+        "open": 0,
+        "maxFrames": 73,
+        "actionableFrames": 246,
+        "framesWithJumpAvailable": 20,
+        "jumpRequestFrames": 13
+      },
+      "stockEvents": [
+        {
+          "tick": 215,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -57.089,
+          "priorY": -62.056
+        },
+        {
+          "tick": 326,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 16,
+          "priorX": -54.852,
+          "priorY": -62.06,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9991663694381714,
+              0,
+              0.008531839586794376,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 475,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": -55.627,
+          "priorY": -62.056
+        },
+        {
+          "tick": 684,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": 40.598,
+          "priorY": -62.056,
+          "lastControl": {
+            "axis": -982,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9821301102638245,
+              0,
+              0,
+              0.009166230447590351,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 852,
+          "player": "fly",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": -60.464,
+          "priorY": -62.056,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9990440607070923,
+              0,
+              0.008351876400411129,
+              0
+            ]
+          }
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 138761,
+          "meanPackedByte": 3.416124775044991,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 130841,
+          "meanPackedByte": 2.127774445110978,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 14.2,
+      "outcome": "fly_loss",
+      "finalStocks": {
+        "fox": 1,
+        "fly": 0
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 2523260147,
+      "traceSha256": "26642126d4148c18686e606f74f18e166b32225d1f7897157cce30da767bb74d",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "f29e2d999cead06660e5ff29c069cdf331f8336c30663d773907ef880832589c",
+        "gameHash": 1002500387
+      }
+    },
+    {
+      "opponent": "retreat_punish",
+      "phaseSeed": 29,
+      "frameLimit": 3600,
+      "frames": 871,
+      "observedDamage": {
+        "fox": 32,
+        "fly": 24
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 2
+      },
+      "requestedActionFrames": {
+        "jump": 10,
+        "attack": 11,
+        "fastfall": 22
+      },
+      "axisReversals": 17,
+      "longestNoDamageFrames": 186,
+      "activeNodes": {
+        "min": 1534,
+        "max": 145682,
+        "mean": 128205.38002296211
+      },
+      "recovery": {
+        "started": 4,
+        "landed": 2,
+        "stockLost": 2,
+        "open": 0,
+        "maxFrames": 72,
+        "actionableFrames": 184,
+        "framesWithJumpAvailable": 17,
+        "jumpRequestFrames": 9
+      },
+      "stockEvents": [
+        {
+          "tick": 214,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -61.176,
+          "priorY": -62.188
+        },
+        {
+          "tick": 327,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 16,
+          "priorX": -56.788,
+          "priorY": -62.852,
+          "lastControl": {
+            "axis": 999,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              0,
+              1,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0,
+              0.9991570711135864,
+              0,
+              0.008929384872317314,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 474,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": -61.962,
+          "priorY": -63.312
+        },
+        {
+          "tick": 662,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": 58.373,
+          "priorY": -62.056,
+          "lastControl": {
+            "axis": -982,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.982101321220398,
+              0,
+              0,
+              0.009107072837650776,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 871,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 16,
+          "priorX": -114.938,
+          "priorY": 43.928
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 138344,
+          "meanPackedByte": 3.405218956208758,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 128913,
+          "meanPackedByte": 2.6015656868626276,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 14.516666666666667,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 1
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 2954569182,
+      "traceSha256": "54be5b8abb9cd969fe4af3450d66397281c39d072aa1cfe79ccc7784a789ec2b",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "861542b5eaecc8d9149b3ea537865bdd07e0c87168466ebe2d8504b52ead6385",
+        "gameHash": 31302525
+      }
+    },
+    {
+      "opponent": "jump_crossup",
+      "phaseSeed": 7,
+      "frameLimit": 3600,
+      "frames": 2144,
+      "observedDamage": {
+        "fox": 16,
+        "fly": 40
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 2
+      },
+      "requestedActionFrames": {
+        "jump": 8,
+        "attack": 33,
+        "fastfall": 30
+      },
+      "axisReversals": 31,
+      "longestNoDamageFrames": 742,
+      "activeNodes": {
+        "min": 1534,
+        "max": 145839,
+        "mean": 125834.33208955223
+      },
+      "recovery": {
+        "started": 3,
+        "landed": 1,
+        "stockLost": 2,
+        "open": 0,
+        "maxFrames": 62,
+        "actionableFrames": 110,
+        "framesWithJumpAvailable": 26,
+        "jumpRequestFrames": 5
+      },
+      "stockEvents": [
+        {
+          "tick": 531,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 0,
+          "priorX": 48.625,
+          "priorY": -62.76
+        },
+        {
+          "tick": 861,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 0,
+          "priorX": 114.765,
+          "priorY": 22.68
+        },
+        {
+          "tick": 1758,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 24,
+          "priorX": 113.845,
+          "priorY": 3.6,
+          "lastControl": {
+            "axis": -988,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 1,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9880250096321106,
+              0,
+              0,
+              0,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 2029,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 16,
+          "priorX": 57.745,
+          "priorY": -62.852,
+          "lastControl": {
+            "axis": -981,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9810468554496765,
+              0,
+              0,
+              0.009868399240076542,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 2144,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 16,
+          "priorX": 67.671,
+          "priorY": -62.7
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 130206,
+          "meanPackedByte": 1.9477204559088181,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 125116,
+          "meanPackedByte": 1.8550389922015598,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 900,
+          "active": 119338,
+          "meanPackedByte": 1.787234553089382,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1200,
+          "active": 130119,
+          "meanPackedByte": 1.9418236352729454,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1500,
+          "active": 126443,
+          "meanPackedByte": 1.8648170365926815,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1800,
+          "active": 130545,
+          "meanPackedByte": 1.8871805638872226,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2100,
+          "active": 127919,
+          "meanPackedByte": 2.566130773845231,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 35.733333333333334,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 1
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 3583563101,
+      "traceSha256": "78d7b5470ee3898bfbb6439593ce2625348bccc264acf74a7a5ef151593b509d",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "c7c025acdce3f61f4d8a683e5407ce00a1910866c2c57ab140c26ada01e57b21",
+        "gameHash": 360729831
+      }
+    },
+    {
+      "opponent": "jump_crossup",
+      "phaseSeed": 29,
+      "frameLimit": 3600,
+      "frames": 1234,
+      "observedDamage": {
+        "fox": 24,
+        "fly": 24
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 2
+      },
+      "requestedActionFrames": {
+        "jump": 11,
+        "attack": 17,
+        "fastfall": 38
+      },
+      "axisReversals": 17,
+      "longestNoDamageFrames": 328,
+      "activeNodes": {
+        "min": 1534,
+        "max": 145909,
+        "mean": 128764.74878444085
+      },
+      "recovery": {
+        "started": 5,
+        "landed": 3,
+        "stockLost": 2,
+        "open": 0,
+        "maxFrames": 71,
+        "actionableFrames": 225,
+        "framesWithJumpAvailable": 30,
+        "jumpRequestFrames": 9
+      },
+      "stockEvents": [
+        {
+          "tick": 350,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": 56.908,
+          "priorY": -62.056,
+          "lastControl": {
+            "axis": -982,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9820829629898071,
+              0,
+              0,
+              0.009104844182729721,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 683,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": 54.112,
+          "priorY": -63.368
+        },
+        {
+          "tick": 870,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": 49.222,
+          "priorY": -62.608
+        },
+        {
+          "tick": 1119,
+          "player": "fly",
+          "stocks": 1,
+          "priorDamage": 16,
+          "priorX": 57.732,
+          "priorY": -62.852,
+          "lastControl": {
+            "axis": -981,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1
+            ],
+            "motor": [
+              0.9811387658119202,
+              0,
+              0,
+              0.009723205119371414,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 1234,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": 49.867,
+          "priorY": -63.5
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 136480,
+          "meanPackedByte": 2.135650869826035,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 136065,
+          "meanPackedByte": 2.603245350929814,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 900,
+          "active": 127733,
+          "meanPackedByte": 1.9728194361127775,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1200,
+          "active": 135214,
+          "meanPackedByte": 2.536028794241152,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 20.566666666666666,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 1
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 1110724213,
+      "traceSha256": "c4ec737c924cd0dcd7c9fe8d9943fb478f9122a2d2370a869b2d831b94c6304a",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "aff3ff439300e0d3c9080d098da41f2c4e9fc49fe74dc0862c9a99e161cd5202",
+        "gameHash": 870100248
+      }
+    },
+    {
+      "opponent": "edge_bait",
+      "phaseSeed": 7,
+      "frameLimit": 3600,
+      "frames": 795,
+      "observedDamage": {
+        "fox": 24,
+        "fly": 24
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 0
+      },
+      "requestedActionFrames": {
+        "jump": 4,
+        "attack": 10,
+        "fastfall": 24
+      },
+      "axisReversals": 21,
+      "longestNoDamageFrames": 216,
+      "activeNodes": {
+        "min": 1534,
+        "max": 142445,
+        "mean": 123815.41509433962
+      },
+      "recovery": {
+        "started": 3,
+        "landed": 2,
+        "stockLost": 0,
+        "open": 1,
+        "maxFrames": 41,
+        "actionableFrames": 90,
+        "framesWithJumpAvailable": 17,
+        "jumpRequestFrames": 4
+      },
+      "stockEvents": [
+        {
+          "tick": 136,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -63.672,
+          "priorY": -62.188
+        },
+        {
+          "tick": 416,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": 57.642,
+          "priorY": -62.188
+        },
+        {
+          "tick": 795,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": -56.902,
+          "priorY": -64.62
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 126837,
+          "meanPackedByte": 1.8675524895020996,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 127192,
+          "meanPackedByte": 1.8701619676064787,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 13.25,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 3
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 24
+      },
+      "finalGameHash": 2604994022,
+      "traceSha256": "ad3cdd2619b886620b9d95979ca04b66201133ec9233607f2b9769d277a9d63f",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "f5191b07e4ffefd276dd73d8973adc04a5d144d012b7bacdfb2d049a1902f6be",
+        "gameHash": 1370755784
+      }
+    },
+    {
+      "opponent": "edge_bait",
+      "phaseSeed": 29,
+      "frameLimit": 3600,
+      "frames": 632,
+      "observedDamage": {
+        "fox": 24,
+        "fly": 16
+      },
+      "stockLosses": {
+        "fox": 3,
+        "fly": 1
+      },
+      "requestedActionFrames": {
+        "jump": 6,
+        "attack": 6,
+        "fastfall": 18
+      },
+      "axisReversals": 15,
+      "longestNoDamageFrames": 194,
+      "activeNodes": {
+        "min": 1534,
+        "max": 143105,
+        "mean": 123997.00316455697
+      },
+      "recovery": {
+        "started": 4,
+        "landed": 2,
+        "stockLost": 1,
+        "open": 1,
+        "maxFrames": 41,
+        "actionableFrames": 111,
+        "framesWithJumpAvailable": 29,
+        "jumpRequestFrames": 6
+      },
+      "stockEvents": [
+        {
+          "tick": 207,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -55.752,
+          "priorY": -63.476
+        },
+        {
+          "tick": 348,
+          "player": "fly",
+          "stocks": 2,
+          "priorDamage": 16,
+          "priorX": 113.965,
+          "priorY": 38.248,
+          "lastControl": {
+            "axis": -882,
+            "buttons": 0,
+            "hitstun": 0,
+            "hitlag": 0,
+            "jumps": 0,
+            "action": 5,
+            "sensory": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "motor": [
+              0.8821033835411072,
+              0,
+              0,
+              0.020049400627613068,
+              0
+            ]
+          }
+        },
+        {
+          "tick": 467,
+          "player": "fox",
+          "stocks": 1,
+          "priorDamage": 8,
+          "priorX": 53.162,
+          "priorY": -63.476
+        },
+        {
+          "tick": 632,
+          "player": "fox",
+          "stocks": 0,
+          "priorDamage": 8,
+          "priorX": -57.272,
+          "priorY": -64.804
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 129419,
+          "meanPackedByte": 1.9793161367726455,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 122839,
+          "meanPackedByte": 1.8177804439112177,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 10.533333333333333,
+      "outcome": "fly_win",
+      "finalStocks": {
+        "fox": 0,
+        "fly": 2
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 2986040302,
+      "traceSha256": "bf3ebdb57fd68492e67ee8cf97e6c48ee497c933dbd1c39d5ab1a5eed13f1377",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "fea76a49c0b0bf1d09e18f8d71803cb2131acfb6cda2bd8a83367f8198dbb54e",
+        "gameHash": 1231525668
+      }
+    },
+    {
+      "opponent": "shuttle",
+      "phaseSeed": 7,
+      "frameLimit": 7200,
+      "frames": 7200,
+      "observedDamage": {
+        "fox": 8,
+        "fly": 0
+      },
+      "stockLosses": {
+        "fox": 1,
+        "fly": 0
+      },
+      "requestedActionFrames": {
+        "jump": 2,
+        "attack": 120,
+        "fastfall": 0
+      },
+      "axisReversals": 121,
+      "longestNoDamageFrames": 7152,
+      "activeNodes": {
+        "min": 1534,
+        "max": 141838,
+        "mean": 125424.62166666667
+      },
+      "recovery": {
+        "started": 1,
+        "landed": 1,
+        "stockLost": 0,
+        "open": 0,
+        "maxFrames": 42,
+        "actionableFrames": 20,
+        "framesWithJumpAvailable": 6,
+        "jumpRequestFrames": 2
+      },
+      "stockEvents": [
+        {
+          "tick": 135,
+          "player": "fox",
+          "stocks": 2,
+          "priorDamage": 8,
+          "priorX": -44.732,
+          "priorY": -64.62
+        }
+      ],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 120742,
+          "meanPackedByte": 1.7983443311337732,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 127052,
+          "meanPackedByte": 1.8717816436712658,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 900,
+          "active": 121419,
+          "meanPackedByte": 1.8063047390521896,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1200,
+          "active": 127054,
+          "meanPackedByte": 1.8718056388722255,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1500,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1800,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2100,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2400,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2700,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3000,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3300,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3600,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3900,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4200,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4500,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4800,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5100,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5400,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5700,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6000,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6300,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6600,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6900,
+          "active": 121419,
+          "meanPackedByte": 1.8062987402519497,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 7200,
+          "active": 127056,
+          "meanPackedByte": 1.8718176364727055,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 120,
+      "outcome": "timeout",
+      "finalStocks": {
+        "fox": 2,
+        "fly": 3
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 4163413088,
+      "traceSha256": "6d4712434eb42d66c8319ae4e4932440b26c43dbd172d4120976f7b930fdab4f",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "088df9c50da5d7bf18d07a5c0faef3af5f8da1a20a8c366a0f03e928016a581e",
+        "gameHash": 3935846014
+      }
+    },
+    {
+      "opponent": "shuttle",
+      "phaseSeed": 29,
+      "frameLimit": 7200,
+      "frames": 7200,
+      "observedDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "stockLosses": {
+        "fox": 0,
+        "fly": 0
+      },
+      "requestedActionFrames": {
+        "jump": 0,
+        "attack": 120,
+        "fastfall": 0
+      },
+      "axisReversals": 119,
+      "longestNoDamageFrames": 7200,
+      "activeNodes": {
+        "min": 1534,
+        "max": 129593,
+        "mean": 125089.79472222223
+      },
+      "recovery": {
+        "started": 0,
+        "landed": 0,
+        "stockLost": 0,
+        "open": 0,
+        "maxFrames": 0,
+        "actionableFrames": 0,
+        "framesWithJumpAvailable": 0,
+        "jumpRequestFrames": 0
+      },
+      "stockEvents": [],
+      "activitySamples": [
+        {
+          "tick": 300,
+          "active": 121708,
+          "meanPackedByte": 1.8797000599880025,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 600,
+          "active": 127266,
+          "meanPackedByte": 1.9520335932813437,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 900,
+          "active": 121688,
+          "meanPackedByte": 1.8769646070785844,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1200,
+          "active": 127271,
+          "meanPackedByte": 1.952243551289742,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1500,
+          "active": 121686,
+          "meanPackedByte": 1.8768326334733054,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 1800,
+          "active": 127272,
+          "meanPackedByte": 1.9524115176964607,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2100,
+          "active": 121689,
+          "meanPackedByte": 1.8770665866826635,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2400,
+          "active": 127274,
+          "meanPackedByte": 1.952609478104379,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 2700,
+          "active": 121689,
+          "meanPackedByte": 1.877006598680264,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3000,
+          "active": 127269,
+          "meanPackedByte": 1.9520515896820636,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3300,
+          "active": 121688,
+          "meanPackedByte": 1.8769646070785844,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3600,
+          "active": 127271,
+          "meanPackedByte": 1.952243551289742,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 3900,
+          "active": 121686,
+          "meanPackedByte": 1.8768326334733054,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4200,
+          "active": 127272,
+          "meanPackedByte": 1.9524115176964607,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4500,
+          "active": 121689,
+          "meanPackedByte": 1.8770665866826635,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 4800,
+          "active": 127274,
+          "meanPackedByte": 1.952609478104379,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5100,
+          "active": 121689,
+          "meanPackedByte": 1.877006598680264,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5400,
+          "active": 127269,
+          "meanPackedByte": 1.9520515896820636,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 5700,
+          "active": 121688,
+          "meanPackedByte": 1.8769646070785844,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6000,
+          "active": 127271,
+          "meanPackedByte": 1.952243551289742,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6300,
+          "active": 121686,
+          "meanPackedByte": 1.8768326334733054,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6600,
+          "active": 127272,
+          "meanPackedByte": 1.9524115176964607,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 6900,
+          "active": 121689,
+          "meanPackedByte": 1.8770665866826635,
+          "saturatedPackedNodes": 0
+        },
+        {
+          "tick": 7200,
+          "active": 127274,
+          "meanPackedByte": 1.952609478104379,
+          "saturatedPackedNodes": 0
+        }
+      ],
+      "simulatedSeconds": 120,
+      "outcome": "timeout",
+      "finalStocks": {
+        "fox": 3,
+        "fly": 3
+      },
+      "finalDamage": {
+        "fox": 0,
+        "fly": 0
+      },
+      "finalGameHash": 1484971702,
+      "traceSha256": "f4f4d03b9b151a13466566273bca4e25e285a0aa0e21ec45249f0240fb4669e4",
+      "prefix600": {
+        "frames": 600,
+        "traceSha256": "d23038354c0154276bada297957d3d0ebb32a80f3dce2e18bc4a3e6d1766cede",
+        "gameHash": 3280279540
+      }
+    }
+  ],
+  "resetReplay": {
+    "opponent": "rushdown",
+    "phaseSeed": 7,
+    "frames": 876,
+    "identical": true
+  },
+  "nativeWasmReplay": "Every frame of every bout and repeated bout matches"
+}

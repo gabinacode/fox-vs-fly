@@ -1,11 +1,21 @@
 # Progress
 
 ## CURRENT MILESTONE
+**LinkedIn MaleCNS brain cinematic renderer added (isolated from gameplay).** Route `/cinematic/` loads measured MaleCNS somas (139,662) via the existing connectome package; default activity is explicitly labeled `SYNTHETIC_CINEMATIC_TIMELINE` with an `ActivitySource` adapter for future real model buffers. Deterministic 1080×1350 @ 60 fps PNG export (Playwright + canvas.toDataURL) and ffmpeg ProRes/H.264 scripts verified locally: 150 frames, determinism hash check, preview reports 60 fps. Game build still produces both `dist/index.html` and `dist/cinematic/index.html`. See docs/CINEMATIC.md.
+
+**Long-match/adversarial V2 evaluation completed locally.** Twelve full-graph bouts cover five combat policies at two phase seeds plus two complete 120-second nonattacking shuttle cases: 23,834 game frames / 397.23 simulated seconds. Rushdown beats Fly in both variants; moving-target pursuit times out twice despite about 125k mean active model nodes. Every bout matches native replay, a full neural reset replay is identical, and canonical checks completely replay the 876-frame rushdown loss and one 7,200-frame shuttle timeout. `./scripts/verify.sh` exited 0: native 5/5, TypeScript 47/47, policy/metric 2/2, Python 17/17, Chrome 24/24. See MATCH_EVALUATION.md and data/long-matches.json. Controller parameters remain unchanged; nothing new has been published.
+
+**Soma display and optional controller-population view verified locally.** V2 holds latest activity with explicit fixed log/linear scale; the optional static population view highlights exact drive/readout membership, not activation. Coverage: drive 9,162 positioned / 9,201 total; readout 2,011 / 2,022. Full 600-frame activity/motor hash remains unchanged. Desktop/mobile screenshots reviewed. See ACTIVITY_DISPLAY.md. Neither local display update has been published; user explicitly deferred publishing.
+
 **Controller V2 deployed and anonymously verified.** Stable WASM rate dynamics, recovery/reach sensors and calibrated readout replace saturated LIF gameplay. Full-graph checks track both directions, reverse without reset, attack in range and recover. Stationary-opponent damage improves 0→32, jumps 13→4 and fastfall frames 581→2. `./scripts/verify.sh` exited 0 (native 5/5 including rate, TypeScript 40/40, production Chrome 22/22). The public chatgpt.site serves the V2 bundle (223 files); a fresh anonymous Chrome received the V2 WASM/calibration assets, showed the Recovery need sensor, dealt 8% damage to a stationary Fox, and paused/reset without errors.
 
 Play: https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site
 
 ## DONE
+- Evaluated V2 across 12 retained scripted bouts (five combat policies and a 120-second nonattacking shuttle, two phase seeds each). Recorded outcomes, damage, stocks, action requests, recovery excursions, activity samples, stock-loss controller state and source hashes. Native replay agrees for all 23,834 frames and a complete neural reset replay is identical. Rushdown losses and long pursuit timeouts are explicit next-controller regressions, without biological or win-rate claims.
+- Isolated LinkedIn brain cinematic (`web/cinematic/`, `web/src/cinematic/`): Three.js Points over measured MaleCNS geometry, absolute-frame timeline, preview controls, Playwright PNG exporter, ffmpeg ProRes master + H.264 preview. Activity honesty tags and ExternalBufferActivity adapter documented in docs/CINEMATIC.md.
+- Added optional, off-by-default controller-population highlight with blue drive/orange readout and exact positioned/unpositioned counts from the actual rate mapping. One startup role-byte transfer; no activity mutation, new drive or graph arrays on UI thread. Static membership, caption, legend and reset behavior tested in WebGL/Canvas.
+- Diagnosed high active-count/dim soma mismatch with deterministic approach/attack samples in data/activity-evidence.json and docs/ACTIVITY_DISPLAY.md. V2 display holds latest continuous rates and offers labeled fixed log/linear contrast; zero remains zero. Added packing, mapping, zero/reset and paused pixel/scale regression checks. Neural drive, calibration and dynamics unchanged; VNC weakness and missing sensory soma coverage explicitly documented.
 - Clarified Melee reference policy: Nintendo disc/Dolphin/decomp are developer-offline tools for fixtures only; never browser/player runtime deps. Documented in AGENTS.md, MELEE_PORT.md, ARCHITECTURE.md; gitignore covers common disc formats.
 - Public static deployment with all 219 runtime assets. Anonymous Chrome reaches live neural gameplay, moves Fox, pauses/resets and reports no page errors.
 - Independent scalar GameBatch API, per-frame serial equivalence at all five sizes, isolated resets and atomic shape validation. Deterministic warmup plus three-repeat benchmarks recorded in data/batch-benchmark.json.
@@ -63,10 +73,10 @@ Play: https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site
 - Focused Chrome matches mapped trace 322408360 after reset; clear removes activity/counters, unload disposes worker/view. Screenshot inspected.
 
 ## IN PROGRESS
-None.
+None. Publishing remains deferred by explicit user request.
 
 ## FAILING
-None. **./scripts/verify.sh exited 0** after the V2 controller change. Native rate + prior C++ tests pass; TypeScript 40/40; Python artifact validation passes; production Chrome 22/22 including approach-and-hit. All 900 native/WASM hashes match. Dummy-mode browser attack loop now approaches before attacking without weakening the damage assertion.
+None. **./scripts/verify.sh exited 0** after the long-match evaluation and local display/population changes. Native rate + prior C++ tests pass; TypeScript 47/47; policy/metric tests 2/2; Python artifact validation passes; production Chrome 24/24. The complete seed-7 rushdown and 120-second shuttle canonical replays match recorded metrics/traces and native execution. All 900 baseline native/WASM hashes match. Dummy-mode browser attack loop now approaches before attacking without weakening the damage assertion.
 
 ## KNOWN APPROXIMATIONS
 Default gameplay activity is the stable rate model over measured wiring with a calibrated readout; the explicit dummy route retains synthetic activity; optional LIF diagnostics remain available. No biologically validated sensory/motor mapping. Geometry is measured somas only, not neurites or synapses; physical units not independently verified. 27,038 retained neurons have no soma position and are excluded only from display. Default graph preparation retains large typed arrays plus the WASM rate copy; graph dynamics now control default gameplay. Canvas fallback is functionally tested but has no 60-fps guarantee at the real point count.
@@ -85,7 +95,7 @@ Production Chrome tests pass for automatic neural game preparation, live model a
 Browser geometry binaries 2,234,592 bytes; source graph unchanged at 218,702,759 bytes. Chrome WebGL2 smoke with 139,662 points: 60/60/60 game/render/neural fps. Latest native benchmark ~9,422,190 frames/sec; dummy microbenchmark ~65,173 steps/sec at its original 7,200-sample test size (not the real population). Graph load 0.959 s, structural validation 79.4 ms, 76.0 MiB logical download, 200.9 MiB arrays. During preparation the short UI counter read 57/60/60 game/render/neural fps; headless LIF benchmark now measures 0.706/3.195/12.069 ms per tick for silent/sparse/dense artificial drive. Browser LIF now measures 0.326/4.507/18.062 ms mean per tick for silent/sparse/dense artificial drive. Dense p95 is 54.3 ms; no 60 Hz neural budget or biological performance claim. See BENCHMARKS.md.
 
 ## NEXT 5 TASKS
-1. Evaluate longer neural matches and adversarial play without biological overclaims.
+1. Fix the evidenced V2 moving-target attack timing and recovery jump timing; require improvement on shuttle/rushdown without regressing stationary, cross-up or edge cases.
 2. Extend sign/timestep sensitivity experiments and population mapping evidence.
 3. Continue Fox fidelity beyond partial jump/gravity behavior: DI, collision and attack/knockback references.
 4. Profile neural scaling before choosing shared graph batches, threads or GPU work.

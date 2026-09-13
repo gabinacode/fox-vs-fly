@@ -1,0 +1,181 @@
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  color: #c8c8c8;
+  font-family: "IBM Plex Mono", "SF Mono", ui-monospace, monospace;
+}
+.cine {
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  background: #000;
+}
+.cine.export {
+  width: 1080px;
+  height: 1350px;
+  overflow: hidden;
+}
+.cine.export .stage {
+  width: 1080px;
+  height: 1350px;
+  margin: 0;
+}
+.cine.export .stage canvas {
+  width: 1080px !important;
+  height: 1350px !important;
+}
+.stage {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  background: #000;
+  overflow: hidden;
+}
+.stage canvas {
+  display: block;
+  /* Fit the full 4:5 frame in the available pane — do NOT set canvas width/height
+     attributes from React; Three.js owns the drawing buffer. */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1080 / 1350;
+  background: #000;
+}
+.boot {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  text-align: center;
+  color: #888;
+  background: #000;
+}
+.boot.error {
+  color: #f66;
+}
+.panel {
+  flex: 0 0 340px;
+  width: 340px;
+  padding: 1rem 1.1rem 1.4rem;
+  background: #0a0a0a;
+  border-left: 1px solid #1c1c1c;
+  overflow: auto;
+  max-height: 100%;
+}
+.panel header {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.85rem;
+}
+.panel header span {
+  color: #666;
+}
+.honesty {
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: #8a8a8a;
+  margin: 0 0 1rem;
+}
+.honesty code {
+  color: #ccc;
+}
+.transport {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+.transport button,
+.panel button {
+  background: #151515;
+  color: #ddd;
+  border: 1px solid #2a2a2a;
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.75rem;
+}
+.transport button:hover {
+  border-color: #444;
+}
+.frame-readout {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.72rem;
+  color: #aaa;
+  margin-left: auto;
+}
+.frame-readout span {
+  color: #666;
+}
+.slider {
+  display: grid;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  color: #999;
+  margin-bottom: 0.65rem;
+}
+.slider input[type='range'] {
+  width: 100%;
+}
+.toggles {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  color: #999;
+  margin: 0.5rem 0 0.8rem;
+}
+.toggles label {
+  display: flex;
+  gap: 0.45rem;
+  align-items: flex-start;
+}
+.hint {
+  font-size: 0.68rem;
+  color: #555;
+  margin: 0.75rem 0 0;
+}
+.debug {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  padding: 0.55rem 0.7rem;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid #222;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: #bbb;
+  pointer-events: none;
+  z-index: 5;
+}
+@media (max-width: 900px) {
+  .cine.preview {
+    flex-direction: column;
+    height: auto;
+    min-height: 100%;
+  }
+  .stage {
+    min-height: 70vh;
+  }
+  .panel {
+    flex-basis: auto;
+    width: 100%;
+    border-left: 0;
+    border-top: 1px solid #1c1c1c;
+    max-height: none;
+  }
+}

@@ -1,5 +1,6 @@
 import {WasmRateModel} from '../brain/rate_model';
 import {MaleCNSBrain} from '../../../brain/core/male_cns';
+import {ratePopulationRoles} from '../../../brain/core/rate_mapping';
 import {loadGraph,validateCatalog} from '../brain/connectome';
 import type {Observation} from '../../../brain/include/types';
 let brain:MaleCNSBrain|null=null;
@@ -17,7 +18,8 @@ self.onmessage=async(event:MessageEvent<{type?:string;base:string;identity:strin
    if(!calibrationResponse.ok)throw Error('Neural calibration download failed');const calibration=await calibrationResponse.json();
    if(calibration.graph_identity!==catalog.graph_identity)throw Error('Neural calibration graph mismatch');
    const module=await create({locateFile:(name:string)=>new URL(name,moduleURL).href});
-   brain=new MaleCNSBrain(graph,new WasmRateModel(module,graph),calibration);self.postMessage({type:'ready'});return;
+   brain=new MaleCNSBrain(graph,new WasmRateModel(module,graph),calibration);
+   const populations=ratePopulationRoles(graph);self.postMessage({type:'ready',populations},{transfer:[populations.buffer]});return;
   }
   if(!brain)throw Error('Neural controller is not ready');
   // Clone cached arrays: transfer would detach the frame needed for pause retries.

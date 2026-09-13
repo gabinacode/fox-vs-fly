@@ -33,3 +33,11 @@ Decoded right minus left sets the axis. Decoded upward/recovery activity request
 Native model tests cover delayed weighted propagation, normalization, recurrent decay and reset. Controller fixtures cover connection removal, both directions, no unrelated action, 30 Hz updates, cached pause retries and exact reset. `scripts/controller_behavior.mjs` uses the full checked graph to require left/right tracking, in-range attack, stage recovery, reversal without reset, damage against a stationary opponent and improvement over the published baseline. `scripts/neural_replay.mjs` checks exact activity/motor and game replay after reset, then native/WASM agreement on generated game inputs. Chrome checks real loading/play/reset/fallback plus approaching and hitting stationary Fox.
 
 This is a more useful experimental opponent, not a trained fighting-game policy or evidence of biological behavior. Calibration uses artificial stimuli; generalization, adversarial play, long-match stability and biological sign/dynamics alternatives remain research tasks. The new visualization shows continuous model activity, explicitly labeled MODEL ACTIVITY, rather than calling rate values spikes.
+
+## Soma activity display
+See [ACTIVITY_DISPLAY.md](ACTIVITY_DISPLAY.md) for reproducible brain/VNC fractions and byte distributions during approach and attack. V2 now holds latest rates and offers explicit fixed log/linear contrast. Packing, active counts, model inputs and calibrated readout are unchanged.
+
+An optional static population view identifies drive (visual_projection) and readout (descending_neuron + vnc_motor), with measured soma coverage. It is explicitly separate from model activity and adds no neural input.
+
+## Longer-match evaluation
+The local stress test in [MATCH_EVALUATION.md](MATCH_EVALUATION.md) retains 12 scripted bouts, including two complete 120-second shuttle timeouts. Rushdown beats V2 in both phase variants; shuttle pursuit requests attacks without reliably landing them despite sustained model activity. This narrows the next controller work to moving-target attack timing and recovery pulses. These are observed weaknesses, not new sensory mappings or biological conclusions.

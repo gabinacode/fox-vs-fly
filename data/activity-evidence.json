@@ -1,0 +1,131 @@
+{
+  "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "activity": "min(255, round(rate/128)); active means byte > 0 (rate >= 64), not spikes",
+  "regionDefinition": "Display-cloud spatial partition: normalized soma y > 0.34 = upper brain/head, y <= 0.34 = lower VNC. Operational geometry split, not annotation-based anatomy; somaNeuromere is missing for 118359 positioned nodes.",
+  "inputNodes": 9201,
+  "readoutNodes": 2022,
+  "populations": {
+    "visual_projection": {
+      "total": 9201,
+      "positioned": 9162
+    },
+    "descending_neuron": {
+      "total": 1314,
+      "positioned": 1308
+    },
+    "vnc_motor": {
+      "total": 708,
+      "positioned": 703
+    },
+    "vnc_sensory": {
+      "total": 6370,
+      "positioned": 2
+    },
+    "cb_sensory": {
+      "total": 4868,
+      "positioned": 0
+    },
+    "ol_sensory": {
+      "total": 6098,
+      "positioned": 28
+    }
+  },
+  "samples": [
+    {
+      "phase": "approach",
+      "window": "early",
+      "gameTick": 10,
+      "modelTick": 6,
+      "distance": 45.519999999999996,
+      "activeModelNodes": 46804,
+      "regions": {
+        "brain": {
+          "positioned": 124295,
+          "active": 45806,
+          "activeFraction": 0.3685264894002172,
+          "meanByte": 1.5126433082585784,
+          "p95Byte": 4
+        },
+        "vnc": {
+          "positioned": 15367,
+          "active": 532,
+          "activeFraction": 0.03461963948721286,
+          "meanByte": 0.03657187479664215,
+          "p95Byte": 0
+        }
+      }
+    },
+    {
+      "phase": "attack",
+      "window": "early",
+      "gameTick": 32,
+      "modelTick": 17,
+      "distance": 8.079999999999998,
+      "activeModelNodes": 90067,
+      "regions": {
+        "brain": {
+          "positioned": 124295,
+          "active": 83305,
+          "activeFraction": 0.6702200410314172,
+          "meanByte": 2.3214208133875056,
+          "p95Byte": 7
+        },
+        "vnc": {
+          "positioned": 15367,
+          "active": 3874,
+          "activeFraction": 0.2520986529576365,
+          "meanByte": 0.26765146092275655,
+          "p95Byte": 1
+        }
+      }
+    },
+    {
+      "phase": "approach",
+      "window": "later",
+      "gameTick": 120,
+      "modelTick": 61,
+      "distance": 38.556,
+      "activeModelNodes": 132211,
+      "regions": {
+        "brain": {
+          "positioned": 124295,
+          "active": 114576,
+          "activeFraction": 0.9218069914316747,
+          "meanByte": 3.8367673679552676,
+          "p95Byte": 10
+        },
+        "vnc": {
+          "positioned": 15367,
+          "active": 5314,
+          "activeFraction": 0.3458059478102427,
+          "meanByte": 0.3971497364482332,
+          "p95Byte": 1
+        }
+      }
+    },
+    {
+      "phase": "attack",
+      "window": "later",
+      "gameTick": 140,
+      "modelTick": 71,
+      "distance": 9.832999999999998,
+      "activeModelNodes": 140747,
+      "regions": {
+        "brain": {
+          "positioned": 124295,
+          "active": 116727,
+          "activeFraction": 0.9391125950360031,
+          "meanByte": 3.3321533448650387,
+          "p95Byte": 9
+        },
+        "vnc": {
+          "positioned": 15367,
+          "active": 8157,
+          "activeFraction": 0.5308127806338258,
+          "meanByte": 0.6540639031691287,
+          "p95Byte": 2
+        }
+      }
+    }
+  ]
+}

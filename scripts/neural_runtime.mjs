@@ -6,7 +6,7 @@ const root=new URL('../',import.meta.url),base=new URL('data/generated/',root);
 if(!fs.existsSync(new URL('manifest.json',base))){console.log('SKIP real neural replay: generated graph absent');process.exit(0);}
 const manifest=JSON.parse(fs.readFileSync(new URL('manifest.json',base),'utf8'));
 const checked=(info)=>{const b=fs.readFileSync(new URL(info.file,base));assert.equal(crypto.createHash('sha256').update(b).digest('hex'),info.sha256);return b;};
-const array=name=>{const info=manifest.arrays[name],b=checked(info);assert.equal(b.length,info.bytes);return new Uint32Array(b.buffer.slice(b.byteOffset,b.byteOffset+b.length));};
+export const array=(name,Type=Uint32Array)=>{const info=manifest.arrays[name],b=checked(info);assert.equal(b.length,info.bytes);return new Type(b.buffer.slice(b.byteOffset,b.byteOffset+b.length));};
 const dictionaries=JSON.parse(checked(manifest.annotations));
 const graph={offsets:array('row_offsets'),targets:array('target_indices'),weights:array('weights'),annotations:Object.fromEntries(['superclass','somaSide'].map(n=>[n,array('annotation_'+n)])),dictionaries};
 

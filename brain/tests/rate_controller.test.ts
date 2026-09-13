@@ -6,6 +6,13 @@ const calibration={version:2 as const,graph_identity:'fixture',outputs:[6,7,8,9,
 class ChainModel {count=12;values=new Uint32Array(12);calls=0;constructor(private connected=true){}reset(){this.values.fill(0);this.calls=0;}step(input:Uint32Array){const next=Uint32Array.from(this.values,(v,i)=>Math.floor(.25*v+input[i]+(i>=6&&this.connected ? .6*this.values[i-6] : 0)));this.values=next;this.calls++;return next;}}
 const fighter={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3};
 const obs=(tick:number,x=-40)=>({tick,fox:{...fighter,x},fly:{...fighter}});
+it('counts nonzero packed rates rather than spikes or propagation-threshold crossings',()=>{
+ const values=new Uint32Array([0,31,32,63,64,128,192,32704,65535,0,0,0]);
+ const brain=new MaleCNSBrain(graph,{count:12,reset(){},step(){return values;}},calibration);
+ const frame=brain.step(obs(0));
+ expect([...frame.activity]).toEqual([0,0,0,0,1,1,2,255,255,0,0,0]);
+ expect(frame.active_neuron_count).toBe(5);
+});
 it('neural readout tracks either side without unrelated actions; disconnecting edges removes controls',()=>{
  for(const x of [-40,40]){const model=new ChainModel(),brain=new MaleCNSBrain(graph,model,calibration);let frame;
   for(let tick=0;tick<60;tick++)frame=brain.step(obs(tick,x));expect(frame!.motor_values[x<0?0:1]).toBeGreaterThan(.95);expect([...frame!.motor_values.slice(2)]).toEqual([0,0,0]);expect(model.calls).toBe(30);

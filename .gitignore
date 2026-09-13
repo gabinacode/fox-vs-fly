@@ -14,6 +14,9 @@ data/generated/
 data/.generated-*/
 web/public/connectome-graph/
 
+# LinkedIn brain cinematic PNG/video export (regenerable)
+web/cinematic-output/
+
 .DS_Store
 dist/
 

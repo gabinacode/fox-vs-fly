@@ -1,0 +1,11 @@
+{
+  "name": "melee-fly",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "cinematic": "npm --prefix web run cinematic",
+    "cinematic:frames": "npm --prefix web run cinematic:frames",
+    "cinematic:video": "npm --prefix web run cinematic:video",
+    "cinematic:export": "npm --prefix web run cinematic:export"
+  }
+}
