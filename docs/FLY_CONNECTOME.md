@@ -1,5 +1,8 @@
 # Connectome provenance and modeling boundary
 
+Current controller update: V2 uses normalized positive rate propagation and an artificial-stimulus-calibrated readout. It retains the measured graph but replaces the poorly selective all-positive LIF gameplay baseline. See NEURAL_GAMEPLAY.md. Older milestone sections below are historical.
+
+
 ## Current runtime — 2026-09-13
 Default gameplay now loads measured connectivity automatically in `male_cns.worker.ts`, runs MaleCNSBrain, and shows the exact model spikes and decoded controls used by Fly. Dynamics, positive signs, stimulation, action partitions and scaling are authored assumptions. See [NEURAL_GAMEPLAY.md](NEURAL_GAMEPLAY.md) for the complete interface, state ownership and validation. The synthetic controller and optional diagnostics remain on `?controller=dummy`. Earlier milestone descriptions below record their implementation history; statements about DummyBrain apply to that explicit demo route now.
 

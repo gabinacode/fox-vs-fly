@@ -16,6 +16,7 @@ npm --prefix web test
 npm --prefix web run build
 node scripts/replay_wasm.mjs
 node scripts/neural_replay.mjs
+node scripts/controller_behavior.mjs
 npm --prefix web run test:browser
 ./build/sim_bench
 ./build/batch_bench

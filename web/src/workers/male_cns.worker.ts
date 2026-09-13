@@ -1,3 +1,4 @@
+import {WasmRateModel} from '../brain/rate_model';
 import {MaleCNSBrain} from '../../../brain/core/male_cns';
 import {loadGraph,validateCatalog} from '../brain/connectome';
 import type {Observation} from '../../../brain/include/types';
@@ -10,7 +11,13 @@ self.onmessage=async(event:MessageEvent<{type?:string;base:string;identity:strin
    if(!response.ok)throw Error('Graph catalog download failed');const catalog=validateCatalog(await response.json());
    if(catalog.graph_identity!==m.identity)throw Error('Graph does not match anatomy');
    const {graph}=await loadGraph(catalog,base,p=>self.postMessage({type:'progress',...p}),new AbortController().signal);
-   brain=new MaleCNSBrain(graph);self.postMessage({type:'ready'});return;
+   self.postMessage({type:'progress',phase:'validating',received:1,total:1});
+   const moduleURL=new URL('../wasm/neural.js',base).href;
+   const [{default:create},calibrationResponse]=await Promise.all([import(/* @vite-ignore */ moduleURL),fetch(new URL('../neural/readout.json',base),{signal:AbortSignal.timeout(30000)})]);
+   if(!calibrationResponse.ok)throw Error('Neural calibration download failed');const calibration=await calibrationResponse.json();
+   if(calibration.graph_identity!==catalog.graph_identity)throw Error('Neural calibration graph mismatch');
+   const module=await create({locateFile:(name:string)=>new URL(name,moduleURL).href});
+   brain=new MaleCNSBrain(graph,new WasmRateModel(module,graph),calibration);self.postMessage({type:'ready'});return;
   }
   if(!brain)throw Error('Neural controller is not ready');
   // Clone cached arrays: transfer would detach the frame needed for pause retries.

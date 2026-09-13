@@ -1,5 +1,5 @@
 import {it,expect} from 'vitest';
-import {MaleCNSBrain} from '../core/male_cns';
+import {MaleCNSBrain} from '../core/male_cns_lif';
 import {motorDecode} from '../core/motor';
 const graph={offsets:new Uint32Array([0,4,4,4,4,4,4,4]),targets:new Uint32Array([2,4,5,6]),weights:new Uint32Array(4).fill(1000),annotations:{superclass:new Uint32Array([1,1,2,2,3,3,3]),somaSide:new Uint32Array([1,2,1,2,1,1,1])},dictionaries:{superclass:[null,'visual_projection','descending_neuron','vnc_motor'],somaSide:[null,'L','R']}};
 const fighter={x:0,y:0,vx:0,vy:0,damage:0,grounded:0,action:0,hitstun:0,stocks:3};

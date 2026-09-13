@@ -1,6 +1,12 @@
 # Melee behavior evidence
 
-Reference: [doldecomp/melee](https://github.com/doldecomp/melee/tree/114e34ac5024211729b673baff28562143f910a0), US 1.02 decomp, inspected 2026-09-11. Code is a reference, not linked or copied wholesale. No original assets or character data files distributed. Paths below relative to src/melee. All numeric gameplay parameters in this prototype are authored tuning values, NOT verified Fox constants. No mechanic is REFERENCE_MATCHED yet.
+Reference: [doldecomp/melee](https://github.com/doldecomp/melee/tree/114e34ac5024211729b673baff28562143f910a0), US 1.02 decomp, inspected 2026-09-11. Code is a reference, not linked or copied wholesale. Paths below relative to src/melee. All numeric gameplay parameters in this prototype are authored tuning values, NOT verified Fox constants. No mechanic is REFERENCE_MATCHED yet.
+
+## Reference acquisition (developer-only)
+
+The **shipped browser game** never loads Nintendo disc images, Dolphin, or decomp. Players install nothing Nintendo-related.
+
+Developers **may** use a personally owned Melee disc image (e.g. `.rvz`) and Dolphin, and/or a local checkout of the pinned decomp, **outside the shipped tree** to observe frame-level behavior and produce fixtures the C++/WASM sim must match. Commit only derived fixtures/tests and documentation—not the disc image, dumps of art/audio/character files, or Dolphin itself. Keep source media gitignored (see root `.gitignore`). Document commit hashes, fixture provenance (decomp-derived vs ROM-observed), and remaining approximations here before upgrading any fidelity status.
 
 | Mechanic | Decomp files / functions | Constants / behavior | Status / differences | Test coverage |
 |---|---|---|---|---|
@@ -16,11 +22,11 @@ Reference: [doldecomp/melee](https://github.com/doldecomp/melee/tree/114e34ac502
 | Death / stocks / respawn / blast zones | ft/kinds/ftCommon (Dead/Rebirth target discovery pending) | stage blast boundaries and stock rules | APPROXIMATE; 3 stocks, x ±115, y -65/+95, 75-frame respawn immunity | stock loss, respawn, match end |
 | Shield / grab / DI / ledges / specials | not inspected yet | no constants imported | NOT_IMPLEMENTED | none |
 
-Implementation constants: sim/include/game.h and sim/core/game.cpp. Tests: sim/tests/game_tests.cpp. Replay compares native and WASM hashes on every serialized fixture frame. That proves implementation consistency only. Next fidelity work must pin source functions, obtain legally usable numeric reference fixtures, and add differential tests before upgrading any status.
+Implementation constants: sim/include/game.h and sim/core/game.cpp. Tests: sim/tests/game_tests.cpp. Replay compares native and WASM hashes on every serialized fixture frame. That proves implementation consistency only. Next fidelity work must pin source functions and/or document ROM-observed numeric fixtures, then add differential tests before upgrading any status.
 
 ## Jump refinement — 2026-09-13
 Re-inspected the same pinned commit (local HEAD verified). `ftCo_KneeBend_Enter` clears the short-hop flag; `ftCo_KneeBend_Check_ShortHop` latches it when XY is released. `ftCo_KneeBend_Anim` enters Jump at the startup threshold. `ftCo_800CB110` selects hop versus full vertical attributes; `ftCo_Jump_Phys_Inner` returns without normal aerial physics on its first call. Fighter setup schedules animation (`Fighter_8006A360`, priority 1) before input (`Fighter_Spaghetti_8006AD10`, priority 3). Our button-only interface reproduces the release latch before the launch boundary and skips gravity/drift on the takeoff step. Subsequent frames resume authored gravity/drift.
 
-`sim/tests/jump_reference.cpp` independently enumerates all eight release masks across the two remaining squat frames and the launch frame: release before launch selects short hop even if re-pressed, release on launch is too late. Fixtures also check full/short takeoff velocity, following-frame gravity, lower short-hop apex, next-jump latch reset and hash coverage. These are source-derived semantic fixtures using our authored attributes, **not captured Melee trajectories or full-game differential validation**. Analog tap jump, IASA cancels, animation fallback, character attributes, horizontal jump momentum and exact input pipeline remain unmatched. Short hop is shared with the original Fly fighter.
+`sim/tests/jump_reference.cpp` independently enumerates all eight release masks across the two remaining squat frames and the launch frame: release before launch selects short hop even if re-pressed, release on launch is too late. Fixtures also check full/short takeoff velocity, following-frame gravity, lower short-hop apex, next-jump latch reset and hash coverage. These are decomp-derived semantic fixtures using our authored attributes, **not yet ROM-observed trajectories or full-game differential validation** (ROM-observed fixtures are allowed when labeled and committed without shipping the disc). Analog tap jump, IASA cancels, animation fallback, character attributes, horizontal jump momentum and exact input pipeline remain unmatched. Short hop is shared with the original Fly fighter.
 
 The additional short-hop latch is serialized in fighter_field index 17 and included in game_hash. State hash layout now covers 18 fighter fields. Historical replay hashes from the earlier layout are not comparable; native/WASM checks still compare every state of the same build.

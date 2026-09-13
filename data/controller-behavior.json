@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "probes": [
+    {
+      "name": "left",
+      "axis": -1000,
+      "jumps": 0,
+      "attacks": 0,
+      "fastfalls": 0
+    },
+    {
+      "name": "right",
+      "axis": 998.7,
+      "jumps": 0,
+      "attacks": 0,
+      "fastfalls": 0
+    },
+    {
+      "name": "near",
+      "axis": 253.95,
+      "jumps": 0,
+      "attacks": 2,
+      "fastfalls": 0
+    },
+    {
+      "name": "recovery",
+      "axis": -979.25,
+      "jumps": 1,
+      "attacks": 0,
+      "fastfalls": 0
+    }
+  ],
+  "reversalAxis": 999.9,
+  "stationaryDuel": {
+    "damageDealt": 32,
+    "jumps": 4,
+    "fastfalls": 2,
+    "attacks": 5,
+    "minDistance": 1.093,
+    "flyStocks": 3,
+    "meanMs": 11.50227974704492
+  },
+  "publishedBaseline": {
+    "damageDealt": 0,
+    "jumps": 13,
+    "fastfalls": 581
+  }
+}

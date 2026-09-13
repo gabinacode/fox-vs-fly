@@ -8,5 +8,5 @@ Read /Users/gabinacode/.codex/RTK.md when available; prefix shell commands with 
 Continue autonomously until the task works or an external blocker exists. Compilation alone is not success.
 Keep simulation separate from rendering; game frames are 60 Hz. Never hide approximations.
 Synthetic data must remain clearly labeled in the UI. No biological claims without processed MaleCNS data and evidence.
-No Nintendo assets, ROM, Dolphin, full decomp compilation, or runtime HAL/DoomFly dependencies.
+Players and the browser build have no Nintendo assets, ROM/ISO/RVZ, Dolphin, full decomp compilation, or HAL/DoomFly runtime dependencies. Those tools may be used offline by developers (outside the shipped tree) to inspect behavior and produce numeric/semantic fixtures that the native/WASM sim must match in-browser. Never ship disc images, ripped art/audio/character data, or make Dolphin/decomp a build or player requirement. Prefer pinning doldecomp/melee commits in docs; label any ROM-derived fixtures as such and keep source media gitignored.
 No accounts or installation for players. Preserve the native CMake + Emscripten + React/Vite architecture.

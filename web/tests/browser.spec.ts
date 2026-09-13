@@ -9,7 +9,12 @@ test('production WASM boots, keyboard moves/jumps/attacks, worker drives HUD, pa
  await page.keyboard.press('w');await expect.poll(async()=>Number(await hud.getAttribute('data-fox-y'))).toBeGreaterThan(0);
  await expect.poll(async()=>Number((await page.getByTestId('active-count').innerText()).replaceAll(',',''))).toBeGreaterThan(0);
  await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(60);
- for(let i=0;i<7;i++){await page.keyboard.press('j');await page.waitForTimeout(450);}
+ // Face and approach the opponent; jumping can leave it behind Fox.
+ for(let i=0;i<60;i++){
+  const damage=Number((await page.getByTestId('fox-damage').innerText()).replace('%',''))+Number((await page.getByTestId('fly-damage').innerText()).replace('%',''));if(damage>0)break;
+  const dx=Number(await hud.getAttribute('data-fly-x'))-Number(await hud.getAttribute('data-fox-x'));
+  const toward=dx<0?'a':'d';await page.keyboard.down(toward);await page.keyboard.press('j');await page.waitForTimeout(80);await page.keyboard.up(toward);
+ }
  await expect.poll(async()=>Number(await page.getByTestId('fox-damage').innerText().then(s=>s.replace('%','')))+Number(await page.getByTestId('fly-damage').innerText().then(s=>s.replace('%','')))).toBeGreaterThan(0);
  console.log('Browser performance:',await page.getByTestId('performance').innerText());
  await page.screenshot({path:'test-results/playing.png',fullPage:true});

@@ -14,7 +14,9 @@ This audit prepares exact candidate memberships from measured MaleCNS v1.0 annot
 The first three groups are candidates for studying artificial sensory inputs because of their released sensory labels. Visual projection is retained as a separate candidate for comparison, not relabeled as primary sensory. Descending and VNC motor groups are candidates for future output studies. These annotation names alone do not establish which neurons should encode opponent location, ground contact, movement direction, jump or attack. All such assignments remain MODEL_ASSUMPTION and unimplemented.
 
 ## Findings that constrain future mappings
-Most selected sensory neurons lack soma positions. A display-only population selector would therefore omit nearly all of them. Membership must use full graph indices and exact IDs; positions are optional coverage metadata only.
+Most selected sensory neurons lack soma positions. A display-only population selector would therefore omit nearly all of them. Membership must use full graph indices and exact IDs; positions are optional coverage metadata only.Publish controller V2 to the existing public Sites URL. Local verify and dist/ are done; Cursor couldn’t run the Sites connector. Commit/push if needed, upload the staged package, publish to the existing project_id. Confirm anonymous Chrome hits V2 (calibrated rate + recovery sensors), not V1.
+
+
 
 Soma side and root side are different source fields and are never substituted. All 4,868 cb_sensory entries lack somaSide, while rootSide contains L 1,961, R 2,494 and unknown 413. VNC sensory has only two L somaSide labels but rootSide L 3,186, R 3,170, missing 13 and unknown 1. Descending neurons have somaSide L 656, M 10, R 648 and all lack rootSide. VNC motor has somaSide L 355 and R 353, with all rootSide missing. Neither field by itself justifies left/right game motor semantics.
 

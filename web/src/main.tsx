@@ -8,6 +8,7 @@ import {drawGame} from './render/game';
 import {loadGeometry} from './brain/geometry';
 import type {BrainGeometry} from '../../brain/include/types';
 import {SENSORY_LABELS,MOTOR_LABELS,type BrainFrame} from '../../brain/include/types';
+import {NEURAL_SENSORY_LABELS} from '../../brain/core/neural_sensory';
 import './style.css';
 
 const dummy=new URLSearchParams(location.search).get('controller')==='dummy';
@@ -17,7 +18,7 @@ function App(){
  const gameCanvas=useRef<HTMLCanvasElement>(null),brainCanvas=useRef<HTMLCanvasElement>(null),session=useRef<Session|null>(null);
  const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[frame,setFrame]=useState<BrainFrame|null>(null),[running,setRunning]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState('Loading'),[fps,setFps]=useState({game:0,render:0,brain:0}),[science,setScience]=useState(false),[preparation,setPreparation]=useState('Loading simulation and anatomy…');
  useEffect(()=>{
-  let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null,last=performance.now(),statTime=last,draws=0,lastTick=0,lastFrame:BrainFrame|null=null;
+  let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null,last=performance.now(),statTime=last,draws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null;
   const change=()=>{const s=session.current;if(s&&!disposed){setSnapshot(s.state);setFrame(s.frame);setRunning(s.running);}};
   const init=async()=>{try{
    const [sim,loaded]=await Promise.all([loadSimulation(),loadGeometry()]);if(disposed)return;
@@ -38,12 +39,12 @@ function App(){
     if(disposed)return;
    }
    setPreparation('Ready to meet your opponent?');
-   session.current=new Session(sim,worker,change,setError,geometry.neuron_count??geometry.positions.length/3);change();
+   session.current=new Session(sim,worker,change,setError,geometry.neuron_count??geometry.positions.length/3);change();last=statTime=performance.now();
    const render=(now:number)=>{const s=session.current;if(!s||disposed)return;
     if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}
     if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}
     drawGame(gameCanvas.current!,s.state);renderer!.draw(now-last);last=now;draws++;
-    if(now-statTime>=1000){const dt=(now-statTime)/1000;setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.max(0,Math.round((s.state.tick-lastTick)/dt))});lastTick=s.state.tick;statTime=now;draws=0;}
+    if(now-statTime>=1000){const dt=(now-statTime)/1000;setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.max(0,Math.round(((s.frame?.model_tick??s.state.tick)-lastModelTick)/dt))});lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;statTime=now;draws=0;}
     raf=requestAnimationFrame(render);
    };raf=requestAnimationFrame(render);
   }catch(e){worker?.terminate();if(!disposed)setError(`Unable to start the game: ${String(e)}`);}};void init();
@@ -61,29 +62,29 @@ function App(){
  return <div className="page">
   <header><a className="brand" href="#"><span className="brandmark">f.</span> FOX <span className="muted">/</span> FLY</a><div className="header-note">A CONNECTOME EXPERIMENT</div><button className="text-button" onClick={()=>setScience(!science)}>{science?'Close notes':'About the experiment'} <span>↗</span></button></header>
   <main>
-   <div className="intro"><div><div className="eyebrow"><span className="dot"/> EXPERIMENT 001 <span className="slash">/</span> PLAYABLE PROTOTYPE</div><h1>Can you beat a<br/><em>fruit fly brain</em> at Melee?</h1></div><div className="intro-copy"><p>You bring the reflexes.<br/>The Fly brings a different kind of wiring.</p><div className="demo-label">{dummy?'SYNTHETIC CONTROLLER · LIVE DEMO':'MEASURED WIRING · AUTHORED NEURAL MODEL'}</div><p className="honesty">{dummy?'The anatomy can be measured. The activity is still a dummy-controller demonstration, not a biological simulation.':'The Fly is driven by model spikes over measured MaleCNS wiring. Dynamics and game mappings are authored assumptions, not biological behavior.'}</p></div></div>
-   {science&&<section className="notes"><strong>A wiring diagram is only the beginning.</strong><p>{dummy?'This demo uses a deterministic rule-based controller and synthetic activity.':'Game observations stimulate selected visual-projection neurons. Measured weighted connections propagate authored LIF spikes; descending and arbitrarily partitioned motor populations produce the exact controls shown below. All-positive transmission, one model tick per game frame, sensory assignments and action scaling are modeling assumptions. This is not a validated model of fly behavior.'} Measured soma positions omit only neurons without positions; those neurons remain in the model. Movement and combat are approximate, with original artwork.</p><a href="https://male-cns.janelia.org/" target="_blank" rel="noreferrer">Explore the MaleCNS project ↗</a></section>}
+   <div className="intro"><div><div className="eyebrow"><span className="dot"/> EXPERIMENT 001 <span className="slash">/</span> PLAYABLE PROTOTYPE</div><h1>Can you beat a<br/><em>fruit fly brain</em> at Melee?</h1></div><div className="intro-copy"><p>You bring the reflexes.<br/>The Fly brings a different kind of wiring.</p><div className="demo-label">{dummy?'SYNTHETIC CONTROLLER · LIVE DEMO':'MEASURED WIRING · AUTHORED NEURAL MODEL'}</div><p className="honesty">{dummy?'The anatomy can be measured. The activity is still a dummy-controller demonstration, not a biological simulation.':'The Fly is driven by neural activity over measured MaleCNS wiring. Dynamics and game mappings are authored assumptions, not biological behavior.'}</p></div></div>
+   {science&&<section className="notes"><strong>A wiring diagram is only the beginning.</strong><p>{dummy?'This demo uses a deterministic rule-based controller and synthetic activity.':'Game observations stimulate selected visual-projection neurons. Measured weighted connections propagate a stable activation model; calibrated descending/motor readouts produce the exact controls shown below. Normalized positive coupling, sensory interfaces and calibration are authored modeling assumptions. This is not a validated model of fly behavior.'} Measured soma positions omit only neurons without positions; those neurons remain in the model. Movement and combat are approximate, with original artwork.</p><a href="https://male-cns.janelia.org/" target="_blank" rel="noreferrer">Explore the MaleCNS project ↗</a></section>}
    <div className="experiment">
     <section className="arena-panel" aria-label="Fox versus Fly game">
      <div className="panel-title"><span><b className="index">01</b> THE MATCH</span><span className="live"><i className={running?'on':''}/>{running?'LIVE':snapshot?'READY':'LOADING WASM'}</span></div>
      <div className="arena"><canvas ref={gameCanvas} aria-label="Original Fox and Fly fighters on a floating platform"/>
       {!running&&<div className="play-overlay"><div className="vs"><span>FOX</span><i>vs</i><span>FLY</span></div><p>{status}</p><button className="play-button" onClick={play} disabled={!snapshot}>{snapshot?.tick&&snapshot.winner===-1?'RESUME MATCH':snapshot?.winner!==-1&&snapshot?'PLAY AGAIN':'PLAY'} <span aria-hidden="true">↗</span></button><small>Tap W: short hop · Hold W: full jump</small></div>}
      </div>
-     <div className="scoreboard" data-testid="hud" data-tick={snapshot?.tick||0} data-hash={snapshot?.hash||0} data-fox-x={snapshot?.fox.x||0} data-fox-y={snapshot?.fox.y||0} data-running={running}>
+     <div className="scoreboard" data-testid="hud" data-tick={snapshot?.tick||0} data-hash={snapshot?.hash||0} data-fox-x={snapshot?.fox.x||0} data-fox-y={snapshot?.fox.y||0} data-fly-x={snapshot?.fly.x||0} data-running={running}>
       {[snapshot?.fox,snapshot?.fly].map((f,i)=><div className={`score score-${i}`} key={i}><div><span className="fighter-name">{i?'FLY':'FOX'} <small>{i?(dummy?'DUMMY CPU':'NEURAL CPU'):'YOU'}</small></span><div className="stocks" aria-label={`${i?'Fly':'Fox'} stocks: ${f?.stocks??3}`}>{Array.from({length:3},(_,j)=><i className={j<(f?.stocks??3)?'remaining':''} key={j}/>)}</div></div><strong data-testid={i?'fly-damage':'fox-damage'}>{f?.damage||0}<span>%</span></strong></div>)}
      </div>
     </section>
     <section className="brain-panel" aria-label={dummy?'Anatomy with synthetic controller activity':'Measured anatomy with neural model activity'}>
-     <div className="panel-title"><span><b className="index">02</b> ANATOMY & ACTIVITY</span><span className="synthetic">{dummy?'SYNTHETIC ACTIVITY':'MODEL SPIKES'}</span></div>
-     <div className="brain-view"><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':'Measured MaleCNS soma positions with model spikes'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':'Actual model spikes · Authored dynamics'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key"><i/> inactive <i/> active</div></div>
+     <div className="panel-title"><span><b className="index">02</b> ANATOMY & ACTIVITY</span><span className="synthetic">{dummy?'SYNTHETIC ACTIVITY':'MODEL ACTIVITY'}</span></div>
+     <div className="brain-view"><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':'Measured MaleCNS soma positions with model activity'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':'Model activity · Calibrated readout'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key"><i/> inactive <i/> active</div></div>
      <div className="brain-stats"><div><strong>{format((geometry?.positions.length??0)/3)}</strong><span>{geometry?.measured?'MEASURED SOMA POSITIONS':'SYNTHETIC SAMPLES'}</span></div><div><strong data-testid="active-count">{format(frame?.active_neuron_count||0)}</strong><span>ACTIVE MODEL NODES</span></div><div><strong>{geometry?.measured?format(geometry.measured.missing):'—'}</strong><span>UNPOSITIONED NEURONS</span></div></div>
-     <div className="geometry-note" data-testid="geometry-status">{geometry?.measured?<>{format(geometry.neuron_count!)} retained neurons · {format(geometry.measured.edges)} connections in the measured graph. {dummy?'Prepare data and run an artificial neural experiment below. This display uses dummy activity.':'Live model spikes drive both this display and Fly controls. Unpositioned neurons participate in dynamics.'}</>:'Generated geometry; no measured anatomy loaded.'}</div>
+     <div className="geometry-note" data-testid="geometry-status">{geometry?.measured?<>{format(geometry.neuron_count!)} retained neurons · {format(geometry.measured.edges)} connections in the measured graph. {dummy?'Prepare data and run an artificial neural experiment below. This display uses dummy activity.':'Live model activity drives both this display and Fly controls. Unpositioned neurons participate in dynamics.'}</>:'Generated geometry; no measured anatomy loaded.'}</div>
     </section>
    </div>
    {geometryWarning&&<div className="geometry-warning" role="status">{geometryWarning}</div>}
    <div className="lower-grid">
     <section className="controls"><div className="eyebrow">YOUR SIDE OF THE EXPERIMENT</div><h2>Three stocks.<br/>One tiny rival.</h2><div className="keys"><div><kbd>A</kbd><kbd>D</kbd><span>Move</span></div><div><kbd>W</kbd><span>Jump / double jump</span></div><div><kbd>S</kbd><span>Fastfall</span></div><div><kbd>J</kbd><span>Attack</span></div></div><div className="control-bottom"><button className="text-button" onClick={()=>{session.current?.reset();setError('');}}>↻ Reset match <kbd>R</kbd></button><button className="text-button" disabled={!running} onClick={()=>session.current?.pause()}>Pause <kbd>esc</kbd></button></div></section>
-    <section className="signals"><div className="signal-heading"><h3>Sensory input</h3><span>GAME → CONTROLLER</span></div>{bars(SENSORY_LABELS,frame?.sensory_values)}</section>
+    <section className="signals"><div className="signal-heading"><h3>Sensory input</h3><span>GAME → CONTROLLER</span></div>{bars(dummy?SENSORY_LABELS:NEURAL_SENSORY_LABELS,frame?.sensory_values)}</section>
     <section className="signals motor"><div className="signal-heading"><h3>Motor output</h3><span>CONTROLLER → FLY</span></div>{bars(MOTOR_LABELS,frame?.motor_values)}<div className="current"><span>APPLIED</span><strong data-testid="motor-action">{action}</strong><small data-testid="brain-tick">f {frame?.tick??'—'}</small></div></section>
    </div>
    {dummy?<ConnectomeLoader geometry={geometry}/>:<p className="geometry-note">Neural graph loads automatically before PLAY. <a href="?controller=dummy">Open the synthetic demo and optional research diagnostics</a>.</p>}

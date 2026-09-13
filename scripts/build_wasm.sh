@@ -15,3 +15,5 @@ emcmake cmake -S . -B build/wasm -DCMAKE_BUILD_TYPE=Release
 cmake --build build/wasm -j 4
 mkdir -p web/public/wasm
 cp build/wasm/sim.js build/wasm/sim.wasm web/public/wasm/
+
+cp build/wasm/neural.js build/wasm/neural.wasm web/public/wasm/

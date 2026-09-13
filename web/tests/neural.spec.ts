@@ -1,5 +1,5 @@
 import {test,expect} from '@playwright/test';
-test('default game automatically loads real wiring and plays with actual model spikes',async({page})=>{
+test('default game automatically loads real wiring and plays with actual model activity',async({page})=>{
  test.setTimeout(90000);const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto('/');const play=page.getByRole('button',{name:'PLAY',exact:true});await expect(play).toBeEnabled({timeout:60000});
  await expect(page.getByText('MEASURED WIRING · AUTHORED NEURAL MODEL')).toBeVisible();
@@ -25,4 +25,15 @@ test('default neural controller plays with Canvas fallback and fits mobile width
  await page.goto('/');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled({timeout:60000});
  await page.getByRole('button',{name:'PLAY',exact:true}).click();await expect.poll(async()=>Number(await page.getByTestId('hud').getAttribute('data-tick')),{timeout:20000}).toBeGreaterThan(30);
  await expect(page.getByTestId('performance')).toContainText('Canvas fallback');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+});
+
+test('neural opponent approaches and hits a stationary Fox',async({page})=>{
+ test.setTimeout(90000);await page.goto('/');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled({timeout:60000});
+ await expect(page.getByText('MODEL ACTIVITY',{exact:true})).toBeVisible();await page.getByRole('button',{name:'PLAY',exact:true}).click();
+ await expect.poll(async()=>Number((await page.getByTestId('fox-damage').innerText()).replace('%','')),{timeout:15000}).toBeGreaterThanOrEqual(8);
+ await expect.poll(async()=>Number(await page.getByTestId('hud').getAttribute('data-tick')),{timeout:15000}).toBeGreaterThan(240);
+ await expect(page.getByTestId('hud')).toHaveAttribute('data-running','true');
+ await expect.poll(async()=>Number((await page.getByTestId('performance').innerText()).split(' ')[0]),{timeout:5000}).toBeGreaterThanOrEqual(50);
+ console.log('Calibrated controller performance:',await page.getByTestId('performance').innerText());
+ await page.screenshot({path:'test-results/neural-combat.png',fullPage:true});
 });

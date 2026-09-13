@@ -2,7 +2,7 @@
 
 **Can you beat a fruit fly brain at Melee?**
 
-The default game runs a neural controller over the measured MaleCNS v1.0 graph: 166,700 neurons and 25,582,938 directed connections. Actual model spikes drive Fly controls and the measured-soma activity view. **Dynamics, all-positive transmission and sensory/action mappings are authored assumptions, not validated fly behavior.** Original fighters and a deterministic C++/WASM game require no player installation. No Nintendo assets are included. See [neural gameplay](docs/NEURAL_GAMEPLAY.md).
+The default game runs a neural controller over the measured MaleCNS v1.0 graph: 166,700 neurons and 25,582,938 directed connections. Calibrated neural activity drives Fly controls and the measured-soma activity view. **Dynamics, normalized positive transmission and sensory/action mappings are authored assumptions, not validated fly behavior.** Original fighters and a deterministic C++/WASM game require no player installation. No Nintendo assets are included. See [neural gameplay](docs/NEURAL_GAMEPLAY.md).
 
 ## Play
 Open the public [game](https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site) in Chrome and wait for automatic graph preparation, then click **PLAY**. The initial graph download is about 76 MiB.
@@ -41,18 +41,18 @@ Native programs: `./build/batch_bench` (1/16/64/256/1024 independent scalar game
 ## Research and continuity
 Read [architecture](docs/ARCHITECTURE.md), [Melee evidence](docs/MELEE_PORT.md), [scientific provenance](docs/FLY_CONNECTOME.md), [progress](docs/PROGRESS.md) and [benchmarks](docs/BENCHMARKS.md). Future agents must read AGENTS.md and update PROGRESS.md.
 
-References: [Melee decomp](https://github.com/doldecomp/melee), [MaleCNS](https://male-cns.janelia.org/), [DoomFly](https://github.com/nftechie/doomfly), [HAL](https://github.com/ericyuegu/hal). Pinned source snapshots and inspected functions are recorded in the docs. No reference repository is a runtime dependency.
+References: [Melee decomp](https://github.com/doldecomp/melee), [MaleCNS](https://male-cns.janelia.org/), [DoomFly](https://github.com/nftechie/doomfly), [HAL](https://github.com/ericyuegu/hal). Pinned source snapshots and inspected functions are recorded in the docs. No reference repository is a **runtime** dependency; developers may use a personal disc image/Dolphin offline to produce fixtures the browser WASM must match (see [MELEE_PORT.md](docs/MELEE_PORT.md)). Disc images stay gitignored and are never shipped.
 
 ## Measured anatomy in the browser
 The checked-in browser package under web/public/connectome contains 139,662 normalized measured soma positions and their indices into the 166,700-node retained graph. These two binary assets total 2,234,592 bytes. Their manifest carries source coverage and attribution; full connectivity is packaged separately and loaded automatically by the default neural controller. Build regenerates the package when data/generated exists, otherwise verifies and reuses it. A production build also requires data/generated or a restored web/public/connectome-graph package; see data/README.md for preprocessing. Players need no source downloads.
 
-The browser verifies asset lengths, SHA-256 and mapping bounds before rendering. The renderer maps full-population model spikes to positioned neurons. Missing/corrupt geometry disables the default neural game; only the explicit synthetic demo may use a visibly labeled geometry fallback.
+The browser verifies asset lengths, SHA-256 and mapping bounds before rendering. The renderer maps full-population model activity to positioned neurons. Missing/corrupt geometry disables the default neural game; only the explicit synthetic demo may use a visibly labeled geometry fallback.
 
 ## Optional network preparation
 On the explicit `?controller=dummy` research/demo route, click **Load connectivity** below the match to load all 166,700 neurons and 25,582,938 directed edges into a separate worker. The 76.0 MiB compressed transport becomes 200.9 MiB of graph arrays. Progress, cancellation, retry and unload are available; gameplay continues. This prepares measured data only: activity and Fly control remain synthetic. See [transport design](docs/GRAPH_LOADING.md).
 
 ## Neural core development
-The deterministic sparse LIF core and its assumptions are documented in [NEURAL_MODEL.md](docs/NEURAL_MODEL.md). Run `node scripts/lif_bench.mjs` for checksum-verified full-topology headless stress workloads (requires data/generated). The same core drives default browser activity and Fly controls through MaleCNSBrain.
+The deterministic sparse LIF core and its assumptions are documented in [NEURAL_MODEL.md](docs/NEURAL_MODEL.md). Run `node scripts/lif_bench.mjs` for checksum-verified full-topology headless stress workloads (requires data/generated). It remains the diagnostic baseline. Default gameplay now uses the stable rate model and calibrated decoder described in NEURAL_GAMEPLAY.md.
 
 After **Load connectivity**, click **Run neural benchmark** to profile silent, sparse and dense artificial stimulation in your browser. **Stop experiment** keeps connectivity loaded; **Unload network** releases the worker. Results include reset replay, per-tick timings and model-array memory. Gameplay and the anatomy overlay still use DummyBrain.
 
@@ -76,3 +76,5 @@ After loading connectivity, **Start spike diagnostic** shows actual LIF spikes o
 Default gameplay uses [MaleCNSBrain](docs/NEURAL_GAMEPLAY.md); the optional research diagnostics above are isolated from its live controller.
 
 For the registered Sites host, run `node scripts/prepare_deploy.mjs` after the normal web build. It stages byte-identical output in root dist/, the static directory accepted by Sites; development remains in web/.
+
+Controller V2 replaces the saturated LIF baseline with a stable WASM activation model and calibrated readout. It now tracks both directions, attacks in reach and encodes stage recovery. The graph is not trained to play Melee; these interfaces remain explicit modeling assumptions. See docs/NEURAL_GAMEPLAY.md and data/controller-behavior.json.

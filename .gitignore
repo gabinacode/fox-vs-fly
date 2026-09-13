@@ -16,3 +16,13 @@ web/public/connectome-graph/
 
 .DS_Store
 dist/
+
+# Offline Melee reference media (developer-only; never ship)
+*.rvz
+*.iso
+*.gcm
+*.gcz
+*.wia
+*.nkit.*
+refs/melee-disc/
+refs/dolphin/
