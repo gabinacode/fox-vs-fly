@@ -74,3 +74,5 @@ The worker now offers **Annotation mapping**: artificial sequential left/right v
 After loading connectivity, **Start spike diagnostic** shows actual LIF spikes over measured somas in a separate panel. Reset/Clear/Unload manage its lifecycle; the bounded run uses artificial mapped drive. The upper anatomy view and Fly controls remain DummyBrain. See [NEURAL_DIAGNOSTIC.md](docs/NEURAL_DIAGNOSTIC.md).
 
 Default gameplay uses [MaleCNSBrain](docs/NEURAL_GAMEPLAY.md); the optional research diagnostics above are isolated from its live controller.
+
+For the registered Sites host, run `node scripts/prepare_deploy.mjs` after the normal web build. It stages byte-identical output in root dist/, the static directory accepted by Sites; development remains in web/.
