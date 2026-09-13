@@ -1,5 +1,9 @@
 # Completion audit — 2026-09-13
 
+## Controller V2 release update
+
+The public runtime now serves Controller V2: a stable rate-model WASM core with an authored calibrated readout and explicit recovery/reach sensory signals. This replaces the saturated LIF gameplay route; it does not establish biological behavioral validity. The deployment service confirmed the V2 source revision and a fresh anonymous Chrome session loaded `wasm/neural.js`, `wasm/neural.wasm`, and `neural/readout.json`, displayed **Recovery need**, dealt 8% to a stationary Fox, and completed pause/reset without page errors. Full evidence is recorded in `data/public-deployment.json`.
+
 The original brief, not the most recent small milestone, defines completion. This audit distinguishes verified public V1 functionality from explicitly later research. Public deployment and a fresh signed-out Chrome session now supply delivery evidence; see data/public-deployment.json.
 
 | Requirement | Current evidence | Assessment |
@@ -20,6 +24,6 @@ The original brief, not the most recent small milestone, defines completion. Thi
 | Fifth milestone: benchmark independent 1/16/64/256/1024 environments | GameBatch, per-frame serial equivalence tests at all sizes, data/batch-benchmark.json | Verified at all five sizes; canonical check exited 0 |
 | Later fidelity systems and research acceleration/plasticity | Shield/grab/DI/ledges/specials, SIMD/GPU/learning | Explicit later scope; not represented as complete |
 
-Completion evidence: the deployment service reports success for the exact runtime commit recorded in data/public-deployment.json, with public access. Fresh native Chrome, without cookies or account login, received HTTP 200, loaded the measured graph, started NEURAL CPU, moved Fox with the keyboard, reached game frame 121 with 4,201 active model nodes, paused and reset correctly, and emitted no page errors. Its screenshot was inspected. The canonical suite passed all 79 tests; real graph validation and both replay paths passed. Game batches match isolated per-frame states at all requested sizes. This proves the bounded public V1 in the brief, while preserving its explicit later fidelity/learning/acceleration scope and scientific limitations.
+Completion evidence: the deployment service reports success for the exact V2 runtime commit recorded in data/public-deployment.json, with public access. Fresh native Chrome, without cookies or account login, loaded the V2 rate WASM and calibration assets, showed the Recovery need sensor, dealt 8% damage to a stationary Fox, paused and reset correctly, and emitted no page errors. The canonical suite passed native 5/5, TypeScript 40/40, Python 17/17, and Chrome 22/22 checks. This proves the bounded public implementation while preserving its explicit fidelity, learning, acceleration, and scientific limitations.
 
 Public URL: https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site

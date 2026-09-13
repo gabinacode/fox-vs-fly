@@ -3,23 +3,27 @@
   "url": "https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site",
   "access": "public",
   "deployment_status": "succeeded",
-  "deployed_commit": "9d1b67ef1baf6d5fa315cef854a83149040b217f",
-  "version": 1,
+  "deployed_commit": "9af59b21a25189bcecf247ecde8a813d9125f301",
+  "version": 2,
   "anonymous_chrome": {
-    "http_status": 200,
-    "controller": "NEURAL CPU",
-    "tick_before_reset": 121,
-    "active_model_nodes_before_reset": 4201,
-    "keyboard_movement": true,
+    "controller_version": 2,
+    "calibration_version": 2,
+    "verified_loaded_assets": [
+      "wasm/neural.js",
+      "neural/readout.json",
+      "wasm/neural.wasm"
+    ],
+    "recovery_sensor_visible": true,
+    "stationary_fox_damage": "8%",
     "pause_reset": true,
     "page_errors": []
   },
   "canonical_tests": {
-    "native": 4,
-    "typescript": 37,
+    "native": 5,
+    "typescript": 40,
     "python": 17,
-    "chrome": 21
+    "chrome": 22
   },
-  "static_assets": 219,
-  "archive_sha256": "9bcf2e19f3d7a46e99a9170283fbaf26d284dffbb4d2511bc0b5a2791ea8f0e7"
+  "static_assets": 223,
+  "archive_sha256": "e93ca132743a16757845d33191c2e112e3657d8de5602a39838bebc392469199"
 }
