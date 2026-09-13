@@ -1,9 +1,12 @@
 # Progress
 
 ## CURRENT MILESTONE
-**M5 independent headless batches implemented (2026-09-13).** All requested sizes (1/16/64/256/1024) match isolated scalar game results, including resets. Local measurements are about 7.9–8.2 million aggregate game frames/s; neural models are excluded. Canonical verification exited 0: native 4/4, TypeScript 37/37, Python 17/17 and production Chrome 21/21. Public hosting is registered; deployment is in progress.
+**Public V1 deployed and verified (2026-09-13).** The public URL runs the full measured-connectome neural controller with no player account or installation. Fresh signed-out Chrome verified automatic preparation, PLAY, keyboard movement, live model spikes, pause and reset with no page errors. Canonical checks pass: native 4/4, TypeScript 37/37, Python 17/17, Chrome 21/21. All five headless batch sizes are measured. Scientific/fidelity limitations remain explicit.
+
+Play: https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site
 
 ## DONE
+- Public static deployment with all 219 runtime assets. Anonymous Chrome reaches live neural gameplay, moves Fox, pauses/resets and reports no page errors.
 - Independent scalar GameBatch API, per-frame serial equivalence at all five sizes, isolated resets and atomic shape validation. Deterministic warmup plus three-repeat benchmarks recorded in data/batch-benchmark.json.
 - Source-informed sticky short hop and launch-frame physics skip, authored heights, exhaustive button-release fixtures, and serialized latch in deterministic hashes.
 - Closed neural/game loop, automatic graph preparation, actual spike HUD, explicit dummy route, cached pause retries and reset generations. Connectivity-removal and pulse fixtures; 600-frame real-graph reset/native/WASM agreement. See NEURAL_GAMEPLAY.md.
@@ -59,7 +62,7 @@
 - Focused Chrome matches mapped trace 322408360 after reset; clear removes activity/counters, unload disposes worker/view. Screenshot inspected.
 
 ## IN PROGRESS
-Batch verification is complete. Preparing the exact static build for public deployment. The full V1 goal remains active; see V1_AUDIT.md. Local preview remains http://127.0.0.1:5173/.
+None for public V1. Runtime build is deployed from commit 9d1b67ef1baf6d5fa315cef854a83149040b217f. Deployment evidence is recorded in data/public-deployment.json; the completion audit is in V1_AUDIT.md. Future research directions below do not imply completed biological validation or full Melee equivalence.
 
 ## FAILING
 None. **./scripts/verify.sh exited 0.** Native 4/4, TypeScript 37/37, Python 17/17, production Chrome 21/21; full real artifact validation passes. All 900 native/WASM hashes match, final 2407523145.
@@ -67,7 +70,7 @@ Chrome initially exposed transparent decoding of `.gz` assets before integrity c
 
 ## KNOWN APPROXIMATIONS
 Default activity is actual LIF spikes over measured wiring; the explicit dummy route retains synthetic activity. No biologically validated sensory/motor mapping. The optional browser LIF benchmark propagates over measured wiring with authored parameters and artificial drive/signs. Geometry is measured somas only, not neurites or synapses; physical units not independently verified. 27,038 retained neurons have no soma position and are excluded only from display. Default graph preparation retains 200.9 MiB of typed arrays; graph dynamics now control default gameplay. Canvas fallback is functionally tested but has no 60-fps guarantee at the real point count.
-Gameplay remains approximate with authored tuning and shared generic mechanics. No ECB fidelity, DI, shield, grab, ledges, specials, body pushboxes, audio, touch controller, online play, or public hosting.
+Gameplay remains approximate with authored tuning and shared generic mechanics. No ECB fidelity, DI, shield, grab, ledges, specials, body pushboxes, audio, touch controller, online play, or online matchmaking. Public hosting is verified.
 
 ## MELEE FIDELITY STATUS
 Jump release/launch and gravity/fastfall structure PARTIALLY_MATCHED; other implemented systems APPROXIMATE; deferred systems NOT_IMPLEMENTED. Nothing is REFERENCE_MATCHED. Native/WASM agreement proves our core consistency, not Melee fidelity. See MELEE_PORT.md.
@@ -76,14 +79,15 @@ Jump release/launch and gravity/fastfall structure PARTIALLY_MATCHED; other impl
 Official v1.0 graph processed and structurally validated. Browser renders 139,662 measured soma positions via mapping into 166,700 retained graph indices. The UI reads counts and missing-position coverage from packaged metadata. 25,582,938 connections / 124,177,617 synaptic contacts can be prepared in a separate worker. The default gameplay worker runs MaleCNSBrain with authored mappings/signs; the explicit dummy route retains DummyBrain. See FLY_CONNECTOME.md and the source lock/report.
 
 ## BROWSER STATUS
-Production Chrome tests pass for automatic neural game preparation, live model activity, neural pause/resume/reset, graph failure without silent fallback, neural Canvas/mobile, measured geometry, game controls/HUD/reset, WASM failure, worker failure, WebGL2 and Canvas fallback, corrupt-geometry fallback, and 390px layout. Screenshots inspected. WebGL2 smoke: 60 game / 60 render / 60 neural fps with measured geometry. Same localhost preview retained and reachable. Other browsers, sustained low-end performance and public hosting untested.
+Production Chrome tests pass for automatic neural game preparation, live model activity, neural pause/resume/reset, graph failure without silent fallback, neural Canvas/mobile, measured geometry, game controls/HUD/reset, WASM failure, worker failure, WebGL2 and Canvas fallback, corrupt-geometry fallback, and 390px layout. Screenshots inspected. WebGL2 smoke: 60 game / 60 render / 60 neural fps with measured geometry. Same localhost preview retained and reachable. Public anonymous Chrome play is verified. Other browsers and sustained low-end performance remain untested.
 
 ## BENCHMARKS
 Browser geometry binaries 2,234,592 bytes; source graph unchanged at 218,702,759 bytes. Chrome WebGL2 smoke with 139,662 points: 60/60/60 game/render/neural fps. Latest native benchmark ~9,422,190 frames/sec; dummy microbenchmark ~65,173 steps/sec at its original 7,200-sample test size (not the real population). Graph load 0.959 s, structural validation 79.4 ms, 76.0 MiB logical download, 200.9 MiB arrays. During preparation the short UI counter read 57/60/60 game/render/neural fps; headless LIF benchmark now measures 0.706/3.195/12.069 ms per tick for silent/sparse/dense artificial drive. Browser LIF now measures 0.326/4.507/18.062 ms mean per tick for silent/sparse/dense artificial drive. Dense p95 is 54.3 ms; no 60 Hz neural budget or biological performance claim. See BENCHMARKS.md.
 
 ## NEXT 5 TASKS
-1. Publish and verify the complete static build at a public URL.
-2. Audit final V1 requirements against the deployed result.
-3. Measure longer neural gameplay behavior and improve weak lateral/action selectivity without biological overclaims.
-4. Continue Fox fidelity beyond the verified jump release/launch refinement.
-5. Extend neural sign/timestep sensitivity experiments and input/output mapping evidence.
+Future research outside the completed public V1:
+1. Evaluate longer neural matches and improve weak lateral/action selectivity without biological overclaims.
+2. Extend sign/timestep sensitivity experiments and population mapping evidence.
+3. Continue Fox fidelity beyond partial jump/gravity behavior: DI, collision and attack/knockback references.
+4. Profile neural scaling before choosing shared graph batches, threads or GPU work.
+5. Extend browser/device coverage and add accessibility/touch support if desired.

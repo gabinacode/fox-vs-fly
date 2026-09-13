@@ -5,13 +5,13 @@
 The default game runs a neural controller over the measured MaleCNS v1.0 graph: 166,700 neurons and 25,582,938 directed connections. Actual model spikes drive Fly controls and the measured-soma activity view. **Dynamics, all-positive transmission and sensory/action mappings are authored assumptions, not validated fly behavior.** Original fighters and a deterministic C++/WASM game require no player installation. No Nintendo assets are included. See [neural gameplay](docs/NEURAL_GAMEPLAY.md).
 
 ## Play
-Open the locally running [game](http://127.0.0.1:5173/) in Chrome and wait for automatic graph preparation, then click **PLAY**. The initial graph download is about 76 MiB.
+Open the public [game](https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site) in Chrome and wait for automatic graph preparation, then click **PLAY**. The initial graph download is about 76 MiB.
 - A / D: move; W: tap for a short hop, hold through takeoff for a full jump; release and press again in air to double jump.
 - S: fastfall while descending. J: attack (release and press for each attack).
 - R: reset. Escape: pause. Leaving the tab pauses; click Resume to continue.
 - Three stocks, one stage. Knock opponents past the blast boundaries.
 
-Players install nothing. A deployed copy requires only its static assets. This session does not publish a public URL.
+Players install nothing. A deployed copy requires only its static assets. The public site was verified in a fresh, signed-out Chrome session. A local development preview is also available at http://127.0.0.1:5173/.
 
 ## Developer setup
 Requires CMake 3.20+, C++17 compiler, Node 22.12+ / npm, Python 3, Emscripten 4.0.15, and Chrome for browser tests. These are developer tools only.
