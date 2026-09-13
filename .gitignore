@@ -1,12 +1,15 @@
 build/
+node_modules/
 web/node_modules/
 web/dist/
 web/public/wasm/
 web/test-results/
 web/playwright-report/
+web/.vite/
 .toolchain/
 data/raw/
 .sites-runtime/
+.wrangler/
 __pycache__/
 *.pyc
 .venv/
@@ -19,6 +22,11 @@ web/cinematic-output/
 
 .DS_Store
 dist/
+.env
+.env.*
+*.log
+.idea/
+.vscode/
 
 # Offline Melee reference media (developer-only; never ship)
 *.rvz

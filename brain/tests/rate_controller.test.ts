@@ -1,6 +1,6 @@
 import {it,expect} from 'vitest';
 import {MaleCNSBrain} from '../core/male_cns';
-import {neuralSensory} from '../core/neural_sensory';
+import {ATTACK_LEAD_FRAMES,neuralSensory,RECOVERY_MARGIN} from '../core/neural_sensory';
 const graph={annotations:{superclass:new Uint32Array([1,1,1,1,1,1,2,2,2,2,2,2])},dictionaries:{superclass:[null,'visual_projection','descending_neuron']}};
 const calibration={version:2 as const,graph_identity:'fixture',outputs:[6,7,8,9,10,11],weights:Array.from({length:6},(_,i)=>Array.from({length:6},(_,j)=>i===j?65535/6400:0))};
 class ChainModel {count=12;values=new Uint32Array(12);calls=0;constructor(private connected=true){}reset(){this.values.fill(0);this.calls=0;}step(input:Uint32Array){const next=Uint32Array.from(this.values,(v,i)=>Math.floor(.25*v+input[i]+(i>=6&&this.connected ? .6*this.values[i-6] : 0)));this.values=next;this.calls++;return next;}}
@@ -27,5 +27,25 @@ it('retains actual drive between model updates, caches retries and exactly reset
 });
 it('sensors identify reach and stage recovery and suppress unsafe fastfall',()=>{
  expect(neuralSensory({...obs(0),fox:{...fighter,x:10}})[3]).toBe(1);
+ expect(ATTACK_LEAD_FRAMES).toBe(9);
+ expect(RECOVERY_MARGIN).toBe(42);
+ expect(neuralSensory({...obs(0),fox:{...fighter,x:28,vx:-1.5},fly:{...fighter,vx:1.5}})[3]).toBe(1);
+ expect(neuralSensory({...obs(0),fox:{...fighter,x:2,vx:-1.5},fly:{...fighter,vx:1.5}})[3]).toBe(0);
+ expect(neuralSensory({...obs(0),fox:{...fighter,x:-28,vx:1.5},fly:{...fighter,vx:-1.5}})[3]).toBe(1);
+ expect(neuralSensory({...obs(0),fox:{...fighter,x:-2,vx:1.5},fly:{...fighter,vx:-1.5}})[3]).toBe(0);
  const s=neuralSensory({...obs(0),fly:{...fighter,x:72,y:-5,vy:-1,grounded:0}});expect(s[0]).toBe(1);expect(s[5]).toBe(1);expect(s[4]).toBe(0);
+ expect(neuralSensory({...obs(0),fly:{...fighter,x:72,y:8,vy:2,grounded:0,action:7,hitstun:8}})[5]).toBe(1);
+});
+it('does not consume jump cooldown while the game rejects the pulse',()=>{
+ const brain=new MaleCNSBrain(graph,new ChainModel(),calibration),fly={...fighter,x:72,y:-5,vy:-1,grounded:0,jumps:1,action:7,hitstun:2,hitlag:0};
+ brain.step({...obs(0),fly});brain.step({...obs(1),fly});
+ expect(brain.step({...obs(2),fly}).motor_values[2]).toBe(0);
+ const accepted=brain.step({...obs(3),fly:{...fly,action:5,hitstun:0}});expect(accepted.motor_values[2]).toBeGreaterThan(.5);
+ expect(brain.step({...obs(4),fly:{...fly,action:5,hitstun:0}}).motor_values[2]).toBe(0);
+});
+it('does not attack during recovery or consume that attack cooldown',()=>{
+ const brain=new MaleCNSBrain(graph,new ChainModel(),calibration),offstage={...fighter,x:72,y:1,grounded:0,action:5};
+ brain.step({...obs(0),fox:{...fighter,x:82},fly:offstage});brain.step({...obs(1),fox:{...fighter,x:82},fly:offstage});
+ expect(brain.step({...obs(2),fox:{...fighter,x:82},fly:offstage}).motor_values[3]).toBe(0);
+ expect(brain.step({...obs(3),fox:{...fighter,x:10},fly:{...fighter,grounded:0,action:5}}).motor_values[3]).toBeGreaterThan(.5);
 });

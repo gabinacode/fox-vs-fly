@@ -19,7 +19,7 @@ node scripts/replay_wasm.mjs
 node scripts/neural_replay.mjs
 node scripts/controller_behavior.mjs
 node scripts/activity_evidence.mjs
-node scripts/long_matches.mjs --check
+node scripts/long_matches.mjs --check --output data/long-matches-after-timing.json --baseline data/long-matches.json
 npm --prefix web run test:browser
 ./build/sim_bench
 ./build/batch_bench

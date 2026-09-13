@@ -58,47 +58,23 @@
     {
       "phase": "attack",
       "window": "early",
-      "gameTick": 32,
-      "modelTick": 17,
-      "distance": 8.079999999999998,
-      "activeModelNodes": 90067,
+      "gameTick": 24,
+      "modelTick": 13,
+      "distance": 21.331,
+      "activeModelNodes": 82363,
       "regions": {
         "brain": {
           "positioned": 124295,
-          "active": 83305,
-          "activeFraction": 0.6702200410314172,
-          "meanByte": 2.3214208133875056,
-          "p95Byte": 7
+          "active": 77026,
+          "activeFraction": 0.619703125628545,
+          "meanByte": 3.0840419968623034,
+          "p95Byte": 8
         },
         "vnc": {
           "positioned": 15367,
-          "active": 3874,
-          "activeFraction": 0.2520986529576365,
-          "meanByte": 0.26765146092275655,
-          "p95Byte": 1
-        }
-      }
-    },
-    {
-      "phase": "approach",
-      "window": "later",
-      "gameTick": 120,
-      "modelTick": 61,
-      "distance": 38.556,
-      "activeModelNodes": 132211,
-      "regions": {
-        "brain": {
-          "positioned": 124295,
-          "active": 114576,
-          "activeFraction": 0.9218069914316747,
-          "meanByte": 3.8367673679552676,
-          "p95Byte": 10
-        },
-        "vnc": {
-          "positioned": 15367,
-          "active": 5314,
-          "activeFraction": 0.3458059478102427,
-          "meanByte": 0.3971497364482332,
+          "active": 3233,
+          "activeFraction": 0.21038589184616385,
+          "meanByte": 0.22470228411531204,
           "p95Byte": 1
         }
       }
@@ -106,24 +82,48 @@
     {
       "phase": "attack",
       "window": "later",
-      "gameTick": 140,
-      "modelTick": 71,
-      "distance": 9.832999999999998,
-      "activeModelNodes": 140747,
+      "gameTick": 122,
+      "modelTick": 62,
+      "distance": 4.5539999999999985,
+      "activeModelNodes": 129323,
       "regions": {
         "brain": {
           "positioned": 124295,
-          "active": 116727,
-          "activeFraction": 0.9391125950360031,
-          "meanByte": 3.3321533448650387,
-          "p95Byte": 9
+          "active": 112816,
+          "activeFraction": 0.9076471298121405,
+          "meanByte": 2.427499094895209,
+          "p95Byte": 5
         },
         "vnc": {
           "positioned": 15367,
-          "active": 8157,
-          "activeFraction": 0.5308127806338258,
-          "meanByte": 0.6540639031691287,
+          "active": 5201,
+          "activeFraction": 0.3384525281447257,
+          "meanByte": 0.3720960499772239,
+          "p95Byte": 1
+        }
+      }
+    },
+    {
+      "phase": "approach",
+      "window": "later",
+      "gameTick": 188,
+      "modelTick": 95,
+      "distance": 17.542,
+      "activeModelNodes": 72006,
+      "regions": {
+        "brain": {
+          "positioned": 124295,
+          "active": 66727,
+          "activeFraction": 0.5368437990265095,
+          "meanByte": 1.218512409992357,
           "p95Byte": 2
+        },
+        "vnc": {
+          "positioned": 15367,
+          "active": 2228,
+          "activeFraction": 0.1449860089802824,
+          "meanByte": 0.14511615800091104,
+          "p95Byte": 1
         }
       }
     }

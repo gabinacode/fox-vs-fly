@@ -1,51 +1,63 @@
 # Longer matches and scripted adversaries
 
-This developer-only assay runs the actual full MaleCNS V2 WASM rate controller against authored opponent policies in the native/WASM game. It neither changes the controller nor claims human-level, Melee-reference, or biological performance.
+This developer-only assay runs the full MaleCNS V2 WASM rate controller against authored opponent policies in the native/WASM game. It does not claim human-level, Melee-reference, or biological performance.
 
 ## Reproduction and checks
 
-Run `node --test scripts/match_evaluation.test.mjs`, then `node scripts/long_matches.mjs` with the generated graph, built neural/game WASM, calibration and native `build/sim_replay` available. The full assay writes `data/long-matches.json` only after every bout and the reset replay pass. Progress rows printed before completion are provisional. `node scripts/long_matches.mjs --check` completely replays seed-7 rushdown and the 120-second seed-7 shuttle, plus the first 600 frames (or earlier natural end) for every other seed-7 policy. It checks recorded outcomes/metrics for the two complete cases and trace fingerprints for all cases. The canonical verify script includes these checks and the metric/policy unit tests; it does not rerun all 12 long bouts. Regenerate the full report when graph, WASM, calibration or opponent/metric source changes. Prefix passes do not certify the remainder of the other long trajectories.
+Run `node --test scripts/match_evaluation.test.mjs`, then `node scripts/long_matches.mjs --output data/long-matches-after-timing.json` with the generated graph, built neural/game WASM, calibration and native `build/sim_replay` available. The assay writes only after every bout and the reset replay pass. The original V2 baseline remains in `data/long-matches.json`.
+
+`node scripts/long_matches.mjs --check --output data/long-matches-after-timing.json --baseline data/long-matches.json` completely replays seed-7 rushdown and shuttle, plus the first 600 frames or natural end for every other seed-7 policy. It checks trace fingerprints, exact complete-match results, targeted before/after improvements and the stationary/cross-up/edge regression floors. Controller source participates in the report provenance hash. The canonical verify script runs this check; it does not rerun all 12 bouts.
 
 ## Protocol
 
-- Five combat policies run until natural match end or 3,600 game frames (60 simulated seconds); an additional nonattacking shuttle policy gets 7,200 frames (120 seconds). Early endings are preserved, never padded or called full-length bouts.
-- Each policy uses phase seeds 7 and 29. Seeds shift the opponent's attack pulses and movement waypoints only. Every match resets to simulation seed 42, Fox on the left and Fly on the right, with three stocks each. The two stationary cases are identical duplicates, not independent evidence.
-- Stationary sends no controls. Rushdown approaches and attacks in reach. Retreat/punish backs away within 28 units, returns inward near the stage margin, and attacks in reach. Jump/cross-up alternates waypoints and requests jumps nearby. Edge bait alternates targets near +/-56. Shuttle alternates +/-48 every 60 frames and never attacks. Mobile policies attempt inward recovery. Policies observe game state, not Fly's current neural output or future state; their timing and recovery rules are authored evaluation assumptions.
+- Five combat policies run until natural match end or 3,600 game frames. A nonattacking shuttle gets 7,200 frames. Early endings are preserved.
+- Each policy uses phase seeds 7 and 29. Seeds shift opponent attack pulses and movement waypoints only. Every match resets to simulation seed 42, Fox on the left and Fly on the right, with three stocks each. The stationary cases are identical deterministic duplicates.
+- Stationary sends no controls. Rushdown approaches and attacks in reach. Retreat/punish backs away within 28 units, returns inward near the stage margin, and attacks in reach. Jump/cross-up alternates waypoints and requests jumps nearby. Edge bait alternates targets near +/-56. Shuttle alternates +/-48 every 60 frames and never attacks. Mobile policies attempt inward recovery. These are authored evaluation assumptions.
 - Game semantics run at 60 Hz and V2 integrates every other frame. No renderer, human input, frame skipping, or alternate neural path participates.
-- Every input stream is replayed through native `sim_replay`; all per-frame game hashes must match WASM. One complete rushdown bout is repeated after resetting the neural model and simulator; its full metrics, activity/motor/opponent/game trace fingerprint and result must match exactly.
+- Every input stream is replayed through native `sim_replay`; all per-frame game hashes must match WASM. One complete rushdown bout is repeated after resetting the neural model and simulator, and its full result and trace must match.
 
 ## Metrics and limits
 
-The report retains every outcome, termination time, stock balance, observed positive damage increment, requested jump/attack/fastfall frames, axis reversals, longest period without a damage increment, active-model-node extrema/mean, and activity samples every 300 frames. “Active” retains the packed-byte threshold; saturation counts refer to packed byte 255, not biological spikes or raw rate saturation. Damage can omit a hit that is followed by a stock reset in the same step. Button requests are not necessarily accepted actions when the fighter is in hitlag, hitstun, attack recovery or lacks a jump.
+The report retains every outcome, termination time, stock balance, observed positive damage increment, requested jump/attack/fastfall frames, axis reversals, longest period without a damage increment, active-model-node extrema/mean, activity samples, recovery excursions and stock-loss state. “Active” retains the packed-byte threshold; it does not mean biological spikes. Damage can omit a hit followed by a stock reset in the same step. A recovery excursion begins when Fly is airborne outside +/-68 or below y=0 and closes on landing or stock loss; these descriptive counts do not establish recoverability.
 
-A recovery excursion begins when Fly is airborne outside +/-68 or below y=0; it closes on stage landing or a stock loss. Excursions still open at the other player's elimination are retained. The report counts frames outside hitlag/hitstun/attack, frames with a remaining jump, and requested jump frames. These counts are descriptive and do not establish that recovery was physically possible. Stock-loss events include the preceding position/damage and last neural sensory/motor/control state to support follow-up diagnosis.
+The timing trace associates a damage increase with the newest unresolved attack request in the preceding 12 frames. This is a diagnostic attribution window, not a game rule. The assay uses a small fixed policy set, one approximate stage and one spawn orientation. It provides no confidence interval, human win-rate estimate, biological validation, or claim of Melee fidelity.
 
-The result is a small fixed-policy stress test on one approximate stage and spawn orientation. There are no statistical confidence intervals, human win-rate estimates, biological validation, or claims of Melee fidelity. Losses and timeouts are findings, not reasons to weaken assertions or drop conditions. Production sensory mapping, calibration and dynamics remain unchanged.
+## Results after the timing fix
 
-## Results
-
-Completed 12 bouts, totaling 23,834 game frames (397.23 simulated seconds), with all conditions retained. Combat bouts ended naturally in 7.05–35.73 seconds; both shuttle bouts reached their complete 120-second horizon. These are 7 Fly wins, 3 losses and 2 timeouts in the specified fixture set, not an estimated win rate. The stationary rows duplicate the same deterministic condition.
+The timing-corrected controller completes all 12 bouts in 7,763 game frames (129.38 simulated seconds). All 12 are Fly wins in this fixture set; this is not an estimated win rate.
 
 | Opponent | Seed | Seconds | Fly result | Stocks Fox / Fly | Damage dealt / received |
 | --- | ---: | ---: | --- | --- | --- |
-| stationary | 7 | 7.05 | fly_win | 0 / 3 | 32 / 0 |
-| stationary | 29 | 7.05 | fly_win | 0 / 3 | 32 / 0 |
-| rushdown | 7 | 14.60 | fly_loss | 3 / 0 | 8 / 64 |
-| rushdown | 29 | 19.73 | fly_loss | 2 / 0 | 16 / 88 |
-| retreat_punish | 7 | 14.20 | fly_loss | 1 / 0 | 16 / 32 |
-| retreat_punish | 29 | 14.52 | fly_win | 0 / 1 | 32 / 24 |
-| jump_crossup | 7 | 35.73 | fly_win | 0 / 1 | 16 / 40 |
-| jump_crossup | 29 | 20.57 | fly_win | 0 / 1 | 24 / 24 |
-| edge_bait | 7 | 13.25 | fly_win | 0 / 3 | 24 / 24 |
-| edge_bait | 29 | 10.53 | fly_win | 0 / 2 | 24 / 16 |
-| shuttle | 7 | 120.00 | timeout | 2 / 3 | 8 / 0 |
-| shuttle | 29 | 120.00 | timeout | 3 / 3 | 0 / 0 |
+| stationary | 7 | 6.75 | fly_win | 0 / 3 | 32 / 0 |
+| stationary | 29 | 6.75 | fly_win | 0 / 3 | 32 / 0 |
+| rushdown | 7 | 15.95 | fly_win | 0 / 2 | 64 / 24 |
+| rushdown | 29 | 10.73 | fly_win | 0 / 3 | 40 / 16 |
+| retreat_punish | 7 | 8.82 | fly_win | 0 / 3 | 24 / 0 |
+| retreat_punish | 29 | 8.82 | fly_win | 0 / 3 | 24 / 0 |
+| jump_crossup | 7 | 15.53 | fly_win | 0 / 1 | 40 / 24 |
+| jump_crossup | 29 | 14.22 | fly_win | 0 / 2 | 48 / 16 |
+| edge_bait | 7 | 9.60 | fly_win | 0 / 3 | 32 / 8 |
+| edge_bait | 29 | 11.23 | fly_win | 0 / 2 | 24 / 16 |
+| shuttle | 7 | 8.25 | fly_win | 0 / 3 | 24 / 0 |
+| shuttle | 29 | 12.73 | fly_win | 0 / 3 | 48 / 0 |
 
-### Actionable findings
+## Timing diagnosis and controller change
 
-1. **Sustained pursuit/attack timing fails against the shuttle.** Each two-minute bout requests attack on 120 frames and reverses axis 119–121 times, but produces just 8 or 0 observed damage. The longest damage-free runs are 7,152 frames (119.2 seconds) and 7,200 frames (120 seconds). Mean active-model-node counts remain 125,425 and 125,090. This is ineffective control despite continuing model activity, not a renderer explanation. Prioritize tracing relative position/facing/velocity through attack startup and testing predictive reach or pulse timing as explicit authored controller changes.
-2. **Rushdown wins both phase variants.** Fly loses 0–3 and 0–2 on stocks after 14.60 and 19.73 seconds, dealing only 8/16 damage while receiving 64/88. Of seven recovery excursions, six end in stock loss and one lands. On the final seed-29 loss at tick 1,184, Fly still has one jump, no hitlag/hitstun, a recovery sensor of 1, inward axis 905, and no jump request at x=-113.121, y=3.6. This is a concrete reproduction for investigating recovery jump-pulse timing, cooldown and model latency. It does not prove that a last-frame jump could save that state; earlier counterfactuals are needed. Five of the other rushdown stock-loss events have no remaining jump.
-3. **Timing matters.** Retreat/punish seed 7 beats Fly, while seed 29 loses with Fly at one stock. Both cross-up cases leave Fly with only one stock. Edge-bait wins by Fly reflect these particular authored policies, including their recovery mistakes; they do not establish robust edge play.
-4. **No observed numerical failure.** Every emitted motor value remains finite and within 0..1, every decoded control stays bounded, model/game ticks advance, and sampled packed-byte saturation is zero at the 300-frame checkpoints. All per-frame native/WASM hashes agree; the complete seed-7 rushdown replay after model reset matches all metrics and its full activity/motor/opponent/game trace. These checks establish software reproducibility, not biological validity, strategic competence or universal stability.
+The baseline trace shows four game frames from attack-sensor onset to the first decoded attack request. The local attack has five startup frames, so the sensor must describe the expected target position nine frames ahead. The old current-distance condition fired when Fly was already almost coincident with a moving target: shuttle requests averaged only 0.66/0.48 units of current horizontal separation, while absolute projected separation at the active frame averaged 15.12/15.35. The new sensor projects relative horizontal velocity across the measured four-frame path plus five-frame startup and tests the authored hitbox interval, while retaining the current vertical limit.
 
-The model and game mechanics were not tuned to these results. The full evidence is retained in `data/long-matches.json`, including stock-loss control snapshots, activity samples, recovery counts, checksums and protocol limits. Publishing remains explicitly deferred.
+| Policy / seed | Baseline attributed hits / requests | After attributed hits / requests | Baseline result | After result |
+| --- | ---: | ---: | --- | --- |
+| shuttle / 7 | 1 / 120 | 3 / 4 | timeout | win, 3 stocks |
+| shuttle / 29 | 0 / 120 | 6 / 9 | timeout | win, 3 stocks |
+| rushdown / 7 | 1 / 17 | 8 / 12 | loss, 0 stocks | win, 2 stocks |
+| rushdown / 29 | 2 / 25 | 5 / 8 | loss, 0 stocks | win, 3 stocks |
+
+The baseline rushdown seed-29 trace also exposes a rejected recovery pulse. At tick 1,176 the decoder emits Jump 0.736 while Fly is in Hurt with two hitstun frames remaining. The game rejects the input, but the old controller starts its 30-frame jump cooldown. Fly dies at tick 1,184 with one jump still available. The controller now withholds jump/attack pulses during local action locks and does not consume their cooldowns. Recovery drive begins throughout an airborne excursion rather than only while falling, so decoder delay can elapse during hitstun.
+
+Attacks are withheld during recovery because the local Attack state freezes air steering. A traced edge loss crossed platform height at x=-72.878 while attack-locked. The common 42-unit steering and attack-suppression margin leaves 26 units before the authored platform edge.
+
+The protected conditions meet explicit before/after floors. Stationary stays at three stocks with 32 damage dealt in both seeds. Cross-up stays at one or more stocks and increases the second seed from one to two. Edge-bait remains at three/two stocks and deals at least the baseline damage. Retreat/punish also changes from one loss/one win to two three-stock wins, though it was not a tuning target.
+
+Every motor value remains finite and bounded, all native/WASM per-frame hashes agree, and the complete seed-7 rushdown reset replay matches all metrics and its full activity/motor/opponent/game trace. These checks establish deterministic behavior in these authored policies. They do not establish biological validity, Melee fidelity, human-level play or performance beyond this fixed assay.
+
+Baseline evidence remains in `data/long-matches.json` and `data/controller-timing-v2-baseline.json`; corrected evidence is in `data/long-matches-after-timing.json` and `data/controller-timing-after.json`. Publishing is explicitly deferred.

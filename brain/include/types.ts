@@ -1,4 +1,4 @@
-export interface FighterObservation { x:number; y:number; vx:number; vy:number; damage:number; grounded:number; action:number; hitstun:number; stocks:number; }
+export interface FighterObservation { x:number; y:number; vx:number; vy:number; damage:number; grounded:number; action:number; hitstun:number; stocks:number; jumps?:number; hitlag?:number; facing?:number; }
 export interface Observation { tick:number; fox:FighterObservation; fly:FighterObservation; }
 export interface ControllerInput { axis:number; buttons:number; }
 export const SENSORY_LABELS=['Opponent left','Opponent right','Approaching','Edge proximity','Damage signal','Ground contact'] as const;

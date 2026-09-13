@@ -5,9 +5,9 @@ Reproduce with `node scripts/activity_evidence.mjs` after generating the checked
 | Sample (game/model tick) | All active nodes | Brain active fraction | Brain mean / p95 byte | VNC active fraction | VNC mean / p95 byte |
 | --- | ---: | ---: | ---: | ---: | ---: |
 | Approach 10/6 | 46,804 | 36.85% | 1.513 / 4 | 3.46% | 0.037 / 0 |
-| Attack 32/17 | 90,067 | 67.02% | 2.321 / 7 | 25.21% | 0.268 / 1 |
-| Approach 120/61 | 132,211 | 92.18% | 3.837 / 10 | 34.58% | 0.397 / 1 |
-| Attack 140/71 | 140,747 | 93.91% | 3.332 / 9 | 53.08% | 0.654 / 2 |
+| Attack 24/13 | 82,363 | 61.97% | 3.084 / 8 | 21.04% | 0.225 / 1 |
+| Attack 122/62 | 129,323 | 90.76% | 2.427 / 5 | 33.85% | 0.372 / 1 |
+| Approach 188/95 | 72,006 | 53.68% | 1.219 / 2 | 14.50% | 0.145 / 1 |
 
 Fractions, means and nearest-rank p95 include **all positioned nodes in each cloud**, including zeros: 124,295 upper brain/head, 15,367 lower VNC. This is an operational geometry split at normalized y=0.34 in the gap between clouds, not an annotation-based anatomical classification. `somaNeuromere` is absent for 118,359 positioned nodes, so using only that annotation would omit most of the brain. Full-model counts include unpositioned neurons; they need not match the cloud counts. These selected snapshots are not match-wide averages.
 
@@ -23,7 +23,7 @@ Missing positions are especially severe for selected exact sensory classes: vnc_
 
 Default V2 now holds the latest packed frame exactly, including zeros and during pause. A fixed log display uses `log(1+byte)/log(256)` for color/size; an explicit linear option uses `byte/255`. Zero remains zero, byte 1 maps to display byte 32, byte 16 to 130, byte 255 to 255. The scale is fixed across time and populations, with no adaptive percentile boost or fabricated baseline. UI explains the formula, active-count threshold, unpositioned nodes, and V2 drive/readout limitations, and labels values as model activity, not spikes. WebGL and Canvas share the scale and continuous color interpolation. Dummy and LIF diagnostic temporal persistence remain separate.
 
-No controller equations, sensory populations, calibration, game behavior or biological claims changed. Adding VNC sensory drive would be a separate authored model experiment requiring recalibration and behavior tests; it is not justified as a cosmetic remedy.
+The later controller-timing change alters which stationary-duel frames satisfy the approach/attack sampler, so this table and `data/activity-evidence.json` were regenerated. Packing, display scaling, neural populations, calibration and biological boundaries remain unchanged. Adding VNC sensory drive would be a separate authored model experiment requiring recalibration and behavior tests; it is not justified as a cosmetic remedy.
 
 Tests cover fixed-scale endpoints/order, mapping with unpositioned nodes, exact replacement/zero clearing, the packing/count threshold, and a Chrome paused-canvas pixel comparison that verifies no fading and reversible log/linear selection. The evidence script is included in canonical verification.
 
@@ -35,4 +35,4 @@ Counts are derived from the full graph role array through the verified visual_in
 
 The worker sends a single transferable 166,700-byte membership array after graph initialization; no graph edges or annotation dictionaries are exposed to the UI. The renderer keeps 139,662 mapped role bytes and a corresponding WebGL attribute; population membership never overwrites activity bytes. Unit fixtures check exact selection/exclusions, visual mapping and missing-position conservation. Chrome checks both WebGL and mobile Canvas for coverage counts, zero-activity highlighting, reversibility, and unchanged membership pixels across gameplay/reset.
 
-Validation: `./scripts/verify.sh` exited 0 after this local change (native 5, TypeScript 45, Python 17, Chrome 24). Full-graph 600-frame activity/motor hash remains `183646e75b67bac3239615fbd9ee7c9233bb4d08fad5e201678c8eebf0049198`. Final desktop and mobile population screenshots reviewed. Not published.
+Validation: `./scripts/verify.sh` exited 0 after the timing update (native 5, TypeScript 49, policy/metric 2, Python 17, Chrome 24). The current 563-frame full-graph replay activity/motor hash is `d02de3b336e6c1c4fd3802d254f4553b5aaa1a1525c2f5736f3ee517a72cd1ef`. Final desktop and mobile population screenshots from the display change were reviewed. The timing update is not published.

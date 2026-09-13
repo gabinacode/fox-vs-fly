@@ -33,10 +33,10 @@
   "reversalAxis": 999.9,
   "stationaryDuel": {
     "damageDealt": 32,
-    "jumps": 4,
-    "fastfalls": 2,
-    "attacks": 5,
-    "minDistance": 1.093,
+    "jumps": 0,
+    "fastfalls": 0,
+    "attacks": 8,
+    "minDistance": 4.550000000000001,
     "flyStocks": 3,
     "meanMs": 11.50227974704492
   },
