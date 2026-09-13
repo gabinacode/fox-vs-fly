@@ -1,0 +1,14 @@
+{
+  "array_bytes": 210664708,
+  "download_bytes": 79731456,
+  "edges": 25582938,
+  "format": "MALECNS_GRAPH_CATALOG_V1",
+  "graph_identity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "manifest": {
+    "bytes": 179213,
+    "file": "graph-e0efe797f8159131ece4636c14c5d071e8bb1b7252cb6c26b4681be6d4fc924c.json",
+    "sha256": "e0efe797f8159131ece4636c14c5d071e8bb1b7252cb6c26b4681be6d4fc924c"
+  },
+  "nodes": 166700,
+  "release": "male-cns:v1.0"
+}

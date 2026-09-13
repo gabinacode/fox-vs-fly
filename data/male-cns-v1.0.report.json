@@ -1,0 +1,149 @@
+{
+  "activity_model": "NONE",
+  "annotation_dictionary_sha256": "0a6e2885fd36cb7dc2eb1ebbf582775bfe7f72c347b9b8a0556f737c268a9647",
+  "artifact_bytes": 218702759,
+  "artifact_checksums": {
+    "annotation_class": "866fe72c18c2760103ed7f235b98eb8df0e12f517d1aff7ad0d00ccd26ff8597",
+    "annotation_consensus_nt": "4dc7ff940fe3ee4d954c61f64de79a0eef0db3ad13c9945a05a351d7035b880b",
+    "annotation_ground_truth": "17b9e747b1dab9f1677592c768fe7d07bb3ea024e7e9ac3417321271d7190891",
+    "annotation_predicted_nt": "77753337b355f18e59d19e55cd2bf818a2a663c55261dca4c3ab47f40e9dc0ec",
+    "annotation_rootSide": "bbc935067a533dd764b7659ad0e85e66192bd209439c1018ca29dbc5a97f3498",
+    "annotation_somaNeuromere": "ca18c7f5aaf6155c8ba5c859b22570398e20dddaa5bc715f92d7d29eeef8f882",
+    "annotation_somaSide": "37b28b9f3b9e8cfdc392277d45a1d117ada8d2aa643dfb10ddbbc997de891110",
+    "annotation_status": "779880cb99dccfa90c56cfb8a187e96508df89f5a040c9164dcf1e33936529ce",
+    "annotation_statusLabel": "ed2ab26028f7b0c17ad4b1985225d86c428b71533771fea8824e99b18ffe5a72",
+    "annotation_subclass": "0d63efd4e8f38e054dc75dcd77409eb041b54a06fa39a6f02eccacac3336d3f6",
+    "annotation_superclass": "fd1051ceef93c581232ff1df020c7e8aae4b4a7512182878ab15352663d08f69",
+    "annotation_type": "4af34959d1fdefc38191b8c22a06594dac3a6133a859ce5aa01d7dfb0e6d0a33",
+    "neuron_ids": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+    "positions": "205f3458313b93a75cfe94e75221757a0701a4b3915ae19bbb5838f4000beb70",
+    "row_offsets": "b16e09e4ae18ab90e5bcdde62f714a99c1f6d8eb54bacafdf6d95d391af4dd6a",
+    "source_positions": "4c565db8f2c748554192ea00dc4808bc086ea83ae88b17b7f0048ec156079eb1",
+    "target_indices": "a782a694f8aae9009f8d1334e93d4744a17efc85aff2c2221f1611c91d534102",
+    "visual_indices": "5c4922247f979c1c774f33ba86750c766104aaa95d71a806cf033ca165b6cf6d",
+    "weights": "2c09b9cab5105891fbaaee9a2c4aad4216349fc94fa00f507262214bcd361c1f"
+  },
+  "attribution": "MaleCNS: FlyEM (HHMI Janelia), University of Cambridge, MRC LMB, Google Research",
+  "coalesced_duplicate_rows": 0,
+  "edge_policy": "All released positive edges with both endpoints retained; no extra weight threshold, autapses kept; duplicate directed pairs summed",
+  "edges": 25582938,
+  "elapsed_seconds": 26.789,
+  "excluded_edge_rows": 126273746,
+  "excluded_nodes": {
+    "explicit_glia": 11864,
+    "missing_superclass": 33013
+  },
+  "excluded_synaptic_contacts": 187655626,
+  "format": "MALECNS_CSR_V2",
+  "license": "CC-BY-4.0",
+  "missing_soma_positions": 27038,
+  "neurotransmitters": {
+    "acetylcholine": 103720,
+    "dopamine": 392,
+    "gaba": 22069,
+    "glutamate": 29302,
+    "histamine": 7891,
+    "octopamine": 101,
+    "serotonin": 48,
+    "unclear": 2999,
+    "unknown": 178
+  },
+  "node_policy": "Assigned nonempty superclass, excluding explicit Glia; uncertain tbc classes retained; no quality/Traced-only filter",
+  "positioned_neurons": 139662,
+  "provenance": "MALECNS",
+  "release": "male-cns:v1.0",
+  "retained_edge_rows": 25582938,
+  "retained_neurons": 166700,
+  "retained_synaptic_contacts": 124177617,
+  "source_annotation_rows": 211577,
+  "source_edge_rows": 151856684,
+  "source_registry": {
+    "checksum_origin": "SHA-256 computed from first HTTPS acquisition; not a publisher-provided digest",
+    "files": {
+      "annotations": {
+        "bytes": 14483314,
+        "filename": "body-annotations-male-cns-v1.0-minconf-0.5.feather",
+        "sha256": "2177e246113e4cfbf1e7772ec37c6da1955ff22e8063d0b1f833101f99a9a3b2",
+        "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-annotations-male-cns-v1.0-minconf-0.5.feather"
+      },
+      "edges": {
+        "bytes": 1051241946,
+        "filename": "connectome-weights-male-cns-v1.0-minconf-0.5.feather",
+        "sha256": "e35da783d1c686b2b58b3b87cd6a403ae43bfcfba8bff28e08ef752c1a56afc1",
+        "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/connectome-weights-male-cns-v1.0-minconf-0.5.feather"
+      },
+      "neurotransmitters": {
+        "bytes": 43282834,
+        "filename": "body-neurotransmitters-male-cns-v1.0.feather",
+        "sha256": "95c9289220663abeb3409f3ad9e5a7f8a53f8093f5139d15502cd08da8879621",
+        "url": "https://storage.googleapis.com/flyem-male-cns/v1.0/connectome-data/flat-connectome/body-neurotransmitters-male-cns-v1.0.feather"
+      }
+    },
+    "release": "male-cns:v1.0",
+    "source": "https://male-cns.janelia.org/download/"
+  },
+  "source_synaptic_contacts": 311833243,
+  "spatial": {
+    "axis_order": [
+      0,
+      2,
+      1
+    ],
+    "axis_sign": [
+      1,
+      -1,
+      1
+    ],
+    "center": [
+      48068.0,
+      36877.0,
+      72342.5
+    ],
+    "description": "One point per annotated soma, not a neurite/synapse reconstruction",
+    "field": "somaLocation",
+    "missing_policy": "omit from geometry, retain in graph; tosomaLocation not substituted",
+    "scale": 73162.94117647059,
+    "source_max": [
+      93668.0,
+      68996.0,
+      134531.0
+    ],
+    "source_min": [
+      2468.0,
+      4758.0,
+      10154.0
+    ],
+    "source_units": "native annotation coordinates; physical units not independently verified"
+  },
+  "superclasses": {
+    "ENS": 50,
+    "ascending_neuron": 1846,
+    "cb_efferent": 4,
+    "cb_endocrine": 72,
+    "cb_intrinsic": 32164,
+    "cb_motor": 107,
+    "cb_sensory": 4868,
+    "cb_sensory_tbc": 14,
+    "descending_neuron": 1314,
+    "descending_neuron_tbc": 2,
+    "efferent_ascending": 8,
+    "efferent_descending": 4,
+    "ol_intrinsic": 89403,
+    "ol_sensory": 6098,
+    "sensory_ascending": 537,
+    "sensory_ascending_tbc": 2,
+    "sensory_descending": 12,
+    "visual_centrifugal": 563,
+    "visual_projection": 9201,
+    "visual_projection_tbc": 2,
+    "vnc_efferent": 94,
+    "vnc_endocrine": 22,
+    "vnc_intrinsic": 13161,
+    "vnc_motor": 708,
+    "vnc_sensory": 6370,
+    "vnc_sensory_tbc": 36,
+    "vnc_tbc": 38
+  },
+  "unmatched_nt_rows": 178,
+  "upstream_confidence_threshold": 0.5
+}

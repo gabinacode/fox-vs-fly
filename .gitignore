@@ -1,0 +1,17 @@
+build/
+web/node_modules/
+web/dist/
+web/public/wasm/
+web/test-results/
+web/playwright-report/
+.toolchain/
+data/raw/
+.sites-runtime/
+__pycache__/
+*.pyc
+.venv/
+data/generated/
+data/.generated-*/
+web/public/connectome-graph/
+
+.DS_Store

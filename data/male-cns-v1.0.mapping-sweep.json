@@ -1,0 +1,510 @@
+{
+  "format": "MAPPING_SWEEP_REPORT_V1",
+  "release": "male-cns:v1.0",
+  "graph_identity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "assumptions": "LIF_V1, all-positive signs, exact visual_projection/descending_neuron lateral mapping; arbitrary current units; no biological calibration",
+  "amplitudes": [
+    250,
+    500,
+    1000
+  ],
+  "shuffle_seeds": [
+    20260912,
+    20260913,
+    20260914
+  ],
+  "method": "60 ticks per independently reset stimulus; reverse-order replay; warmup and measurement; production Chrome local smoke",
+  "result": {
+    "suite": "robustness",
+    "mappingCoverage": {
+      "inputs": [
+        4589,
+        4612
+      ],
+      "outputs": [
+        656,
+        648
+      ],
+      "excludedInput": 0,
+      "excludedOutput": 10
+    },
+    "rows": [
+      {
+        "name": "Annotated \u00b7 250",
+        "amplitude": 250,
+        "trialHashes": [
+          153494619,
+          3229257601
+        ],
+        "directionalContrast": 0.009116230051189417,
+        "readout": [
+          [
+            0.11445630081300813,
+            0.11656378600823045
+          ],
+          [
+            0.11328760162601625,
+            0.12451131687242799
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          202822,
+          209995
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 412817,
+        "lateSpikes": 209995,
+        "hash": 3605170222,
+        "stepMs": 2.9966666638851165,
+        "p95Ms": 5.5,
+        "wallMs": 572
+      },
+      {
+        "name": "Transmission off \u00b7 250",
+        "amplitude": 250,
+        "trialHashes": [
+          1397465817,
+          2529807057
+        ],
+        "directionalContrast": 0,
+        "readout": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          36712,
+          36896
+        ],
+        "lastSpikeTick": 113,
+        "spikes": 73608,
+        "lateSpikes": 36896,
+        "hash": 4098475160,
+        "stepMs": 0.43499999642372134,
+        "p95Ms": 0.5999999046325684,
+        "wallMs": 206.79999995231628
+      },
+      {
+        "name": "Shuffled 20260912 \u00b7 250",
+        "amplitude": 250,
+        "shuffleSeed": 20260912,
+        "trialHashes": [
+          3736479779,
+          2944083246
+        ],
+        "directionalContrast": 0.00016028053799056752,
+        "readout": [
+          [
+            0.015853658536585366,
+            0.01617798353909465
+          ],
+          [
+            0.016336382113821137,
+            0.01682098765432099
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          207377,
+          211871
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 419248,
+        "lateSpikes": 211871,
+        "hash": 852200311,
+        "stepMs": 2.95499999721845,
+        "p95Ms": 5.1000001430511475,
+        "wallMs": 568
+      },
+      {
+        "name": "Shuffled 20260913 \u00b7 250",
+        "amplitude": 250,
+        "shuffleSeed": 20260913,
+        "trialHashes": [
+          3007750096,
+          944525250
+        ],
+        "directionalContrast": -9.911673190805999e-05,
+        "readout": [
+          [
+            0.017809959349593497,
+            0.013940329218106996
+          ],
+          [
+            0.018114837398373985,
+            0.014146090534979424
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          207089,
+          208588
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 415677,
+        "lateSpikes": 208588,
+        "hash": 4094004310,
+        "stepMs": 3.7541666587193805,
+        "p95Ms": 5.400000095367432,
+        "wallMs": 706.2000000476837
+      },
+      {
+        "name": "Shuffled 20260914 \u00b7 250",
+        "amplitude": 250,
+        "shuffleSeed": 20260914,
+        "trialHashes": [
+          3493350557,
+          3633714395
+        ],
+        "directionalContrast": -0.00046264930241895,
+        "readout": [
+          [
+            0.01875,
+            0.017566872427983538
+          ],
+          [
+            0.01877540650406504,
+            0.01712962962962963
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          207447,
+          204019
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 411466,
+        "lateSpikes": 204019,
+        "hash": 4034197042,
+        "stepMs": 3.6999999940395356,
+        "p95Ms": 5.5,
+        "wallMs": 703.0999999046326
+      },
+      {
+        "name": "Annotated \u00b7 500",
+        "amplitude": 500,
+        "trialHashes": [
+          4150718908,
+          2992954141
+        ],
+        "directionalContrast": 0.01111612967981529,
+        "readout": [
+          [
+            0.12705792682926828,
+            0.12800925925925927
+          ],
+          [
+            0.12329776422764227,
+            0.13536522633744855
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          250559,
+          255322
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 505881,
+        "lateSpikes": 255322,
+        "hash": 1130961779,
+        "stepMs": 4.444166678190231,
+        "p95Ms": 5.900000095367432,
+        "wallMs": 804
+      },
+      {
+        "name": "Transmission off \u00b7 500",
+        "amplitude": 500,
+        "trialHashes": [
+          2138957365,
+          1198013033
+        ],
+        "directionalContrast": 0,
+        "readout": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          55068,
+          55344
+        ],
+        "lastSpikeTick": 117,
+        "spikes": 110412,
+        "lateSpikes": 55344,
+        "hash": 2791957716,
+        "stepMs": 0.5441666603088379,
+        "p95Ms": 0.7000000476837158,
+        "wallMs": 216.70000004768372
+      },
+      {
+        "name": "Shuffled 20260912 \u00b7 500",
+        "amplitude": 500,
+        "shuffleSeed": 20260912,
+        "trialHashes": [
+          2421331184,
+          1878826025
+        ],
+        "directionalContrast": 2.8229448961192283e-06,
+        "readout": [
+          [
+            0.018800813008130083,
+            0.01895576131687243
+          ],
+          [
+            0.019029471544715446,
+            0.01918724279835391
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          254630,
+          256320
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 510950,
+        "lateSpikes": 256320,
+        "hash": 1475866011,
+        "stepMs": 4.296666661898295,
+        "p95Ms": 5.700000047683716,
+        "wallMs": 788.7000000476837
+      },
+      {
+        "name": "Shuffled 20260913 \u00b7 500",
+        "amplitude": 500,
+        "shuffleSeed": 20260913,
+        "trialHashes": [
+          3223441040,
+          3033094320
+        ],
+        "directionalContrast": 0.0004108953126568289,
+        "readout": [
+          [
+            0.020934959349593496,
+            0.016383744855967077
+          ],
+          [
+            0.020884146341463416,
+            0.016743827160493826
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          255797,
+          255590
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 511387,
+        "lateSpikes": 255590,
+        "hash": 707023968,
+        "stepMs": 4.323333342870076,
+        "p95Ms": 5.700000047683716,
+        "wallMs": 786.0999999046326
+      },
+      {
+        "name": "Shuffled 20260914 \u00b7 500",
+        "amplitude": 500,
+        "shuffleSeed": 20260914,
+        "trialHashes": [
+          457416526,
+          1255567405
+        ],
+        "directionalContrast": 0.000431283248017663,
+        "readout": [
+          [
+            0.022027439024390243,
+            0.0202417695473251
+          ],
+          [
+            0.021544715447154472,
+            0.020190329218106994
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          254898,
+          252264
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 507162,
+        "lateSpikes": 252264,
+        "hash": 3523729625,
+        "stepMs": 4.278333336114883,
+        "p95Ms": 5.700000047683716,
+        "wallMs": 776.2000000476837
+      },
+      {
+        "name": "Annotated \u00b7 1000",
+        "amplitude": 1000,
+        "trialHashes": [
+          1348478627,
+          3786965343
+        ],
+        "directionalContrast": 0.015326708822643781,
+        "readout": [
+          [
+            0.13940548780487805,
+            0.13940329218106995
+          ],
+          [
+            0.13295223577235774,
+            0.14827674897119342
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          300375,
+          304639
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 605014,
+        "lateSpikes": 304639,
+        "hash": 4094718388,
+        "stepMs": 4.920000006755193,
+        "p95Ms": 6.700000047683716,
+        "wallMs": 872.7000000476837
+      },
+      {
+        "name": "Transmission off \u00b7 1000",
+        "amplitude": 1000,
+        "trialHashes": [
+          601952421,
+          3826655813
+        ],
+        "directionalContrast": 0,
+        "readout": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          91780,
+          92240
+        ],
+        "lastSpikeTick": 117,
+        "spikes": 184020,
+        "lateSpikes": 92240,
+        "hash": 2854557344,
+        "stepMs": 0.5458333333333333,
+        "p95Ms": 0.7000000476837158,
+        "wallMs": 219.90000009536743
+      },
+      {
+        "name": "Shuffled 20260912 \u00b7 1000",
+        "amplitude": 1000,
+        "shuffleSeed": 20260912,
+        "trialHashes": [
+          2992661511,
+          1233460176
+        ],
+        "directionalContrast": -4.7362742145940634e-05,
+        "readout": [
+          [
+            0.02223069105691057,
+            0.02204218106995885
+          ],
+          [
+            0.022560975609756097,
+            0.022325102880658435
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          317751,
+          319114
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 636865,
+        "lateSpikes": 319114,
+        "hash": 1632124789,
+        "stepMs": 4.329999999205271,
+        "p95Ms": 6.5,
+        "wallMs": 790.6000001430511
+      },
+      {
+        "name": "Shuffled 20260913 \u00b7 1000",
+        "amplitude": 1000,
+        "shuffleSeed": 20260913,
+        "trialHashes": [
+          1431563786,
+          56123658
+        ],
+        "directionalContrast": 0.00025437870119441805,
+        "readout": [
+          [
+            0.02464430894308943,
+            0.01954732510288066
+          ],
+          [
+            0.024415650406504064,
+            0.01957304526748971
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          318759,
+          319100
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 637859,
+        "lateSpikes": 319100,
+        "hash": 1949441280,
+        "stepMs": 5.083333345254262,
+        "p95Ms": 6.699999809265137,
+        "wallMs": 900.5999999046326
+      },
+      {
+        "name": "Shuffled 20260914 \u00b7 1000",
+        "amplitude": 1000,
+        "shuffleSeed": 20260914,
+        "trialHashes": [
+          3093228553,
+          4182471105
+        ],
+        "directionalContrast": 0.0006599417846030291,
+        "readout": [
+          [
+            0.025914634146341462,
+            0.02353395061728395
+          ],
+          [
+            0.025203252032520326,
+            0.023482510288065844
+          ]
+        ],
+        "ticks": 120,
+        "spikeBins": [
+          318370,
+          317342
+        ],
+        "lastSpikeTick": 119,
+        "spikes": 635712,
+        "lateSpikes": 317342,
+        "hash": 1023893976,
+        "stepMs": 5.0550000131130215,
+        "p95Ms": 6.6000001430511475,
+        "wallMs": 898.9000000953674
+      }
+    ],
+    "modelBytes": 3167300,
+    "inputBytes": 666800
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "release": "male-cns:v1.0",
+  "retained_neurons": 166700,
+  "positioned_neurons": 139662,
+  "missing_soma_positions": 27038,
+  "edges": 25582938,
+  "spatial": {
+    "axis_order": [
+      0,
+      2,
+      1
+    ],
+    "axis_sign": [
+      1,
+      -1,
+      1
+    ],
+    "center": [
+      48068.0,
+      36877.0,
+      72342.5
+    ],
+    "description": "One point per annotated soma, not a neurite/synapse reconstruction",
+    "field": "somaLocation",
+    "missing_policy": "omit from geometry, retain in graph; tosomaLocation not substituted",
+    "scale": 73162.94117647059,
+    "source_max": [
+      93668.0,
+      68996.0,
+      134531.0
+    ],
+    "source_min": [
+      2468.0,
+      4758.0,
+      10154.0
+    ],
+    "source_units": "native annotation coordinates; physical units not independently verified"
+  },
+  "license": "CC-BY-4.0",
+  "attribution": "MaleCNS: FlyEM (HHMI Janelia), University of Cambridge, MRC LMB, Google Research",
+  "graph_identity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "format": "MALECNS_GEOMETRY_V1",
+  "activity_model": "SYNTHETIC_DEMO",
+  "arrays": {
+    "positions": {
+      "bytes": 1675944,
+      "dtype": "<f4",
+      "file": "positions-205f3458313b93a7.bin",
+      "length": 418986,
+      "sha256": "205f3458313b93a75cfe94e75221757a0701a4b3915ae19bbb5838f4000beb70"
+    },
+    "visual_indices": {
+      "bytes": 558648,
+      "dtype": "<u4",
+      "file": "visual_indices-5c4922247f979c1c.bin",
+      "length": 139662,
+      "sha256": "5c4922247f979c1c774f33ba86750c766104aaa95d71a806cf033ca165b6cf6d"
+    }
+  }
+}
