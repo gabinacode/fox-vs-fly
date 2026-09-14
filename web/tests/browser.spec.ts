@@ -34,6 +34,52 @@ test('worker failure pauses gameplay',async({page})=>{
  await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();await page.getByRole('button',{name:'PLAY',exact:true}).click();await expect(page.getByRole('alert')).toContainText('worker stopped');await expect(page.getByTestId('hud')).toHaveAttribute('data-running','false');
 });
 test('mobile layout has no horizontal overflow',async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/mobile.png',fullPage:true});});
+test('mobile browser blur does not pause an active match',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ await page.getByRole('button',{name:'PLAY',exact:true}).click();
+ const hud=page.getByTestId('hud');
+ await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(5);
+ const before=Number(await hud.getAttribute('data-tick'));
+ await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
+ await expect(hud).toHaveAttribute('data-running','true');
+ await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(before);
+});
+test('mobile touch stick moves Fox and HIT attacks',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ await page.getByRole('button',{name:'PLAY',exact:true}).click();
+ const hud=page.getByTestId('hud');
+ await expect(page.getByTestId('touch-pad')).toBeVisible();
+ const stick=page.getByTestId('touch-stick');
+ const box=await stick.boundingBox();
+ expect(box).toBeTruthy();
+ const startX=Number(await hud.getAttribute('data-fox-x'));
+ await page.mouse.move(box!.x+box!.width/2,box!.y+box!.height/2);
+ await page.mouse.down();
+ await page.mouse.move(box!.x+box!.width*0.9,box!.y+box!.height/2);
+ await expect.poll(async()=>Number(await hud.getAttribute('data-fox-x'))).toBeGreaterThan(startX);
+ await page.mouse.up();
+ const flyStart=Number(await page.getByTestId('fly-damage').innerText().then(s=>s.replace('%','')));
+ for(let i=0;i<50;i++){
+  const damage=Number(await page.getByTestId('fly-damage').innerText().then(s=>s.replace('%','')));
+  if(damage>flyStart)break;
+  const dx=Number(await hud.getAttribute('data-fly-x'))-Number(await hud.getAttribute('data-fox-x'));
+  const stickBox=(await stick.boundingBox())!;
+  const cx=stickBox.x+stickBox.width/2,cy=stickBox.y+stickBox.height/2;
+  await page.mouse.move(cx,cy);await page.mouse.down();
+  await page.mouse.move(cx+(dx<0?-36:36),cy);await page.waitForTimeout(60);
+  await page.mouse.up();
+  const hit=page.getByTestId('touch-hit');
+  const hb=await hit.boundingBox();
+  await page.mouse.click(hb!.x+hb!.width/2,hb!.y+hb!.height/2);
+  await page.waitForTimeout(80);
+ }
+ await expect.poll(async()=>Number(await page.getByTestId('fly-damage').innerText().then(s=>s.replace('%','')))).toBeGreaterThan(flyStart);
+ await page.screenshot({path:'test-results/mobile-touch.png',fullPage:true});
+});
 
 test('measured geometry loads with explicit synthetic activity and no full graph download',async({page})=>{
  const requested:string[]=[];page.on('request',r=>requested.push(r.url()));await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
