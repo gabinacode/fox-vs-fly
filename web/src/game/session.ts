@@ -3,6 +3,7 @@ import type {BrainFrame} from '../../../brain/include/types';
 import {motorDecode} from '../../../brain/core/motor';
 import {FixedClock} from './clock';
 import {PlayerInput} from './input';
+type WorkerFrame=Omit<BrainFrame,'activity'>&{activity?:Uint8Array};
 export class Session {
  input=new PlayerInput();clock=new FixedClock();running=false;epoch=0;generation=0;pending=false;frame:BrainFrame|null=null;state:Snapshot;
  /** When true, the interval pump does not advance — callers use stepOnce(). */
@@ -16,15 +17,18 @@ export class Session {
  private stepWaiters:{resolve:()=>void;reject:(error:Error)=>void}|null=null;
  constructor(readonly sim:Simulation,readonly worker:Worker,private change:()=>void,private failed:(message:string)=>void,readonly neuronCount=7200){
   this.state=sim.snapshot();
-  worker.onmessage=(event:MessageEvent<{epoch:number;frame:BrainFrame;type?:string;message?:string}>)=>{
+  worker.onmessage=(event:MessageEvent<{epoch:number;frame?:WorkerFrame;type?:string;message?:string}>)=>{
    if(event.data.epoch!==this.epoch||!this.pending||!this.running)return;
-   try{if(event.data.type==='error')throw Error(event.data.message||'Controller failed');const f=event.data.frame;if(f.tick!==this.sentTick||f.version!==1||f.activity.length!==this.neuronCount)throw Error('Worker frame mismatch');
+   try{if(event.data.type==='error')throw Error(event.data.message||'Controller failed');const wire=event.data.frame;if(!wire)throw Error('Worker frame missing');
+    const activity=wire.activity??this.frame?.activity;
+    if(wire.tick!==this.sentTick||wire.version!==1||!activity||activity.length!==this.neuronCount||(!wire.activity&&wire.model_tick!==this.frame?.model_tick))throw Error('Worker frame mismatch');
+    const f:BrainFrame=wire.activity?(wire as BrainFrame):{...wire,activity};
     const decoded=motorDecode(f.motor_values);
     const controls=this.flyIdleAfterTick!=null&&this.state.tick>=this.flyIdleAfterTick?{axis:0,buttons:0}:decoded;
     // Sample Fox at apply time, not request time — neural wait would otherwise freeze stale input.
     this.sim.step(this.input.sample(),controls);this.frame=f;this.state=sim.snapshot();this.pending=false;
     if(this.state.winner!==-1&&!this.exportDrive)this.pause();this.change();
-    if(this.stepWaiters){const w=this.stepWaiters;this.stepWaiters=null;w.resolve();}
+    if(this.stepWaiters){const w=this.stepWaiters;this.stepWaiters=null;w.resolve();}else this.pump(performance.now());
    }catch(error){this.fail(String(error));}
   };
   worker.onerror=()=>this.fail('The controller worker stopped. Reload the page to restart.');
@@ -36,8 +40,9 @@ export class Session {
  }
  private pump(now:number){
   if(!this.running||this.exportDrive||this.stepWaiters)return;
-  // Waiting on the neural worker is not schedule debt — phones would otherwise pause after a few seconds.
-  if(this.pending){this.clock.mark(now);if(now-this.sentAt>2000)this.fail('Controller timeout. Reload to restart.');return;}
+  // Worker time satisfies the current frame budget, capped at one frame so a
+  // slow device never accumulates catch-up debt or skips deterministic frames.
+  if(this.pending){this.clock.wait(now);if(now-this.sentAt>2000)this.fail('Controller timeout. Reload to restart.');return;}
   // A suspended/overloaded phone may deliver a very late timer. Drop wall-clock debt
   // instead of forcing a click; deterministic game frames are never skipped.
   if(!this.clock.accrue(now)){this.clock.reset(now);return;}

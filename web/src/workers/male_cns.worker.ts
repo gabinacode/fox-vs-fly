@@ -37,8 +37,12 @@ self.onmessage=async(event:MessageEvent<{type?:string;base:string;identity:strin
   if(!brain)throw Error('Neural controller is not ready');
   // Keep MaleCNSBrain's cached arrays attached for pause retries; transfer outbound copies.
   const frame=brain.step(m.observation,m.generation);
-  const activity=takeActivity(frame.activity),sensory_values=takeF32(sensoryPool,frame.sensory_values),motor_values=takeF32(motorPool,frame.motor_values);
+  // Activity changes only on even game ticks (30 Hz). On the held tick the UI
+  // reuses its already-transferred buffer, avoiding a redundant 166,700-byte copy.
+  const activity=frame.tick%2===0?takeActivity(frame.activity):undefined;
+  const sensory_values=takeF32(sensoryPool,frame.sensory_values),motor_values=takeF32(motorPool,frame.motor_values);
   poolSlot++;
-  self.postMessage({epoch:m.epoch,frame:{...frame,activity,sensory_values,motor_values}},{transfer:[activity.buffer,sensory_values.buffer,motor_values.buffer]});
+  const transfer:Transferable[]=[sensory_values.buffer,motor_values.buffer];if(activity)transfer.unshift(activity.buffer);
+  self.postMessage({epoch:m.epoch,frame:{...frame,activity,sensory_values,motor_values}},{transfer});
  }catch(e){self.postMessage({type:'error',epoch:m.epoch,message:String(e)});}
 };

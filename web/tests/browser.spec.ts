@@ -33,7 +33,86 @@ test('worker failure pauses gameplay',async({page})=>{
  await page.addInitScript(()=>{const Original=window.Worker;window.Worker=class extends Original {constructor(url:string|URL,options?:WorkerOptions){super(url,options);setTimeout(()=>this.dispatchEvent(new ErrorEvent('error',{message:'test failure'})),1000);}};});
  await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();await page.getByRole('button',{name:'PLAY',exact:true}).click();await expect(page.getByRole('alert')).toContainText('worker stopped');await expect(page.getByTestId('hud')).toHaveAttribute('data-running','false');
 });
-test('mobile layout has no horizontal overflow',async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();await expect(page.getByTestId('performance')).toContainText('phone mode');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/mobile.png',fullPage:true});});
+test('Fox controls fill the match column under the scoreboard',async({page})=>{
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ const placed=await page.evaluate(()=>{
+  const panel=document.querySelector('.arena-panel');
+  const board=document.querySelector('.scoreboard');
+  const controls=document.querySelector('.controls');
+  if(!panel||!board||!controls)return false;
+  const p=panel.getBoundingClientRect(),b=board.getBoundingClientRect(),c=controls.getBoundingClientRect();
+  return panel.contains(controls)&&c.top>=b.bottom-1&&c.bottom<=p.bottom+2&&c.left>=p.left-1&&c.right<=p.right+2&&c.height>80;
+ });
+ expect(placed).toBe(true);
+ await expect(page.getByRole('region',{name:'Fox controls'})).toContainText('YOUR SIDE OF THE EXPERIMENT');
+});
+test('sensory and motor bars sit at bottom corners over the brain canvas',async({page})=>{
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ const placed=await page.evaluate(()=>{
+  const stage=document.querySelector('.brain-stage');
+  const sensory=document.querySelector('.brain-signals.sensory');
+  const motor=document.querySelector('.brain-signals.motor');
+  const view=document.querySelector('.brain-view');
+  const key=document.querySelector('.activity-key');
+  if(!stage||!sensory||!motor||!view||!key)return false;
+  const s=sensory.getBoundingClientRect(),v=view.getBoundingClientRect(),m=motor.getBoundingClientRect(),k=key.getBoundingClientRect();
+  const upper=v.top+v.height*.38;
+  return view.contains(sensory)&&view.contains(motor)&&stage.contains(view)
+   &&s.left>=v.left-1&&m.right<=v.right+1
+   &&s.bottom<=v.bottom+2&&m.bottom<=v.bottom+2
+   &&s.top>upper&&m.top>upper
+   &&s.right<v.left+v.width*.5&&m.left>v.left+v.width*.5
+   &&k.top<v.top+v.height*.25&&k.right<=v.right+2&&k.left>v.left+v.width*.45
+   &&k.bottom<=m.top+1;
+ });
+ expect(placed).toBe(true);
+ await expect(page.getByTestId('motor-action')).toBeVisible();
+ const widths=await page.evaluate(()=>{
+  const motor=document.querySelector('.brain-signals.motor') as HTMLElement;
+  const action=document.querySelector('[data-testid="motor-action"]') as HTMLElement;
+  const before=motor.getBoundingClientRect().width;
+  action.textContent='Left + Jump + Attack + Fastfall';
+  const mid=motor.getBoundingClientRect().width;
+  action.textContent='Neutral';
+  const after=motor.getBoundingClientRect().width;
+  return {before,mid,after};
+ });
+ expect(Math.abs(widths.mid-widths.before)).toBeLessThan(2);
+ expect(Math.abs(widths.after-widths.before)).toBeLessThan(2);
+});
+test('mobile layout keeps a taller fight window and original brain height',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ await expect(page.getByTestId('performance')).toContainText('phone mode');
+ expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+ await expect(page.getByRole('region',{name:'Fox controls'})).toBeHidden();
+ const layout=await page.evaluate(()=>{
+  window.scrollTo(0,0);
+  const arena=document.querySelector('.arena')!.getBoundingClientRect();
+  const board=document.querySelector('.scoreboard')!.getBoundingClientRect();
+  const panel=document.querySelector('.arena-panel')!.getBoundingClientRect();
+  const sensory=document.querySelector('.brain-signals.sensory')!.getBoundingClientRect();
+  const view=document.querySelector('.brain-view')!.getBoundingClientRect();
+  const motor=document.querySelector('.brain-signals.motor')!.getBoundingClientRect();
+  const upper=view.top+view.height*.38;
+  return {
+   arenaTop:arena.top,arenaHeight:arena.height,brainHeight:view.height,brainWidth:view.width,
+   scoreboardEndsPanel:Math.abs(board.bottom-panel.bottom)<=2,
+   bottomCorners:sensory.top>upper&&motor.top>upper&&sensory.bottom<=view.bottom+2&&motor.bottom<=view.bottom+2
+    &&sensory.left>=view.left-1&&motor.right<=view.right+1&&sensory.right<view.left+view.width*.5&&motor.left>view.left+view.width*.5,
+  };
+ });
+ expect(layout.arenaTop).toBeGreaterThanOrEqual(0);
+ expect(layout.arenaHeight).toBeGreaterThanOrEqual(220);
+ expect(layout.brainHeight).toBeCloseTo(310,0);
+ expect(layout.brainWidth).toBeGreaterThan(160);
+ expect(layout.scoreboardEndsPanel).toBe(true);
+ expect(layout.bottomCorners).toBe(true);
+ await page.screenshot({path:'test-results/mobile.png',fullPage:true});
+});
 test('mobile browser blur does not pause an active match',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto('/?controller=dummy');

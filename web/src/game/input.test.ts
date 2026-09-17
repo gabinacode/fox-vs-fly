@@ -26,12 +26,15 @@ it('paces frames independently and never consumes unrequested frames', () => {
   expect(c.accrue(3000)).toBe(false);
 });
 
-it('mark advances wall time without schedule debt so neural waits do not trip fell-behind', () => {
+it('worker waits satisfy at most one frame without accumulating catch-up debt', () => {
   const c = new FixedClock();
   c.reset(0);
-  c.mark(800);
-  expect(c.accrue(816)).toBe(true);
-  expect(c.debt).toBeLessThan(20);
+  c.wait(800);
+  expect(c.debt).toBeCloseTo(1000 / 60);
+  c.consume();
+  expect(c.ready()).toBe(false);
+  c.wait(3000);
+  expect(c.debt).toBeCloseTo(1000 / 60);
 });
 
 it('maps analog stick deadzone, walk range, jump and fastfall gates', () => {

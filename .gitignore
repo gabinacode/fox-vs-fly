@@ -39,3 +39,6 @@ dist/
 *.nkit.*
 refs/melee-disc/
 refs/dolphin/
+.cf-home/
+.openai/
+test-results/

@@ -14,7 +14,7 @@ for(const fallback of [false,true])test(`controller population view shows audite
  const membership=await pixels();expect(membership).not.toBe(inactive);await expect(page.getByTestId('active-count')).toHaveText('0');
  await toggle.uncheck();await expect.poll(pixels).toBe(inactive);
  await toggle.check();await play.click();await expect.poll(async()=>Number(await page.getByTestId('hud').getAttribute('data-tick')),{timeout:20000}).toBeGreaterThan(30);await page.keyboard.press('Escape');
- await expect.poll(pixels).toBe(membership);await page.getByRole('button',{name:'Reset match'}).click();
+ await expect.poll(pixels).toBe(membership);await page.keyboard.press('r');
  await expect(page.getByTestId('active-count')).toHaveText('0');await expect(toggle).toBeChecked();await expect.poll(pixels).toBe(membership);
  expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
  await page.screenshot({path:`test-results/populations-${fallback?'canvas-mobile':'webgl'}.png`,fullPage:true});

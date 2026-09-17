@@ -8,8 +8,9 @@ it('applies matching worker outputs and rejects stale reset replies',()=>{
  const sim={snapshot:()=>({...state}),step,reset} as unknown as Simulation;
  const w={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
  const s=new Session(sim,w as unknown as Worker,()=>{},()=>{},166700);s.play();vi.advanceTimersByTime(20);expect(w.postMessage).toHaveBeenCalledTimes(1);
- const request=w.postMessage.mock.calls[0][0];expect(request.count).toBe(166700);const frame=new DummyBrain(166700).step({...state,tick:0});w.onmessage({data:{epoch:request.epoch,frame}});
+ const request=w.postMessage.mock.calls[0][0];expect(request.count).toBe(166700);const frame=new DummyBrain(166700).step({...state,tick:0});vi.advanceTimersByTime(20);w.onmessage({data:{epoch:request.epoch,frame}});
  expect(step).toHaveBeenCalledWith({axis:0,buttons:0},{axis:1000,buttons:4});expect(s.frame).toBe(frame);
+ expect(w.postMessage).toHaveBeenCalledTimes(2); // worker latency already satisfied the next frame budget
  vi.advanceTimersByTime(20);const old=w.postMessage.mock.calls.at(-1)![0];s.reset();w.onmessage({data:{epoch:old.epoch,frame}});expect(step).toHaveBeenCalledTimes(1);expect(s.state.tick).toBe(0);s.dispose();
 });
 
@@ -45,6 +46,20 @@ it('applies Fox input sampled when the neural reply arrives, not when the reques
  w.onmessage({data:{epoch:request.epoch,frame}});
  expect(step).toHaveBeenCalledWith({axis:1000,buttons:4},{axis:1000,buttons:4});
  s.dispose();
+});
+
+it('reuses the prior activity buffer when a held neural frame omits redundant activity bytes',()=>{
+ vi.useFakeTimers();vi.stubGlobal('window',globalThis);
+ const f={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3,facing:1,action_frame:0,jumps:2,hitlag:0,invulnerable:0};
+ const state:Snapshot={tick:0,fox:{...f,x:10},fly:f,winner:-1,hash:1};
+ const sim={snapshot:()=>({...state}),step:vi.fn(()=>state.tick++),reset:vi.fn()} as unknown as Simulation;
+ const worker={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
+ const failed=vi.fn(),s=new Session(sim,worker as unknown as Worker,()=>{},failed,12);s.play();vi.advanceTimersByTime(20);
+ const first={...new DummyBrain(12).step({...state,tick:0}),model_tick:1};
+ const firstRequest=worker.postMessage.mock.calls[0][0];worker.onmessage({data:{epoch:firstRequest.epoch,frame:first}});
+ vi.advanceTimersByTime(20);const secondRequest=worker.postMessage.mock.calls.at(-1)![0];
+ const held={...first,tick:1,activity:undefined};worker.onmessage({data:{epoch:secondRequest.epoch,frame:held}});
+ expect(s.frame?.activity).toBe(first.activity);expect(failed).not.toHaveBeenCalled();expect(state.tick).toBe(2);s.dispose();
 });
 
 it('drops excessive wall-clock debt without pausing or skipping a game frame',()=>{
