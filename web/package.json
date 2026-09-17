@@ -13,7 +13,12 @@
     "cinematic:build": "tsc --noEmit && vite build",
     "cinematic:frames": "npm run cinematic:build && node scripts/cinematic-frames.mjs",
     "cinematic:video": "node scripts/cinematic-video.mjs",
-    "cinematic:export": "npm run cinematic:frames && npm run cinematic:video"
+    "cinematic:export": "npm run cinematic:frames && npm run cinematic:video",
+    "capture:build": "tsc --noEmit && vite build",
+    "capture:frames": "node scripts/capture-frames.mjs",
+    "capture:video": "node scripts/capture-video.mjs",
+    "capture:export": "npm run capture:build && node scripts/capture-frames.mjs && node scripts/capture-video.mjs",
+    "capture:export:all": "npm run capture:build && for shot in reveal approach brain-response fly-response impact split; do CAPTURE_SHOT=$shot node scripts/capture-frames.mjs && CAPTURE_SHOT=$shot node scripts/capture-video.mjs || exit 1; done"
   },
   "dependencies": {
     "react": "19.1.1",

@@ -1,4 +1,5 @@
 import type {ControllerInput,FighterObservation,Observation} from '../../../brain/include/types';
+import {runtimeAssetUrl} from '../capture/runtime_url';
 export interface Fighter extends FighterObservation { facing:number; action_frame:number; jumps:number; hitlag:number; invulnerable:number; }
 export interface Snapshot extends Observation { fox:Fighter; fly:Fighter; winner:number; hash:number; }
 interface Module { _sim_reset(seed:number):void; _sim_step(x:number,b:number,y:number,c:number):void; _sim_field(p:number,f:number):number; _sim_tick():number; _sim_winner():number; _sim_hash():number; }
@@ -13,7 +14,7 @@ export class Simulation {
 }
 export async function loadSimulation(){
  if(typeof WebAssembly==='undefined')throw Error('This browser does not support WebAssembly. Open in current Chrome.');
- const url=new URL(`${import.meta.env.BASE_URL}wasm/sim.js`,window.location.href).href;
+ const url=runtimeAssetUrl('wasm/sim.js').href;
  const {default:create}=await import(/* @vite-ignore */ url);
  const module=await create({locateFile:(name:string)=>new URL(name,url).href});
  return new Simulation(module);

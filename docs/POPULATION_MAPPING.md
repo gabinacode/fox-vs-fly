@@ -1,6 +1,6 @@
 # Experimental annotation mapping v1
 
-This browser worker assay is **MODEL_ASSUMPTION**, not a biological controller. It establishes a tested path from annotated input populations through measured connectivity to normalized annotated readouts. Fly gameplay and the visible anatomy overlay still use DummyBrain.
+This browser worker assay is **MODEL_ASSUMPTION**, not a biological controller. It establishes a tested path from annotated input populations through measured connectivity to normalized annotated readouts. Default gameplay uses a separate V2 rate controller; this optional LIF assay does not select or modify its parameters.
 
 ## Exact predicates
 Inputs select `superclass == visual_projection`, partitioned by `somaSide == L` (4,589) and `R` (4,612). Outputs select `superclass == descending_neuron`, partitioned by `somaSide == L` (656) and `R` (648). Ten midline descending entries are excluded from this readout only; no input entries have excluded sides. Unknown, missing and midline sides are never silently assigned a direction. Related `_tbc` labels do not satisfy exact equality. Positions are never required.
@@ -33,3 +33,21 @@ The result includes both stimulus-specific trace hashes; the combined row hash i
 The **Amplitude and shuffle sweep** suite tests current amplitudes 250, 500 and 1000 with unchanged positive signs, LIF parameters and exact annotation selectors. For each strength it runs the annotated mapping, transmission off and shuffled memberships with seeds 20260912, 20260913 and 20260914. All 15 conditions are reported; none are selected after inspecting outcomes. The same three permutations are reused across amplitudes, making these paired sensitivity comparisons rather than independent samples.
 
 Each condition runs warmup, measurement and reverse-order replay over independently reset left/right 60-tick stimuli: 5,400 ticks total. Every row records amplitude, optional seed, readouts, directional contrast and stimulus-specific hashes. The earlier amplitude-1000 annotated and first-shuffle traces must reproduce. Disconnected output must remain zero at every strength. No statistical significance, calibrated stimulus unit or controller threshold is inferred from three shuffles. This finite deterministic assay does not test noise, broad population choices or biological signs.
+
+## Paired sign/temporal evidence
+
+`data/male-cns-v1.0.sensitivity.json` extends the prior amplitude sweep with the 12 predeclared sign/temporal combinations documented in NEURAL_MODEL.md. Every combination tests the exact annotated populations and all three original membership shuffle seeds (20260912–20260914), each with independently reset left/right stimuli. Mapping drive is 500 integer current units per arbitrary reference unit, applied for 60 reference units: 60 steps at amplitude 500, or 30 steps at amplitude 1000 for the coarse setting. Aggregate input still depends on population size. Signs remain attached to graph source indices when membership is shuffled.
+
+Raw readout counts, spike events per neuron per model tick, and events per neuron per reference unit are all retained. Directional contrast uses the latter denominator, so a changed step count does not silently change normalization. These reference-unit rates are not Hz. All-zero signs must yield exactly zero descending readout for every membership and temporal setting. The positive baseline must reproduce both individual stimulus hashes and readouts from all four amplitude-500 connected rows in `male-cns-v1.0.mapping-sweep.json`; that report is preserved unchanged.
+
+Reverse replay checks every trial diagnostic, including bins and counts, rather than only a combined hash. Exact same-side fixtures verify sign suppression, delayed propagation, subthreshold stronger-leak behavior and both readout denominators. Shuffles change input and output membership together and do not provide a statistical null distribution. These finite **MODEL_ASSUMPTION** comparisons cannot promote an annotation mapping, sign policy, retention or timestep to a biological default or establish a robust controller.
+
+Retained annotated contrast (events/neuron/reference unit; descriptive only):
+
+| Temporal setting | Positive | Alternating | Inverted blocks | Zero |
+|---|---:|---:|---:|---:|
+| Baseline | 0.01111613 | 0.00112698 | 0.00173768 | 0 |
+| Stronger leak | 0 | 0 | 0 | 0 |
+| Coarse step | 0.01382333 | 0.00084437 | 0.00163637 | 0 |
+
+At amplitude 500, stronger leak yields zero mapped readout across all tested memberships and signs. This is a finite response to a specified input, not evidence that those populations are disconnected. Positive-baseline shuffle contrasts range from 0.00000282 to 0.00043128; all individual results, including zero and negative contrasts under other settings, are retained without selecting a winning condition.

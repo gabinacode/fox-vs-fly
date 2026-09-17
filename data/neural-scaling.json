@@ -1,0 +1,372 @@
+{
+  "format": "NEURAL_SCALING_V1",
+  "label": "MODEL_ASSUMPTION",
+  "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "sourceHashes": {
+    "brain/core/lif.ts": "4a03530b72283b6acd336835ab18977d716dfd4eb9cb30072716ad40e3a4cd5b",
+    "brain/core/scaling.ts": "8c98115c19212ca1ff45de69e6aa7bb1d63f2b87ee0f1dfdab810bf728763947",
+    "scripts/neural_scaling.mjs": "ec991fd0f46012411131d718a21f098b89dd0738d4bf5e0ddda14b622ecc42e2"
+  },
+  "inputHashes": {
+    "row_offsets.bin": "b16e09e4ae18ab90e5bcdde62f714a99c1f6d8eb54bacafdf6d95d391af4dd6a",
+    "target_indices.bin": "a782a694f8aae9009f8d1334e93d4744a17efc85aff2c2221f1611c91d534102",
+    "weights.bin": "2c09b9cab5105891fbaaee9a2c4aad4216349fc94fa00f507262214bcd361c1f",
+    "neuron_ids.bin": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5"
+  },
+  "protocol": {
+    "fractions": [
+      0.015625,
+      0.0625,
+      0.25,
+      0.5,
+      1
+    ],
+    "replicaCounts": [
+      1,
+      2,
+      4
+    ],
+    "workloads": [
+      {
+        "name": "silent",
+        "stride": 0
+      },
+      {
+        "name": "sparse",
+        "stride": 100
+      },
+      {
+        "name": "dense",
+        "stride": 1
+      }
+    ],
+    "warmupTicks": 8,
+    "measureTicks": 40,
+    "subgraph": "Induced CSR prefix: first N nodes and edges with target < N",
+    "replicaMode": "Independent SparseLif state arrays sharing one induced CSR; stepped sequentially"
+  },
+  "scales": [
+    {
+      "nodes": 2604,
+      "edges": 228774,
+      "fraction": 0.015620875824835033,
+      "graphBytes": 1840612,
+      "stateBytes": 49476,
+      "workloads": {
+        "silent": {
+          "spikes": 0,
+          "edgeVisits": 0,
+          "hash": 3388221373
+        },
+        "sparse": {
+          "spikes": 1722,
+          "edgeVisits": 145568,
+          "hash": 1675778012
+        },
+        "dense": {
+          "spikes": 36456,
+          "edgeVisits": 3202836,
+          "hash": 3861392469
+        }
+      }
+    },
+    {
+      "nodes": 10418,
+      "edges": 1303458,
+      "fraction": 0.06249550089982003,
+      "graphBytes": 10469340,
+      "stateBytes": 197942,
+      "workloads": {
+        "silent": {
+          "spikes": 0,
+          "edgeVisits": 0,
+          "hash": 3388221373
+        },
+        "sparse": {
+          "spikes": 5632,
+          "edgeVisits": 1066795,
+          "hash": 2840831554
+        },
+        "dense": {
+          "spikes": 145852,
+          "edgeVisits": 18248412,
+          "hash": 1010982379
+        }
+      }
+    },
+    {
+      "nodes": 41675,
+      "edges": 5538949,
+      "fraction": 0.25,
+      "graphBytes": 44478296,
+      "stateBytes": 791825,
+      "workloads": {
+        "silent": {
+          "spikes": 0,
+          "edgeVisits": 0,
+          "hash": 3388221373
+        },
+        "sparse": {
+          "spikes": 17935,
+          "edgeVisits": 5353832,
+          "hash": 4195758245
+        },
+        "dense": {
+          "spikes": 583450,
+          "edgeVisits": 77545286,
+          "hash": 1012585165
+        }
+      }
+    },
+    {
+      "nodes": 83350,
+      "edges": 11500230,
+      "fraction": 0.5,
+      "graphBytes": 92335244,
+      "stateBytes": 1583650,
+      "workloads": {
+        "silent": {
+          "spikes": 0,
+          "edgeVisits": 0,
+          "hash": 3388221373
+        },
+        "sparse": {
+          "spikes": 28146,
+          "edgeVisits": 9522248,
+          "hash": 2325899919
+        },
+        "dense": {
+          "spikes": 1166900,
+          "edgeVisits": 161003220,
+          "hash": 1546566167
+        }
+      }
+    },
+    {
+      "nodes": 166700,
+      "edges": 25582938,
+      "fraction": 1,
+      "graphBytes": 205330308,
+      "stateBytes": 3167300,
+      "workloads": {
+        "silent": {
+          "spikes": 0,
+          "edgeVisits": 0,
+          "hash": 3388221373
+        },
+        "sparse": {
+          "spikes": 104368,
+          "edgeVisits": 39666348,
+          "hash": 4039191799
+        },
+        "dense": {
+          "spikes": 2333800,
+          "edgeVisits": 358161132,
+          "hash": 2057794133
+        }
+      }
+    }
+  ],
+  "replicas": [
+    {
+      "replicas": 1,
+      "nodes": 83350,
+      "edges": 11500230,
+      "spikes": 28146,
+      "hash": 3970058703,
+      "sharedGraphBytes": {
+        "graphBytes": 92335244,
+        "stateBytes": 1583650,
+        "totalBytes": 93918894
+      },
+      "independentCopyBytes": {
+        "graphBytes": 92335244,
+        "stateBytes": 1583650,
+        "totalBytes": 93918894
+      }
+    },
+    {
+      "replicas": 2,
+      "nodes": 83350,
+      "edges": 11500230,
+      "spikes": 56292,
+      "hash": 2101736367,
+      "sharedGraphBytes": {
+        "graphBytes": 92335244,
+        "stateBytes": 3167300,
+        "totalBytes": 95502544
+      },
+      "independentCopyBytes": {
+        "graphBytes": 184670488,
+        "stateBytes": 3167300,
+        "totalBytes": 187837788
+      }
+    },
+    {
+      "replicas": 4,
+      "nodes": 83350,
+      "edges": 11500230,
+      "spikes": 112584,
+      "hash": 2295394929,
+      "sharedGraphBytes": {
+        "graphBytes": 92335244,
+        "stateBytes": 6334600,
+        "totalBytes": 98669844
+      },
+      "independentCopyBytes": {
+        "graphBytes": 369340976,
+        "stateBytes": 6334600,
+        "totalBytes": 375675576
+      }
+    }
+  ],
+  "rateProbe": {
+    "model": "wasm-rate-v2",
+    "nodes": 166700,
+    "edges": 25582938,
+    "driveStride": 100,
+    "driveAmplitude": 1000,
+    "probe": 1336
+  },
+  "recommendation": {
+    "decision": "Do not add shared-graph batches, worker threads, SIMD or GPU yet for the shipped single-match browser path.",
+    "reasons": [
+      "Full-graph LIF and WASM rate timings remain the dominant cost versus the scalar GameBatch fighter core.",
+      "Sequential independent SparseLif replicas on a shared induced CSR scale wall time roughly with replica count; graph sharing alone does not reduce CPU work.",
+      "Independent full-graph CSR copies would multiply the ~200 MiB connectivity arrays; shared-graph batches are only motivated for multi-environment research/training, not the one Fly controller in the player build.",
+      "A single realtime match does not justify SharedArrayBuffer, cross-origin isolation, Metal or WebGPU complexity on this evidence."
+    ],
+    "limits": [
+      "Induced node-prefix subgraphs are engineering slices, not biologically meaningful modules.",
+      "All-positive signs and index-strided drive are MODEL_ASSUMPTION stress policies.",
+      "Wall-clock timings are single-host descriptive measurements, not performance gates or cross-device promises."
+    ]
+  },
+  "timings": {
+    "host": {
+      "platform": "darwin",
+      "arch": "arm64",
+      "cpus": null,
+      "node": "v22.18.0"
+    },
+    "processMemory": {
+      "rss": 1021313024,
+      "heapTotal": 53313536,
+      "heapUsed": 31686760,
+      "external": 553955960,
+      "arrayBuffers": 305135452
+    },
+    "memoryNote": "Post-run process snapshot including TS transpile and graph buffers; not peak RSS or browser heap.",
+    "scales": [
+      {
+        "nodes": 2604,
+        "workloads": {
+          "silent": {
+            "milliseconds": 2.230000000000018,
+            "millisecondsPerTick": 0.05575000000000045
+          },
+          "sparse": {
+            "milliseconds": 2.763249999999971,
+            "millisecondsPerTick": 0.06908124999999928
+          },
+          "dense": {
+            "milliseconds": 6.1043750000000045,
+            "millisecondsPerTick": 0.1526093750000001
+          }
+        }
+      },
+      {
+        "nodes": 10418,
+        "workloads": {
+          "silent": {
+            "milliseconds": 0.8945420000000013,
+            "millisecondsPerTick": 0.02236355000000003
+          },
+          "sparse": {
+            "milliseconds": 3.39224999999999,
+            "millisecondsPerTick": 0.08480624999999975
+          },
+          "dense": {
+            "milliseconds": 23.706041000000027,
+            "millisecondsPerTick": 0.5926510250000007
+          }
+        }
+      },
+      {
+        "nodes": 41675,
+        "workloads": {
+          "silent": {
+            "milliseconds": 3.488458000000037,
+            "millisecondsPerTick": 0.08721145000000093
+          },
+          "sparse": {
+            "milliseconds": 16.011083999999983,
+            "millisecondsPerTick": 0.40027709999999955
+          },
+          "dense": {
+            "milliseconds": 108.33729099999994,
+            "millisecondsPerTick": 2.7084322749999985
+          }
+        }
+      },
+      {
+        "nodes": 83350,
+        "workloads": {
+          "silent": {
+            "milliseconds": 6.752084000000082,
+            "millisecondsPerTick": 0.16880210000000204
+          },
+          "sparse": {
+            "milliseconds": 29.009999999999877,
+            "millisecondsPerTick": 0.725249999999997
+          },
+          "dense": {
+            "milliseconds": 237.6970409999999,
+            "millisecondsPerTick": 5.942426024999998
+          }
+        }
+      },
+      {
+        "nodes": 166700,
+        "workloads": {
+          "silent": {
+            "milliseconds": 14.510167000000138,
+            "millisecondsPerTick": 0.36275417500000345
+          },
+          "sparse": {
+            "milliseconds": 92.23941600000012,
+            "millisecondsPerTick": 2.305985400000003
+          },
+          "dense": {
+            "milliseconds": 528.9545000000003,
+            "millisecondsPerTick": 13.223862500000006
+          }
+        }
+      }
+    ],
+    "replicas": [
+      {
+        "replicas": 1,
+        "milliseconds": 29.049291000000267,
+        "millisecondsPerReplicaTick": 0.7262322750000066,
+        "millisecondsWallPerTick": 0.7262322750000066
+      },
+      {
+        "replicas": 2,
+        "milliseconds": 55.464292000000114,
+        "millisecondsPerReplicaTick": 0.6933036500000014,
+        "millisecondsWallPerTick": 1.3866073000000028
+      },
+      {
+        "replicas": 4,
+        "milliseconds": 108.69716600000038,
+        "millisecondsPerReplicaTick": 0.6793572875000023,
+        "millisecondsWallPerTick": 2.7174291500000094
+      }
+    ],
+    "rate": {
+      "milliseconds": 235.47179199999982,
+      "millisecondsPerTick": 5.886794799999995
+    }
+  }
+}

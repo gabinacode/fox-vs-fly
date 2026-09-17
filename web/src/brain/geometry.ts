@@ -1,4 +1,5 @@
 import type {BrainGeometry} from '../../../brain/include/types';
+import {runtimeAssetUrl} from '../capture/runtime_url';
 import {placeholderGeometry,validateGeometry} from '../../../brain/core/geometry';
 type Asset={file:string;sha256:string;bytes:number;length:number;dtype:string};
 export async function decodeGeometry(m:any,read:(asset:Asset)=>Promise<ArrayBuffer>):Promise<BrainGeometry>{
@@ -18,7 +19,7 @@ export async function decodeGeometry(m:any,read:(asset:Asset)=>Promise<ArrayBuff
 }
 export async function loadGeometry():Promise<{geometry:BrainGeometry;warning:string}>{
  try{
-  const base=new URL(`${import.meta.env.BASE_URL}connectome/`,location.href);
+  const base=runtimeAssetUrl('connectome/');
   const response=await fetch(new URL('manifest.json',base),{signal:AbortSignal.timeout(10000)});if(!response.ok)throw Error('Measured geometry unavailable');
   const geometry=await decodeGeometry(await response.json(),async a=>{const r=await fetch(new URL(a.file,base),{signal:AbortSignal.timeout(15000)});if(!r.ok)throw Error('Geometry download failed');return r.arrayBuffer();});
   return {geometry,warning:''};

@@ -12,3 +12,51 @@ it('applies matching worker outputs and rejects stale reset replies',()=>{
  expect(step).toHaveBeenCalledWith({axis:0,buttons:0},{axis:1000,buttons:4});expect(s.frame).toBe(frame);
  vi.advanceTimersByTime(20);const old=w.postMessage.mock.calls.at(-1)![0];s.reset();w.onmessage({data:{epoch:old.epoch,frame}});expect(step).toHaveBeenCalledTimes(1);expect(s.state.tick).toBe(0);s.dispose();
 });
+
+it('forces Fly sim input idle after the capture freeze tick without changing motor decode display',()=>{
+ vi.useFakeTimers();vi.stubGlobal('window',globalThis);
+ const f={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3,facing:1,action_frame:0,jumps:2,hitlag:0,invulnerable:0};
+ const state:Snapshot={tick:42,fox:{...f,x:-40},fly:{...f,x:-20},winner:-1,hash:1};
+ const step=vi.fn(()=>state.tick++);
+ const sim={snapshot:()=>({...state}),step,reset:vi.fn()} as unknown as Simulation;
+ const w={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
+ const s=new Session(sim,w as unknown as Worker,()=>{},()=>{},166700);
+ s.flyIdleAfterTick=42;s.play();vi.advanceTimersByTime(20);
+ const request=w.postMessage.mock.calls[0][0];
+ const frame=new DummyBrain(166700).step({...state,tick:42});
+ w.onmessage({data:{epoch:request.epoch,frame}});
+ expect(step).toHaveBeenCalledWith({axis:0,buttons:0},{axis:0,buttons:0});
+ expect(s.frame?.motor_values[0]).toBeGreaterThan(0);
+ s.dispose();
+});
+
+it('applies Fox input sampled when the neural reply arrives, not when the request was sent',()=>{
+ vi.useFakeTimers();vi.stubGlobal('window',globalThis);
+ const f={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3,facing:1,action_frame:0,jumps:2,hitlag:0,invulnerable:0};
+ const state:Snapshot={tick:0,fox:{...f,x:10},fly:f,winner:-1,hash:1};
+ const step=vi.fn(()=>state.tick++);
+ const sim={snapshot:()=>({...state}),step,reset:vi.fn()} as unknown as Simulation;
+ const w={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
+ const s=new Session(sim,w as unknown as Worker,()=>{},()=>{},166700);s.play();vi.advanceTimersByTime(20);
+ expect(w.postMessage).toHaveBeenCalledTimes(1);
+ s.input.down('KeyD');s.input.down('KeyJ');
+ const request=w.postMessage.mock.calls[0][0];
+ const frame=new DummyBrain(166700).step({...state,tick:0});
+ w.onmessage({data:{epoch:request.epoch,frame}});
+ expect(step).toHaveBeenCalledWith({axis:1000,buttons:4},{axis:1000,buttons:4});
+ s.dispose();
+});
+
+it('drops excessive wall-clock debt without pausing or skipping a game frame',()=>{
+ vi.useFakeTimers();vi.stubGlobal('window',globalThis);
+ const f={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3,facing:1,action_frame:0,jumps:2,hitlag:0,invulnerable:0};
+ const state:Snapshot={tick:0,fox:{...f},fly:{...f},winner:-1,hash:1};
+ const sim={snapshot:()=>({...state}),step:vi.fn(),reset:vi.fn()} as unknown as Simulation;
+ const worker={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
+ const failed=vi.fn(),s=new Session(sim,worker as unknown as Worker,()=>{},failed,166700);
+ s.play();s.clock.last=performance.now()-1600;
+ (s as unknown as {pump:(now:number)=>void}).pump(performance.now());
+ expect(s.running).toBe(true);expect(failed).not.toHaveBeenCalled();expect(worker.postMessage).not.toHaveBeenCalled();
+ vi.advanceTimersByTime(20);expect(worker.postMessage).toHaveBeenCalledTimes(1);expect(state.tick).toBe(0);
+ s.dispose();
+});

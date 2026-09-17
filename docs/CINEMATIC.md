@@ -33,3 +33,7 @@ Outputs under `web/cinematic-output/`:
 - `fox-vs-fly-brain-preview.mp4` (H.264)
 
 Requires ffmpeg (`brew install ffmpeg` on macOS).
+
+## Related: live gameplay capture
+
+For the post-reveal gameplay section (real V2 model activity, scripted Fox timelines, beat-friendly markers), see [CAPTURE.md](CAPTURE.md) (`?capture=hero-sequence`). That path is separate from this synthetic cinematic timeline.

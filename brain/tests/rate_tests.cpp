@@ -9,5 +9,7 @@ int main(){
  flybrain::RateNetwork recurrent(2,2);recurrent.offsets={0,1,2};recurrent.targets={1,0};recurrent.weights={100,999};CHECK(recurrent.initialize());recurrent.input[0]=65535;recurrent.step();recurrent.input[0]=0;
  auto previous=65535u;for(int i=0;i<100;i++){recurrent.step();unsigned maximum=std::max(recurrent.values[0],recurrent.values[1]);CHECK(maximum<=previous);previous=maximum;}CHECK(previous==0);
  recurrent.reset();CHECK(recurrent.values==std::vector<uint32_t>({0,0}));
- std::cout<<"rate model: weighted delay, normalization, recurrent decay, reset passed\n";
+ flybrain::RateNetwork pack(3,0);pack.offsets={0,0,0,0};CHECK(pack.initialize());
+ pack.values={0,64,32704};CHECK(pack.pack_activity()==2);CHECK(pack.packed==std::vector<uint8_t>({0,1,255}));
+ std::cout<<"rate model: weighted delay, normalization, recurrent decay, reset, pack passed\n";
 }

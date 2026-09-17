@@ -4,9 +4,9 @@
   "provenance": {
     "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
     "calibrationSha256": "97d861aad85b6b45779d735697d1ad52db2502dc9989075a92d32a8fd8f8aec4",
-    "neuralWasmSha256": "c58d71e447e7f694cfb30511cb81941d161f614985ee2fa8063f0664a7f4a934",
+    "neuralWasmSha256": "54caa2977b38ccdd85af6c6b191ac622937057db83a409d11e0afa46b507030b",
     "simulationWasmSha256": "2ee01bc507cf969116d5b49ade29178f2c75edf00729f25570c100ce6aa19f7a",
-    "controllerSha256": "6f3a01c88d88881465b37c1cee24cdaf4e487f14d61d87b3bd728812ca74029b",
+    "controllerSha256": "0b682f2ff26e9925d73a71c81cab67a3666de909142fc9d6112d18b6e3128e0b",
     "opponentsSha256": "ff41d6c6599b4c91a3d9e4d1589db1a42a37b755fc167cd042097c216a8723f8"
   },
   "protocol": {

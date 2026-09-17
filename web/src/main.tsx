@@ -4,7 +4,6 @@ import {loadSimulation,type Snapshot} from './wasm/sim';
 import {ConnectomeLoader} from './components/ConnectomeLoader';
 import {Session} from './game/session';
 import type {PopulationCoverage} from './brain/population_display';
-import type {ActivityScale} from './brain/activity_display';
 import {BrainRenderer} from './render/brain';
 import {drawGame} from './render/game';
 import {preloadFighterSprites,resetFighterSpriteVisuals} from './render/sprites';
@@ -14,8 +13,12 @@ import type {BrainGeometry} from '../../brain/include/types';
 import {SENSORY_LABELS,MOTOR_LABELS,type BrainFrame} from '../../brain/include/types';
 import {NEURAL_SENSORY_LABELS} from '../../brain/core/neural_sensory';
 import {parseCaptureFlags,isCaptureMode} from './capture/config';
-import {getCapturePreset} from './capture/presets';
+import {getCapturePreset,getCaptureShot} from './capture/presets';
 import {installCaptureDriver} from './capture/driver';
+import {brainCameraState,gameCameraState} from './capture/camera';
+import {interactiveRenderProfile} from './render/performance';
+import {expandInputRle} from './capture/types';
+import {runtimeAssetUrl} from './capture/runtime_url';
 import {TouchControls} from './components/TouchControls';
 import type {PlayerInput} from './game/input';
 import './style.css';
@@ -24,23 +27,29 @@ const dummy=new URLSearchParams(location.search).get('controller')==='dummy';
 const captureFlags=parseCaptureFlags();
 const captureActive=isCaptureMode(captureFlags)&&!dummy;
 const capturePreset=captureActive?getCapturePreset(captureFlags.preset!):null;
+const captureShot=captureFlags.shot?getCaptureShot(captureFlags.shot):null;
+const captureTimeline=capturePreset?expandInputRle(capturePreset.inputRle):[];
 const format=(n:number)=>n.toLocaleString('en-US');
 function App(){
  const [populationView,setPopulationView]=useState(false),[populationCoverage,setPopulationCoverage]=useState<PopulationCoverage|null>(null);
- const rendererRef=useRef<BrainRenderer|null>(null),[activityScale,setActivityScale]=useState<ActivityScale>('log');
+ const rendererRef=useRef<BrainRenderer|null>(null);
  const [geometry,setGeometry]=useState<BrainGeometry|null>(null),[geometryWarning,setGeometryWarning]=useState('');
- const gameCanvas=useRef<HTMLCanvasElement>(null),brainCanvas=useRef<HTMLCanvasElement>(null),session=useRef<Session|null>(null);
+ const gameCanvas=useRef<HTMLCanvasElement>(null),brainCanvas=useRef<HTMLCanvasElement>(null),compositeCanvas=useRef<HTMLCanvasElement>(null),session=useRef<Session|null>(null);
  const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[frame,setFrame]=useState<BrainFrame|null>(null),[running,setRunning]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState('Loading'),[fps,setFps]=useState({game:0,render:0,brain:0}),[science,setScience]=useState(false),[preparation,setPreparation]=useState('Loading simulation and anatomy…');
  const [captureStatus,setCaptureStatus]=useState(capturePreset?`Capture ${capturePreset.preset} · preparing…`:'');
  const [touchInput,setTouchInput]=useState<PlayerInput|null>(null);
  useEffect(()=>{
-  let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null,last=performance.now(),statTime=last,draws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null;
-  let captureDispose:(()=>void)|null=null;
-  const change=()=>{const s=session.current;if(s&&!disposed){setSnapshot(s.state);setFrame(s.frame);setRunning(s.running);}};
+  const renderProfile=interactiveRenderProfile(window.innerWidth,window.matchMedia('(pointer: coarse)').matches);
+  let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null,last=performance.now()-renderProfile.frameIntervalMs,statTime=performance.now(),draws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null,hudAt=0;
+  let resumeAfterVisibility=false;
+  let captureDispose:(()=>void)|null=null,captureDraw:((localFrame:number,totalFrames:number)=>void)|null=null;
+  // The rAF loop reads Session directly; phone React state and all signal bars publish at ~10 Hz.
+  const change=()=>{const s=session.current;if(!s||disposed)return;setRunning(s.running);const now=performance.now();if(s.running&&renderProfile.uiIntervalMs&&now-hudAt<renderProfile.uiIntervalMs)return;setSnapshot(s.state);if(s.running&&now-hudAt<100)return;hudAt=now;setFrame(s.frame);};
+  const failed=(message:string)=>{resumeAfterVisibility=false;setError(message);};
   const init=async()=>{try{
    const [sim,loaded]=await Promise.all([loadSimulation(),loadGeometry(),preloadFighterSprites(),preloadStage()]);if(disposed)return;
    const geometry=loaded.geometry;setGeometry(geometry);setGeometryWarning(loaded.warning);
-   renderer=new BrainRenderer(brainCanvas.current!,geometry,!dummy);rendererRef.current=renderer;setMode(renderer.mode);
+   renderer=new BrainRenderer(brainCanvas.current!,geometry,!dummy,renderProfile.pixelRatioCap);rendererRef.current=renderer;setMode(`${renderer.mode}${renderProfile.mobile?' · phone mode':''}`);
    if(capturePreset)renderer.setClearColor(0,0,0);
    worker=dummy?new Worker(new URL('./workers/brain.worker.ts',import.meta.url),{type:'module'}):new Worker(new URL('./workers/male_cns.worker.ts',import.meta.url),{type:'module'});
    if(!dummy){
@@ -52,30 +61,45 @@ function App(){
       if(m.type==='ready'){try{setPopulationCoverage(renderer!.setPopulations(m.populations));resolve();}catch(e){reject(e);}}else if(m.type==='error')reject(Error(m.message));
       else if(m.type==='progress')setPreparation(m.phase==='validating'?'Validating neural graph…':`Preparing neural graph · ${Math.floor(100*m.received/m.total)}%`);
      };
-     worker!.postMessage({type:'initialize',base:new URL(`${import.meta.env.BASE_URL}connectome-graph/`,location.href).href,identity:geometry.measured!.graph_identity});
+     worker!.postMessage({type:'initialize',base:runtimeAssetUrl('connectome-graph/').href,identity:geometry.measured!.graph_identity});
     });
     if(disposed)return;
    }
    setPreparation(capturePreset?'Capture ready':'Ready to meet your opponent?');
-   const s=new Session(sim,worker,change,setError,geometry.neuron_count??geometry.positions.length/3);
+   const s=new Session(sim,worker,change,failed,geometry.neuron_count??geometry.positions.length/3);
    const baseReset=s.reset.bind(s);s.reset=()=>{resetFighterSpriteVisuals();baseReset();};
    session.current=s;setTouchInput(s.input);change();last=statTime=performance.now();
    if(capturePreset){
-    const drawNow=()=>{
+    const drawNow=(localFrame:number,totalFrames:number)=>{
      const sess=session.current;if(!sess||!renderer)return;
      if(sess.frame){renderer.ingest(sess.frame);lastFrame=sess.frame;}
      else if(lastFrame){renderer.clear();lastFrame=null;}
-     drawGame(gameCanvas.current!,sess.state,{clean:true});
-     renderer.draw(0);
+     drawGame(gameCanvas.current!,sess.state,{clean:true,camera:gameCameraState(captureFlags.camera,sess.state,localFrame,totalFrames)});
+     renderer.setCaptureFrame(sess.state,sess.frame,brainCameraState(captureFlags.brainCamera,localFrame,totalFrames));
+     renderer.draw(captureFlags.exportMode?1000/60:0);
+     if(captureFlags.view==='split'&&compositeCanvas.current){
+      const out=compositeCanvas.current,dpr=Math.min(devicePixelRatio,2),w=out.clientWidth,h=out.clientHeight;
+      if(out.width!==Math.round(w*dpr)||out.height!==Math.round(h*dpr)){out.width=Math.round(w*dpr);out.height=Math.round(h*dpr);}
+      const ctx=out.getContext('2d')!;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#000';ctx.fillRect(0,0,w,h);
+      const splitY=Math.round(h*.55),game=gameCanvas.current!,brain=brainCanvas.current!;
+      ctx.drawImage(game,0,Math.round(game.height*.08),game.width,Math.round(game.height*.84),0,0,w,splitY);
+      ctx.drawImage(brain,0,0,brain.width,brain.height,0,splitY,w,h-splitY);
+      ctx.fillStyle='#b8bdb9';ctx.globalAlpha=.35;ctx.fillRect(0,splitY-1,w,1);ctx.globalAlpha=1;
+     }
     };
+    captureDraw=drawNow;
     const driver=installCaptureDriver({
      session:s,
      preset:capturePreset,
+     shot:captureShot,
      view:captureFlags.view,
+     camera:captureFlags.camera,
+     brainCamera:captureFlags.brainCamera,
      loop:captureFlags.loop,
      exportMode:captureFlags.exportMode,
      getGameCanvas:()=>gameCanvas.current,
      getBrainCanvas:()=>brainCanvas.current,
+     getCompositeCanvas:()=>compositeCanvas.current,
      drawNow,
      onStatus:setCaptureStatus,
     });
@@ -84,9 +108,10 @@ function App(){
    }
    const render=(now:number)=>{const s=session.current;if(!s||disposed)return;
     if(captureFlags.exportMode){raf=requestAnimationFrame(render);return;}
+    if(renderProfile.frameIntervalMs&&now-last<renderProfile.frameIntervalMs){raf=requestAnimationFrame(render);return;}
     if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}
     if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}
-    renderer!.syncGameplay(s.state,s.frame,s.running);drawGame(gameCanvas.current!,s.state,{clean:!!capturePreset});renderer!.draw(now-last);last=now;draws++;
+    if(capturePreset&&captureDraw){const start=captureShot?.startTick??capturePreset.suggestedCaptureWindow.startTick,end=captureShot?.endTick??capturePreset.suggestedCaptureWindow.endTick;captureDraw(Math.max(0,Math.min(end-start,s.state.tick-start)),end-start+1);}else{renderer!.syncGameplay(s.state,s.frame,s.running);drawGame(gameCanvas.current!,s.state,{pixelRatioCap:renderProfile.pixelRatioCap});renderer!.draw(now-last);}last=now;draws++;
     if(now-statTime>=1000){const dt=(now-statTime)/1000;setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.max(0,Math.round(((s.frame?.model_tick??s.state.tick)-lastModelTick)/dt))});lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;statTime=now;draws=0;}
     raf=requestAnimationFrame(render);
    };raf=requestAnimationFrame(render);
@@ -103,7 +128,15 @@ function App(){
   const pause=()=>{if(capturePreset)return;if(session.current?.running)session.current.pause();};
   // Mobile browsers fire window.blur spuriously (address bar, button focus, chrome show/hide).
   // Only pause when the page is actually hidden.
-  const hide=()=>{if(document.visibilityState==='hidden')pause();};
+  const hide=()=>{
+   if(document.visibilityState==='hidden'){
+    resumeAfterVisibility=!!session.current?.running;
+    if(resumeAfterVisibility)pause();
+   }else if(resumeAfterVisibility){
+    resumeAfterVisibility=false;
+    if(session.current&&session.current.state.winner===-1)session.current.play();
+   }
+  };
   window.addEventListener('keydown',down);window.addEventListener('keyup',up);document.addEventListener('visibilitychange',hide);
   return()=>{disposed=true;captureDispose?.();cancelAnimationFrame(raf);session.current?.dispose();worker?.terminate();renderer?.dispose();window.removeEventListener('keydown',down);window.removeEventListener('keyup',up);document.removeEventListener('visibilitychange',hide);};
  },[]);
@@ -114,12 +147,18 @@ function App(){
 
  if(capturePreset){
   const showGame=captureFlags.view==='game';
+  const showBrain=captureFlags.view==='brain';
+  const debugInput=captureTimeline[Math.min(snapshot?.tick??0,captureTimeline.length-1)]??{axis:0,buttons:0};
   return <div className={`capture-page capture-view-${captureFlags.view}${captureFlags.exportMode?' capture-export':''}`} data-testid="capture-root" data-preset={capturePreset.preset} data-view={captureFlags.view} data-tick={snapshot?.tick||0} data-export={captureFlags.exportMode?'1':'0'}>
    <canvas ref={gameCanvas} className={showGame?'capture-canvas':'capture-canvas capture-hidden'} width={captureFlags.exportMode?1080:undefined} height={captureFlags.exportMode?1350:undefined} aria-label="Capture gameplay"/>
-   <canvas ref={brainCanvas} className={!showGame?'capture-canvas':'capture-canvas capture-hidden'} width={captureFlags.exportMode?1080:undefined} height={captureFlags.exportMode?1350:undefined} aria-label="Capture MaleCNS model activity"/>
+   <canvas ref={brainCanvas} className={showBrain?'capture-canvas':'capture-canvas capture-hidden'} width={captureFlags.exportMode?1080:undefined} height={captureFlags.exportMode?1350:undefined} aria-label="Capture MaleCNS model activity"/>
+   <canvas ref={compositeCanvas} className={captureFlags.view==='split'?'capture-canvas':'capture-canvas capture-hidden'} width={captureFlags.exportMode?1080:undefined} height={captureFlags.exportMode?1350:undefined} aria-label="Synchronized gameplay and brain capture"/>
    {captureFlags.debug&&!captureFlags.exportMode&&<div className="capture-debug" data-testid="capture-debug">
     <div>{captureStatus}</div>
-    <div>tick {snapshot?.tick??0} · active {frame?.active_neuron_count??0} · {action}</div>
+    <div>tick {snapshot?.tick??0} · Fox axis {debugInput.axis} buttons {debugInput.buttons}</div>
+    <div>sensory {frame?Array.from(frame.sensory_values,v=>v.toFixed(2)).join(' / '):'—'}</div>
+    <div>motor {frame?Array.from(frame.motor_values,v=>v.toFixed(2)).join(' / '):'—'} · applied {action}</div>
+    <div>active {frame?.active_neuron_count??0} · camera {captureFlags.camera} · brain {captureFlags.brainCamera}</div>
     <div>{capturePreset.markers.map(m=>`${m.id}@${m.tick}`).join(' · ')}</div>
     <div>R replay · esc pause · no music in footage</div>
    </div>}
@@ -141,13 +180,13 @@ function App(){
       {touchInput&&<TouchControls input={touchInput} visible={!!snapshot&&running}/>}
      </div>
      <div className="scoreboard" data-testid="hud" data-tick={snapshot?.tick||0} data-hash={snapshot?.hash||0} data-fox-x={snapshot?.fox.x||0} data-fox-y={snapshot?.fox.y||0} data-fly-x={snapshot?.fly.x||0} data-running={running}>
-      {[snapshot?.fox,snapshot?.fly].map((f,i)=><div className={`score score-${i}`} key={i}><div><span className="fighter-name">{i?'FLY':'FOX'} <small>{i?(dummy?'DUMMY CPU':'NEURAL CPU'):'YOU'}</small></span><div className="stocks" aria-label={`${i?'Fly':'Fox'} stocks: ${f?.stocks??3}`}>{Array.from({length:3},(_,j)=><i className={j<(f?.stocks??3)?'remaining':''} key={j}/>)}</div></div><strong data-testid={i?'fly-damage':'fox-damage'}>{f?.damage||0}<span>%</span></strong></div>)}
+      {[snapshot?.fox,snapshot?.fly].map((f,i)=><div className={`score score-${i}`} key={i}><div><span className="fighter-name">{i?'FLY':'FOX'} <small>{i?(dummy?'DUMMY FLY':'NEURAL FLY'):'YOU'}</small></span><div className="stocks" aria-label={`${i?'Fly':'Fox'} stocks: ${f?.stocks??3}`}>{Array.from({length:3},(_,j)=><i className={j<(f?.stocks??3)?'remaining':''} key={j}/>)}</div></div><strong data-testid={i?'fly-damage':'fox-damage'}>{f?.damage||0}<span>%</span></strong></div>)}
      </div>
     </section>
     <section className="brain-panel" aria-label={dummy?'Anatomy with synthetic controller activity':'Measured anatomy with neural model activity'}>
      <div className="panel-title"><span><b className="index">02</b> ANATOMY & ACTIVITY</span><span className="synthetic">{dummy?'SYNTHETIC ACTIVITY':populationView?'CONTROLLER POPULATIONS':'MODEL ACTIVITY'}</span></div>
-     <div className={`brain-view${running?' brain-live':''}`}><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':populationView?'Measured MaleCNS soma positions with controller populations':'Measured MaleCNS soma positions with model activity'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':populationView?'Static membership · Not activity':'Live activity · Match-coupled view'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key">{populationView?<><i className="drive-key"/> drive <i className="readout-key"/> readout · not activity</>:<><i/> zero <i/> {dummy?'synthetic activity':'higher model activity'}</>}</div></div>
-     {!dummy&&<div className="activity-explanation"><label className="population-toggle"><input type="checkbox" checked={populationView} disabled={!populationCoverage} onChange={e=>{setPopulationView(e.target.checked);rendererRef.current?.setPopulationView(e.target.checked);}}/> Highlight drive &amp; readout populations</label>{populationView&&populationCoverage&&<div data-testid="population-coverage"><p>Static controller membership, independent of current activity. Colors do not represent spikes or biological function.</p><p><b>Blue · Drive:</b> {format(populationCoverage.drive.positioned)} positioned / {format(populationCoverage.drive.total)} total · {format(populationCoverage.drive.unpositioned)} unpositioned. Visual projection only.</p><p><b>Orange · Readout:</b> {format(populationCoverage.readout.positioned)} positioned / {format(populationCoverage.readout.total)} total · {format(populationCoverage.readout.unpositioned)} unpositioned. Descending + VNC motor.</p></div>}<label>Model activity scale <select disabled={mode==='Loading'||populationView} aria-label="Model activity scale" value={activityScale} onChange={e=>{const scale=e.target.value as ActivityScale;setActivityScale(scale);rendererRef.current?.setScale(scale);}}><option value="log">Fixed log</option><option value="linear">Linear</option></select></label>{!populationView&&<p>{activityScale==='log'?'Brightness = log(1 + byte) / log(256).':'Brightness = byte / 255.'} Byte = min(255, round(rate / 128)); zero stays zero. Latest model values held between updates; not spikes.</p>}<p>Active count includes unpositioned nodes and means byte ≥ 1. V2 drives visual-projection nodes only; descending + VNC motor nodes supply readout. Dim VNC points can reflect weak model drive.</p></div>}
+     <div className="brain-view"><canvas ref={brainCanvas} aria-label={geometry?.provenance==='MALECNS'?(dummy?'Measured MaleCNS soma positions with synthetic activity':populationView?'Measured MaleCNS soma positions with controller populations':'Measured MaleCNS soma positions with model activity'):'Synthetic placeholder geometry'}/><div className="brain-caption">{geometry?.provenance==='MALECNS'?'MALECNS v1.0 · MEASURED SOMAS':'SYNTHETIC GEOMETRY'}<span>{dummy?'Synthetic activity overlay · Dummy controller':populationView?'Static membership · Not activity':'Live activity · Match-coupled view'}</span></div><div className="brain-axis">Y ↑<br/>└→ X</div><div className="activity-key">{populationView?<><i className="drive-key"/> drive <i className="readout-key"/> readout · not activity</>:<><i/> zero <i/> {dummy?'synthetic activity':'higher model activity'}</>}</div></div>
+     {!dummy&&<div className="activity-explanation"><label className="population-toggle"><input type="checkbox" checked={populationView} disabled={!populationCoverage} onChange={e=>{setPopulationView(e.target.checked);rendererRef.current?.setPopulationView(e.target.checked);}}/> Highlight drive &amp; readout populations</label>{populationView&&populationCoverage&&<div data-testid="population-coverage"><p>Static controller membership, independent of current activity. Colors do not represent spikes or biological function.</p><p><b>Blue · Drive:</b> {format(populationCoverage.drive.positioned)} positioned / {format(populationCoverage.drive.total)} total · {format(populationCoverage.drive.unpositioned)} unpositioned. Visual projection only.</p><p><b>Orange · Readout:</b> {format(populationCoverage.readout.positioned)} positioned / {format(populationCoverage.readout.total)} total · {format(populationCoverage.readout.unpositioned)} unpositioned. Descending + VNC motor.</p></div>}{!populationView&&<p>Brightness = log(1 + byte) / log(256). Byte = min(255, round(rate / 128)); zero stays zero. Latest model values held between updates; not spikes.</p>}<p>Active count includes unpositioned nodes and means byte ≥ 1. V2 drives visual-projection nodes only; descending + VNC motor nodes supply readout. Dim VNC points can reflect weak model drive.</p></div>}
      <div className="brain-stats"><div><strong>{format((geometry?.positions.length??0)/3)}</strong><span>{geometry?.measured?'MEASURED SOMA POSITIONS':'SYNTHETIC SAMPLES'}</span></div><div><strong data-testid="active-count">{format(frame?.active_neuron_count||0)}</strong><span>ACTIVE MODEL NODES</span></div><div><strong>{geometry?.measured?format(geometry.measured.missing):'—'}</strong><span>UNPOSITIONED NEURONS</span></div></div>
      <div className="geometry-note" data-testid="geometry-status">{geometry?.measured?<>{format(geometry.neuron_count!)} retained neurons · {format(geometry.measured.edges)} connections in the measured graph. {dummy?'Prepare data and run an artificial neural experiment below. This display uses dummy activity.':populationView?'Showing static controller membership. Unpositioned neurons participate in dynamics.':'Live model activity drives both this display and Fly controls. Unpositioned neurons participate in dynamics.'}</>:'Generated geometry; no measured anatomy loaded.'}</div>
     </section>

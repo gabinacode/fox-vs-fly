@@ -30,6 +30,4 @@
 .capture-export .capture-canvas{width:1080px;height:1350px}
 
 /* Renderer-only gameplay response: depth, activity bloom and a stronger live-state grade. */
-.brain-view{background:radial-gradient(circle at 50% 48%,#17251f 0,#0e1211 62%);box-shadow:inset 0 0 70px #0008}
-.brain-view canvas{filter:saturate(1.08);transition:filter .25s ease}
-.brain-view.brain-live canvas{filter:saturate(1.22) contrast(1.04)}
+.brain-view{overflow:hidden;background:radial-gradient(circle at 50% 48%,#17251f 0,#0e1211 62%);box-shadow:inset 0 0 70px #0008}

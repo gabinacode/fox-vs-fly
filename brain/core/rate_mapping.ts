@@ -17,4 +17,5 @@ export function ratePopulationRoles(graph:MappingAnnotations){
  return roles;
 }
 export interface RateCalibration {version:2;graph_identity:string;outputs:number[];weights:number[][];}
-export interface RateModel {count:number;reset():void;step(input:Uint32Array):Uint32Array;}
+/** Optional packActivity must match min(255, round(rate/128)) over the latest step values. */
+export interface RateModel {count:number;reset():void;step(input:Uint32Array,driven?:Uint32Array,drivenCount?:number):Uint32Array;packActivity?(out:Uint8Array):number;}

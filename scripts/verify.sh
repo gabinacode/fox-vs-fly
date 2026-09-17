@@ -24,5 +24,7 @@ npm --prefix web run test:browser
 ./build/sim_bench
 ./build/batch_bench
 node scripts/lif_bench.mjs
+node scripts/lif_sensitivity.mjs --check
+node scripts/neural_scaling.mjs --check
 "$PREPROCESS_PYTHON" brain/preprocess/validate_artifact.py
 "$PREPROCESS_PYTHON" brain/preprocess/populations.py --check

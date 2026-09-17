@@ -1,0 +1,3096 @@
+{
+  "format": "LIF_SENSITIVITY_V1",
+  "label": "MODEL_ASSUMPTION",
+  "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "sourceHashes": {
+    "brain/core/lif.ts": "4a03530b72283b6acd336835ab18977d716dfd4eb9cb30072716ad40e3a4cd5b",
+    "brain/core/population_mapping.ts": "8fad11b5c5e531b1b398c3e73e2bb6ca265be3c206fb77c1028d21d6d947c647",
+    "brain/core/sensitivity.ts": "ea6e33e570c884bf6e88d4a2ea49dbe61179946d61baf3f040c3a31eee5d0743",
+    "scripts/lif_sensitivity.mjs": "d70620f5b0aca4a2d1f51594b5490d4b14892e5c519018a094f15b031b1f949d"
+  },
+  "inputHashes": {
+    "row_offsets.bin": "b16e09e4ae18ab90e5bcdde62f714a99c1f6d8eb54bacafdf6d95d391af4dd6a",
+    "target_indices.bin": "a782a694f8aae9009f8d1334e93d4744a17efc85aff2c2221f1611c91d534102",
+    "weights.bin": "2c09b9cab5105891fbaaee9a2c4aad4216349fc94fa00f507262214bcd361c1f",
+    "neuron_ids.bin": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+    "annotation_superclass.bin": "fd1051ceef93c581232ff1df020c7e8aae4b4a7512182878ab15352663d08f69",
+    "annotation_somaSide.bin": "37b28b9f3b9e8cfdc392277d45a1d117ada8d2aa643dfb10ddbbc997de891110",
+    "annotations.json": "0a6e2885fd36cb7dc2eb1ebbf582775bfe7f72c347b9b8a0556f737c268a9647"
+  },
+  "priorMappingReportSha256": "d91198067d02e950d611322ab04e4889d7f1eac350e0e2c452cdbf0b58785ecb",
+  "protocol": {
+    "timeUnits": "arbitrary reference units, not milliseconds",
+    "pulseDuration": 600,
+    "pulseOnDuration": 10,
+    "pulseAmplitudePerUnit": 1000,
+    "pulseStride": 100,
+    "mappingDuration": 60,
+    "mappingAmplitudePerUnit": 500,
+    "binDuration": 60,
+    "replay": "Complete reset before every stimulus; repeat conditions, memberships and stimulus order in reverse; exact equality of every deterministic diagnostic",
+    "timestepCaveat": "dt=2 rescales duration, external increments, refractory steps and retention (19/20)^2; edge delay remains one step, hence doubles in reference units. Integer rounding and threshold checks differ. Not convergence or biological calibration.",
+    "signs": "Artificial 100-index blocks and their inversion; zero disables outgoing current. No NT inference."
+  },
+  "coverage": {
+    "inputs": [
+      4589,
+      4612
+    ],
+    "outputs": [
+      656,
+      648
+    ],
+    "excludedInput": 0,
+    "excludedOutput": 10
+  },
+  "rows": [
+    {
+      "sign": "positive",
+      "time": {
+        "name": "baseline",
+        "dt": 1,
+        "leakNumerator": 19,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 19,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 3219849679,
+        "spikes": 2318764,
+        "bins": [
+          153059,
+          240944,
+          240443,
+          240136,
+          240998,
+          240089,
+          240835,
+          240673,
+          240996,
+          240591
+        ],
+        "lastSpikeStep": 599,
+        "lastSpikeTime": 599,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 4150718908,
+              "spikes": 250559,
+              "bins": [
+                250559
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                5001,
+                4977
+              ],
+              "readoutPerTick": [
+                0.12705792682926828,
+                0.12800925925925927
+              ],
+              "readoutPerReferenceUnit": [
+                0.12705792682926828,
+                0.12800925925925927
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2992954141,
+              "spikes": 255322,
+              "bins": [
+                255322
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                4853,
+                5263
+              ],
+              "readoutPerTick": [
+                0.12329776422764227,
+                0.13536522633744855
+              ],
+              "readoutPerReferenceUnit": [
+                0.12329776422764227,
+                0.13536522633744855
+              ]
+            }
+          ],
+          "directionalContrast": 0.01111612967981529
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2421331184,
+              "spikes": 254630,
+              "bins": [
+                254630
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                740,
+                737
+              ],
+              "readoutPerTick": [
+                0.018800813008130083,
+                0.01895576131687243
+              ],
+              "readoutPerReferenceUnit": [
+                0.018800813008130083,
+                0.01895576131687243
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1878826025,
+              "spikes": 256320,
+              "bins": [
+                256320
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                749,
+                746
+              ],
+              "readoutPerTick": [
+                0.019029471544715446,
+                0.01918724279835391
+              ],
+              "readoutPerReferenceUnit": [
+                0.019029471544715446,
+                0.01918724279835391
+              ]
+            }
+          ],
+          "directionalContrast": 0.0000028229448961192283
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3223441040,
+              "spikes": 255797,
+              "bins": [
+                255797
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                824,
+                637
+              ],
+              "readoutPerTick": [
+                0.020934959349593496,
+                0.016383744855967077
+              ],
+              "readoutPerReferenceUnit": [
+                0.020934959349593496,
+                0.016383744855967077
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3033094320,
+              "spikes": 255590,
+              "bins": [
+                255590
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                822,
+                651
+              ],
+              "readoutPerTick": [
+                0.020884146341463416,
+                0.016743827160493826
+              ],
+              "readoutPerReferenceUnit": [
+                0.020884146341463416,
+                0.016743827160493826
+              ]
+            }
+          ],
+          "directionalContrast": 0.0004108953126568289
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 457416526,
+              "spikes": 254898,
+              "bins": [
+                254898
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                867,
+                787
+              ],
+              "readoutPerTick": [
+                0.022027439024390243,
+                0.0202417695473251
+              ],
+              "readoutPerReferenceUnit": [
+                0.022027439024390243,
+                0.0202417695473251
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1255567405,
+              "spikes": 252264,
+              "bins": [
+                252264
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                848,
+                785
+              ],
+              "readoutPerTick": [
+                0.021544715447154472,
+                0.020190329218106994
+              ],
+              "readoutPerReferenceUnit": [
+                0.021544715447154472,
+                0.020190329218106994
+              ]
+            }
+          ],
+          "directionalContrast": 0.000431283248017663
+        }
+      }
+    },
+    {
+      "sign": "alternating",
+      "time": {
+        "name": "baseline",
+        "dt": 1,
+        "leakNumerator": 19,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 19,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 3652834096,
+        "spikes": 9057,
+        "bins": [
+          6923,
+          237,
+          236,
+          243,
+          236,
+          240,
+          233,
+          232,
+          241,
+          236
+        ],
+        "lastSpikeStep": 599,
+        "lastSpikeTime": 599,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2982569859,
+              "spikes": 55545,
+              "bins": [
+                55545
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                42,
+                30
+              ],
+              "readoutPerTick": [
+                0.0010670731707317074,
+                0.0007716049382716049
+              ],
+              "readoutPerReferenceUnit": [
+                0.0010670731707317074,
+                0.0007716049382716049
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1250565193,
+              "spikes": 55830,
+              "bins": [
+                55830
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                27,
+                59
+              ],
+              "readoutPerTick": [
+                0.0006859756097560975,
+                0.0015174897119341563
+              ],
+              "readoutPerReferenceUnit": [
+                0.0006859756097560975,
+                0.0015174897119341563
+              ]
+            }
+          ],
+          "directionalContrast": 0.0011269823346381613
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1667930100,
+              "spikes": 55843,
+              "bins": [
+                55843
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1096031905,
+              "spikes": 55766,
+              "bins": [
+                55766
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 241420954,
+              "spikes": 55458,
+              "bins": [
+                55458
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                2
+              ],
+              "readoutPerTick": [
+                0,
+                0.000051440329218106995
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.000051440329218106995
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3053575955,
+              "spikes": 55663,
+              "bins": [
+                55663
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": -0.000051440329218106995
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3350445419,
+              "spikes": 55411,
+              "bins": [
+                55411
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                3,
+                6
+              ],
+              "readoutPerTick": [
+                0.00007621951219512195,
+                0.00015432098765432098
+              ],
+              "readoutPerReferenceUnit": [
+                0.00007621951219512195,
+                0.00015432098765432098
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2446967364,
+              "spikes": 55870,
+              "bins": [
+                55870
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                3,
+                1
+              ],
+              "readoutPerTick": [
+                0.00007621951219512195,
+                0.000025720164609053497
+              ],
+              "readoutPerReferenceUnit": [
+                0.00007621951219512195,
+                0.000025720164609053497
+              ]
+            }
+          ],
+          "directionalContrast": -0.0001286008230452675
+        }
+      }
+    },
+    {
+      "sign": "inverted",
+      "time": {
+        "name": "baseline",
+        "dt": 1,
+        "leakNumerator": 19,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 19,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 1728830624,
+        "spikes": 6697,
+        "bins": [
+          6697,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 10,
+        "lastSpikeTime": 10,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2037257804,
+              "spikes": 55503,
+              "bins": [
+                55503
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                36,
+                3
+              ],
+              "readoutPerTick": [
+                0.0009146341463414635,
+                0.00007716049382716049
+              ],
+              "readoutPerReferenceUnit": [
+                0.0009146341463414635,
+                0.00007716049382716049
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2301231559,
+              "spikes": 55778,
+              "bins": [
+                55778
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                35
+              ],
+              "readoutPerTick": [
+                0,
+                0.0009002057613168725
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.0009002057613168725
+              ]
+            }
+          ],
+          "directionalContrast": 0.0017376794138311753
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3899120092,
+              "spikes": 55314,
+              "bins": [
+                55314
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3774524445,
+              "spikes": 55632,
+              "bins": [
+                55632
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                1,
+                0
+              ],
+              "readoutPerTick": [
+                0.00002540650406504065,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0.00002540650406504065,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": -0.00002540650406504065
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2469946252,
+              "spikes": 55343,
+              "bins": [
+                55343
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 872195275,
+              "spikes": 55801,
+              "bins": [
+                55801
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 4105843456,
+              "spikes": 55290,
+              "bins": [
+                55290
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2531996174,
+              "spikes": 55595,
+              "bins": [
+                55595
+              ],
+              "lastSpikeStep": 59,
+              "lastSpikeTime": 59,
+              "readoutCounts": [
+                0,
+                8
+              ],
+              "readoutPerTick": [
+                0,
+                0.00020576131687242798
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.00020576131687242798
+              ]
+            }
+          ],
+          "directionalContrast": 0.00020576131687242798
+        }
+      }
+    },
+    {
+      "sign": "zero",
+      "time": {
+        "name": "baseline",
+        "dt": 1,
+        "leakNumerator": 19,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 19,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 2815718209,
+        "spikes": 6668,
+        "bins": [
+          6668,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 9,
+        "lastSpikeTime": 9,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 2138957365,
+              "spikes": 55068,
+              "bins": [
+                55068
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1198013033,
+              "spikes": 55344,
+              "bins": [
+                55344
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3671471461,
+              "spikes": 55068,
+              "bins": [
+                55068
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3755033365,
+              "spikes": 55344,
+              "bins": [
+                55344
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3953309561,
+              "spikes": 55068,
+              "bins": [
+                55068
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 3337596841,
+              "spikes": 55344,
+              "bins": [
+                55344
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 4274085909,
+              "spikes": 55068,
+              "bins": [
+                55068
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 4127518061,
+              "spikes": 55344,
+              "bins": [
+                55344
+              ],
+              "lastSpikeStep": 57,
+              "lastSpikeTime": 57,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    },
+    {
+      "sign": "positive",
+      "time": {
+        "name": "stronger-leak",
+        "dt": 1,
+        "leakNumerator": 10,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 10,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 2978848227,
+        "spikes": 6722,
+        "bins": [
+          6722,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 11,
+        "lastSpikeTime": 11,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    },
+    {
+      "sign": "alternating",
+      "time": {
+        "name": "stronger-leak",
+        "dt": 1,
+        "leakNumerator": 10,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 10,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 201233049,
+        "spikes": 8065,
+        "bins": [
+          6805,
+          140,
+          140,
+          140,
+          140,
+          140,
+          140,
+          140,
+          140,
+          140
+        ],
+        "lastSpikeStep": 599,
+        "lastSpikeTime": 599,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    },
+    {
+      "sign": "inverted",
+      "time": {
+        "name": "stronger-leak",
+        "dt": 1,
+        "leakNumerator": 10,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 10,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 829803953,
+        "spikes": 6676,
+        "bins": [
+          6676,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 10,
+        "lastSpikeTime": 10,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    },
+    {
+      "sign": "zero",
+      "time": {
+        "name": "stronger-leak",
+        "dt": 1,
+        "leakNumerator": 10,
+        "leakDenominator": 20
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 10,
+        "leakDenominator": 20,
+        "refractorySteps": 2,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 600,
+        "duration": 600,
+        "hash": 2815718209,
+        "spikes": 6668,
+        "bins": [
+          6668,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 9,
+        "lastSpikeTime": 9,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 60,
+              "duration": 60,
+              "hash": 1009434569,
+              "spikes": 0,
+              "bins": [
+                0
+              ],
+              "lastSpikeStep": null,
+              "lastSpikeTime": null,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    },
+    {
+      "sign": "positive",
+      "time": {
+        "name": "coarse-step",
+        "dt": 2,
+        "leakNumerator": 361,
+        "leakDenominator": 400
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 361,
+        "leakDenominator": 400,
+        "refractorySteps": 1,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 300,
+        "duration": 600,
+        "hash": 1639930452,
+        "spikes": 1719322,
+        "bins": [
+          16692,
+          160807,
+          192606,
+          192946,
+          192922,
+          193107,
+          192061,
+          192835,
+          192362,
+          192984
+        ],
+        "lastSpikeStep": 299,
+        "lastSpikeTime": 598,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 2819569711,
+              "spikes": 201531,
+              "bins": [
+                201531
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                3925,
+                3816
+              ],
+              "readoutPerTick": [
+                0.1994410569105691,
+                0.1962962962962963
+              ],
+              "readoutPerReferenceUnit": [
+                0.09972052845528455,
+                0.09814814814814815
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 774511901,
+              "spikes": 206573,
+              "bins": [
+                206573
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                3716,
+                4147
+              ],
+              "readoutPerTick": [
+                0.1888211382113821,
+                0.2133230452674897
+              ],
+              "readoutPerReferenceUnit": [
+                0.09441056910569105,
+                0.10666152263374486
+              ]
+            }
+          ],
+          "directionalContrast": 0.013823333835190202
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 62943348,
+              "spikes": 216881,
+              "bins": [
+                216881
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                566,
+                547
+              ],
+              "readoutPerTick": [
+                0.028760162601626015,
+                0.02813786008230453
+              ],
+              "readoutPerReferenceUnit": [
+                0.014380081300813008,
+                0.014068930041152264
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1228333966,
+              "spikes": 218732,
+              "bins": [
+                218732
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                584,
+                563
+              ],
+              "readoutPerTick": [
+                0.02967479674796748,
+                0.028960905349794237
+              ],
+              "readoutPerReferenceUnit": [
+                0.01483739837398374,
+                0.014480452674897119
+              ]
+            }
+          ],
+          "directionalContrast": -0.00004579443942587767
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3927082627,
+              "spikes": 218686,
+              "bins": [
+                218686
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                649,
+                495
+              ],
+              "readoutPerTick": [
+                0.03297764227642276,
+                0.02546296296296296
+              ],
+              "readoutPerReferenceUnit": [
+                0.01648882113821138,
+                0.01273148148148148
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 693331663,
+              "spikes": 218786,
+              "bins": [
+                218786
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                646,
+                502
+              ],
+              "readoutPerTick": [
+                0.03282520325203252,
+                0.02582304526748971
+              ],
+              "readoutPerReferenceUnit": [
+                0.01641260162601626,
+                0.012911522633744855
+              ]
+            }
+          ],
+          "directionalContrast": 0.0002562606644584964
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1048167643,
+              "spikes": 218398,
+              "bins": [
+                218398
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                667,
+                608
+              ],
+              "readoutPerTick": [
+                0.033892276422764225,
+                0.031275720164609055
+              ],
+              "readoutPerReferenceUnit": [
+                0.016946138211382113,
+                0.015637860082304528
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 2762210746,
+              "spikes": 216587,
+              "bins": [
+                216587
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                656,
+                601
+              ],
+              "readoutPerTick": [
+                0.03333333333333333,
+                0.030915637860082303
+              ],
+              "readoutPerReferenceUnit": [
+                0.016666666666666666,
+                0.015457818930041152
+              ]
+            }
+          ],
+          "directionalContrast": 0.00009943039245207015
+        }
+      }
+    },
+    {
+      "sign": "alternating",
+      "time": {
+        "name": "coarse-step",
+        "dt": 2,
+        "leakNumerator": 361,
+        "leakDenominator": 400
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 361,
+        "leakDenominator": 400,
+        "refractorySteps": 1,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 300,
+        "duration": 600,
+        "hash": 4265673794,
+        "spikes": 6025,
+        "bins": [
+          5119,
+          101,
+          98,
+          104,
+          98,
+          102,
+          98,
+          100,
+          98,
+          107
+        ],
+        "lastSpikeStep": 299,
+        "lastSpikeTime": 598,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3975051444,
+              "spikes": 58888,
+              "bins": [
+                58888
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                41,
+                33
+              ],
+              "readoutPerTick": [
+                0.0020833333333333333,
+                0.0016975308641975309
+              ],
+              "readoutPerReferenceUnit": [
+                0.0010416666666666667,
+                0.0008487654320987654
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3053668493,
+              "spikes": 55711,
+              "bins": [
+                55711
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                27,
+                52
+              ],
+              "readoutPerTick": [
+                0.001371951219512195,
+                0.002674897119341564
+              ],
+              "readoutPerReferenceUnit": [
+                0.0006859756097560975,
+                0.001337448559670782
+              ]
+            }
+          ],
+          "directionalContrast": 0.0008443741844825856
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1931859617,
+              "spikes": 65112,
+              "bins": [
+                65112
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3973138248,
+              "spikes": 65199,
+              "bins": [
+                65199
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4228705257,
+              "spikes": 64813,
+              "bins": [
+                64813
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                1
+              ],
+              "readoutPerTick": [
+                0,
+                0.000051440329218106995
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.000025720164609053497
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3975814688,
+              "spikes": 65258,
+              "bins": [
+                65258
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                1
+              ],
+              "readoutPerTick": [
+                0,
+                0.000051440329218106995
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.000025720164609053497
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 2559527679,
+              "spikes": 65074,
+              "bins": [
+                65074
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                4,
+                5
+              ],
+              "readoutPerTick": [
+                0.0002032520325203252,
+                0.000257201646090535
+              ],
+              "readoutPerReferenceUnit": [
+                0.0001016260162601626,
+                0.0001286008230452675
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 890309524,
+              "spikes": 67089,
+              "bins": [
+                67089
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                3,
+                1
+              ],
+              "readoutPerTick": [
+                0.0001524390243902439,
+                0.000051440329218106995
+              ],
+              "readoutPerReferenceUnit": [
+                0.00007621951219512195,
+                0.000025720164609053497
+              ]
+            }
+          ],
+          "directionalContrast": -0.00007747415437117335
+        }
+      }
+    },
+    {
+      "sign": "inverted",
+      "time": {
+        "name": "coarse-step",
+        "dt": 2,
+        "leakNumerator": 361,
+        "leakDenominator": 400
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 361,
+        "leakDenominator": 400,
+        "refractorySteps": 1,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 300,
+        "duration": 600,
+        "hash": 2986932655,
+        "spikes": 5015,
+        "bins": [
+          5015,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 5,
+        "lastSpikeTime": 10,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 418095342,
+              "spikes": 58567,
+              "bins": [
+                58567
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                31,
+                3
+              ],
+              "readoutPerTick": [
+                0.0015752032520325204,
+                0.00015432098765432098
+              ],
+              "readoutPerReferenceUnit": [
+                0.0007876016260162602,
+                0.00007716049382716049
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1525236790,
+              "spikes": 62220,
+              "bins": [
+                62220
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                36
+              ],
+              "readoutPerTick": [
+                0,
+                0.001851851851851852
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.000925925925925926
+              ]
+            }
+          ],
+          "directionalContrast": 0.0016363670581150255
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3827476936,
+              "spikes": 64621,
+              "bins": [
+                64621
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1891305444,
+              "spikes": 64734,
+              "bins": [
+                64734
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3823784882,
+              "spikes": 64739,
+              "bins": [
+                64739
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 502595292,
+              "spikes": 65173,
+              "bins": [
+                65173
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 1812991905,
+              "spikes": 64710,
+              "bins": [
+                64710
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4257662888,
+              "spikes": 65434,
+              "bins": [
+                65434
+              ],
+              "lastSpikeStep": 29,
+              "lastSpikeTime": 58,
+              "readoutCounts": [
+                0,
+                7
+              ],
+              "readoutPerTick": [
+                0,
+                0.000360082304526749
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0.0001800411522633745
+              ]
+            }
+          ],
+          "directionalContrast": 0.0001800411522633745
+        }
+      }
+    },
+    {
+      "sign": "zero",
+      "time": {
+        "name": "coarse-step",
+        "dt": 2,
+        "leakNumerator": 361,
+        "leakDenominator": 400
+      },
+      "parameters": {
+        "threshold": 1000,
+        "reset": 0,
+        "floor": -1000,
+        "leakNumerator": 361,
+        "leakDenominator": 400,
+        "refractorySteps": 1,
+        "gain": 1
+      },
+      "pulse": {
+        "steps": 300,
+        "duration": 600,
+        "hash": 1065179613,
+        "spikes": 5001,
+        "bins": [
+          5001,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "lastSpikeStep": 4,
+        "lastSpikeTime": 8,
+        "readoutCounts": [
+          0,
+          0
+        ],
+        "readoutPerTick": null,
+        "readoutPerReferenceUnit": null
+      },
+      "mapped": {
+        "annotated": {
+          "seed": null,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4182922376,
+              "spikes": 68835,
+              "bins": [
+                68835
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4155789693,
+              "spikes": 69180,
+              "bins": [
+                69180
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260912": {
+          "seed": 20260912,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4253429886,
+              "spikes": 68835,
+              "bins": [
+                68835
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4008420387,
+              "spikes": 69180,
+              "bins": [
+                69180
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260913": {
+          "seed": 20260913,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3543258992,
+              "spikes": 68835,
+              "bins": [
+                68835
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 4205751645,
+              "spikes": 69180,
+              "bins": [
+                69180
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        },
+        "shuffle-20260914": {
+          "seed": 20260914,
+          "trials": [
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 2067824931,
+              "spikes": 68835,
+              "bins": [
+                68835
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            },
+            {
+              "steps": 30,
+              "duration": 60,
+              "hash": 3238473248,
+              "spikes": 69180,
+              "bins": [
+                69180
+              ],
+              "lastSpikeStep": 28,
+              "lastSpikeTime": 56,
+              "readoutCounts": [
+                0,
+                0
+              ],
+              "readoutPerTick": [
+                0,
+                0
+              ],
+              "readoutPerReferenceUnit": [
+                0,
+                0
+              ]
+            }
+          ],
+          "directionalContrast": 0
+        }
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Integer sparse LIF v1
 
-Status: deterministic core implemented in `brain/core/lif.ts` and available as an optional browser worker benchmark. It is not connected to the activity renderer, sensory encoder or motor decoder. The visible Fly still uses DummyBrain.
+Status: deterministic core implemented in `brain/core/lif.ts` and available as an optional browser worker benchmark. LIF remains an optional diagnostic and historical controller model; default gameplay uses the separate V2 rate controller. These sensitivity experiments do not change gameplay.
 
 ## Measured data and explicit assumptions
 The model borrows immutable presynaptic CSR offsets, targets and positive measured contact counts. It neither copies nor changes those weights. A separate, required per-source Int8 sign vector supplies -1, 0 or +1. Zero disables outgoing current; there is no implicit excitatory default and no automatic neurotransmitter-to-sign conversion. Caller-provided signs are copied. A single presynaptic sign is an engineering simplification, not evidence of receptor-specific effects.
@@ -27,6 +27,8 @@ Int32 voltage, Uint16 refractory counters, Float64 integer accumulators, Uint32 
 Constructor checks CSR ordering/bounds, positive weights, signs and parameter ranges. Total contacts times gain is limited to 2^40, keeping all accumulated currents exactly representable; bounded voltage/leak multiplication is also below the exact integer limit. No Int32 wraparound is used for current accumulation. Input uses Int32 currents and must match the graph population. Reset clears voltage, pending transmission, refractory counters, spike storage and tick count.
 
 Each tick scans all neurons and only traverses outgoing edges of spikes with nonzero signs. Thus cost is O(nodes + outgoing edges of active sources), with no dense adjacency matrix and no per-edge mutable model state.
+
+Prefix scaling, shared-CSR replica accounting and the no-batch/no-GPU decision for the single-match path are retained in `data/neural-scaling.json` and documented in BENCHMARKS.md. Those assays do not change LIF_V1 parameters or gameplay.
 
 ## Tests and reproduction
 Eight fixture tests cover leak/threshold/refractory semantics, directed delay, excitation/inhibition cancellation and zero signs, autapses, reset replay and unchanged measured counts, invalid inputs/CSR, an independent dense reference over 200 ticks, and accumulation beyond uint32 range without wrapping.
@@ -65,3 +67,25 @@ The Long pulse sensitivity suite extends observation to **600 model ticks** per 
 Each condition executes a full warmup, measurement and reset replay: 7,200 ticks total. Results include ten consecutive 60-tick spike bins, the final 60-tick count and last observed spike tick (zero-based, null if none). The histogram must sum to the total. Independent disconnected fixtures predict exactly four spikes per driven neuron, all on ticks 0, 3, 6 and 9, regardless of these interventions. The full graph baseline's first two bins must reproduce the earlier 120-tick pulse experiment.
 
 This is a finite-horizon parameter sensitivity assay. A zero final bin does not independently prove mathematical stability; persistent activity does not establish memory or biological plausibility. The 10/20 leak retention is an authored stronger-leak control, not a calibrated time constant. No physical timestep or neural gameplay mapping is selected by this assay. Cooperative scheduling and Stop/Unload semantics are unchanged.
+
+## Retained sign and timestep sensitivity
+
+`rtk proxy node scripts/lif_sensitivity.mjs` runs the developer-only assay in `brain/core/sensitivity.ts` and writes `data/male-cns-v1.0.sensitivity.json`. `--check` recomputes and compares the entire deterministic JSON without rewriting it; canonical verification runs this check. Generated graph data is required, with SHA-256 validation of CSR, neuron identity, annotation arrays and dictionaries. The report also pins implementation sources and the earlier mapping report. No timing measurements enter retained equality.
+
+All settings are **MODEL_ASSUMPTION**. The predeclared cross product contains four source-sign policies (all positive, alternating 100-index blocks, the exact inverse blocks, and all zero) and three temporal settings:
+
+| Setting | Step in arbitrary reference units | Retention per step | Refractory steps |
+|---|---:|---:|---:|
+| Baseline | 1 | 19/20 | 2 |
+| Stronger leak | 1 | 10/20 | 2 |
+| Coarse step | 2 | 361/400 | 1 |
+
+The coarse retention is exactly `(19/20)^2`. External current increments scale by step size; horizon and pulse duration stay fixed at 600 and 10 reference units. Pulse current is 1000 per reference unit at every 100th graph index. Transmission gain stays 1; zero signs disable outgoing current without changing measured edges. All other parameters remain LIF_V1. No neurotransmitter labels determine signs.
+
+**This is discrete implementation sensitivity, not timestep convergence.** Transmission delay stays one step and therefore doubles in reference units in the coarse condition. Threshold decisions, reset opportunities and integer truncation also differ; there is no continuous model against which to claim numerical accuracy. Neither arbitrary reference units nor model ticks are milliseconds or game frames.
+
+Each of 12 conditions retains a long pulse and eight mapped trials (two sides × annotated/three shuffles), totaling 108 trials per pass. Replay reverses condition, membership and stimulus execution order. Every stimulus starts with a complete model reset. All counts, bins, hashes, last-spike diagnostics and readouts must match by identity. Bins span 60 reference units, and both last step and last reference time are retained. The original baseline, stronger-leak and alternating pulse totals are executable anchors (2,318,764 / 6,722 / 9,057). Analytical disconnected fixtures predict 12 total spikes for three driven cells at step 1 versus 9 at step 2, ending at reference times 9 versus 8.
+
+Finite activity or silence does not establish biological memory, mathematical stability or preferred defaults. See POPULATION_MAPPING.md for the paired mapping evidence and its normalization limits.
+
+The retained pulse results expose an interaction between signs and retention: stronger leak ends positive-sign activity after 6,722 total spikes, but alternating signs still produce 140 spikes in the final bin (8,065 total). Inverting those blocks instead yields 6,676 total and zero final-bin spikes. The coarse positive condition yields 1,719,322 total / 192,984 final-bin spikes. These observations do not justify a general monotonic leak/stability claim; the complete 12-row evidence is retained.

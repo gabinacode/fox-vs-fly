@@ -4,6 +4,19 @@ import {ratePopulationRoles} from '../../../brain/core/rate_mapping';
 import {loadGraph,validateCatalog} from '../brain/connectome';
 import type {Observation} from '../../../brain/include/types';
 let brain:MaleCNSBrain|null=null;
+/** Ping-pong outbound copies so cached worker frames stay attached while UI receives transfers. */
+const activityPool:Uint8Array[]=[];const sensoryPool:Float32Array[]=[];const motorPool:Float32Array[]=[];
+let poolSlot=0;
+function takeActivity(src:Uint8Array){
+ const i=poolSlot%4;let out=activityPool[i];
+ if(!out||out.length!==src.length||out.buffer.byteLength===0)out=activityPool[i]=new Uint8Array(src.length);
+ out.set(src);return out;
+}
+function takeF32(pool:Float32Array[],src:Float32Array){
+ const i=poolSlot%4;let out=pool[i];
+ if(!out||out.length!==src.length||out.buffer.byteLength===0)out=pool[i]=new Float32Array(src.length);
+ out.set(src);return out;
+}
 self.onmessage=async(event:MessageEvent<{type?:string;base:string;identity:string;epoch:number;generation:number;observation:Observation}>)=>{
  const m=event.data;
  try{
@@ -22,7 +35,10 @@ self.onmessage=async(event:MessageEvent<{type?:string;base:string;identity:strin
    const populations=ratePopulationRoles(graph);self.postMessage({type:'ready',populations},{transfer:[populations.buffer]});return;
   }
   if(!brain)throw Error('Neural controller is not ready');
-  // Clone cached arrays: transfer would detach the frame needed for pause retries.
-  self.postMessage({epoch:m.epoch,frame:brain.step(m.observation,m.generation)});
+  // Keep MaleCNSBrain's cached arrays attached for pause retries; transfer outbound copies.
+  const frame=brain.step(m.observation,m.generation);
+  const activity=takeActivity(frame.activity),sensory_values=takeF32(sensoryPool,frame.sensory_values),motor_values=takeF32(motorPool,frame.motor_values);
+  poolSlot++;
+  self.postMessage({epoch:m.epoch,frame:{...frame,activity,sensory_values,motor_values}},{transfer:[activity.buffer,sensory_values.buffer,motor_values.buffer]});
  }catch(e){self.postMessage({type:'error',epoch:m.epoch,message:String(e)});}
 };

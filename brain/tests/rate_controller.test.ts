@@ -13,6 +13,23 @@ it('counts nonzero packed rates rather than spikes or propagation-threshold cros
  expect([...frame.activity]).toEqual([0,0,0,0,1,1,2,255,255,0,0,0]);
  expect(frame.active_neuron_count).toBe(5);
 });
+it('packs activity only on model steps and reuses the buffer on the held game frame',()=>{
+ const values=new Uint32Array(12);values[4]=128;
+ let packs=0;const model={count:12,reset(){},step(input:Uint32Array){return values;},packActivity(out:Uint8Array){packs++;out.set([0,0,0,0,1,0,0,0,0,0,0,0]);return 1;}};
+ const brain=new MaleCNSBrain(graph,model,calibration),a=brain.step(obs(0)),b=brain.step(obs(1));
+ expect(packs).toBe(1);expect(a.activity).toBe(b.activity);expect([...b.activity]).toEqual([0,0,0,0,1,0,0,0,0,0,0,0]);
+ brain.step(obs(2));expect(packs).toBe(2);
+});
+it('clears only prior drive indices before writing sparse sensory currents',()=>{
+ const seen:Uint32Array[]=[];
+ const model={count:12,reset(){},step(input:Uint32Array,driven?:Uint32Array,drivenCount?:number){
+  seen.push(Uint32Array.from(input));expect(drivenCount).toBeGreaterThan(0);expect(driven!.length).toBeGreaterThanOrEqual(drivenCount!);
+  return new Uint32Array(12);
+ }};
+ const brain=new MaleCNSBrain(graph,model,calibration);brain.step(obs(0,-40));brain.step(obs(1,40));brain.step(obs(2,40));
+ expect(seen).toHaveLength(2);
+ expect(seen[0].some(Boolean)).toBe(true);expect(seen[1].some(Boolean)).toBe(true);
+});
 it('neural readout tracks either side without unrelated actions; disconnecting edges removes controls',()=>{
  for(const x of [-40,40]){const model=new ChainModel(),brain=new MaleCNSBrain(graph,model,calibration);let frame;
   for(let tick=0;tick<60;tick++)frame=brain.step(obs(tick,x));expect(frame!.motor_values[x<0?0:1]).toBeGreaterThan(.95);expect([...frame!.motor_values.slice(2)]).toEqual([0,0,0]);expect(model.calls).toBe(30);

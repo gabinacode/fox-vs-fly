@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         cinematic: resolve(__dirname, 'cinematic/index.html'),
+        capture: resolve(__dirname, 'capture/index.html'),
       },
     },
   },

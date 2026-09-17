@@ -1,4 +1,5 @@
 import {it,expect} from 'vitest';
+import {packRateActivity} from '../../../brain/core/male_cns';
 import {activityByte,mapRateActivity} from './activity_display';
 it('fixed log scale preserves zero/endpoints and order without changing input',()=>{
  expect(activityByte(0,'log')).toBe(0);expect(activityByte(255,'log')).toBe(255);
@@ -12,4 +13,8 @@ it('holds the latest mapped rates exactly and clears old activity on a zero fram
  mapRateActivity(input,geometry,out,'linear');expect([...out]).toEqual([16,1]);
  mapRateActivity(new Uint8Array(3),geometry,out,'log');expect([...out]).toEqual([0,0]);
  expect(()=>mapRateActivity(new Uint8Array(2),geometry,out,'log')).toThrow('mismatch');
+});
+it('JS pack helper matches the documented rate display formula',()=>{
+ const rates=new Uint32Array([0,31,32,63,64,128,192,32704,65535]),out=new Uint8Array(rates.length);
+ expect(packRateActivity(rates,out)).toBe(5);expect([...out]).toEqual([0,0,0,0,1,1,2,255,255]);
 });

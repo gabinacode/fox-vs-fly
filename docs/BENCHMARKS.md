@@ -162,3 +162,29 @@ The 1,024-game state storage is 159,744 bytes, plus 16,384 bytes of controller i
 
 ## Controller V2 behavior and cost
 The full-graph stable rate model measured 17.46 ms per integration in six-stimulus calibration. Production integrates at 30 Hz with 60 Hz game frames. The timing-corrected stationary-opponent regression improves damage from the V1 value of 0 to 32, reduces jump requests from 13 to 0 and fastfall frames from 581 to 0, and preserves all Fly stocks. Reversal without reset ends at axis 999.9/1000. Full raw evidence: data/controller-behavior.json and data/rate-calibration.json. This is an authored sensor/calibrated readout improvement, not learned Melee skill or biological validation. Earlier LIF and neural-game timings describe V1 and remain historical baselines.
+
+## Neural scaling profile — 2026-09-14
+`node scripts/neural_scaling.mjs` measures induced CSR-prefix LIF cost at 1/64, 1/16, 1/4, 1/2 and full retained nodes, plus 1/2/4 sequential SparseLif replicas sharing one ~50% prefix, and one full-graph WASM rate sparse-drive probe. Warmup 8 + measure 40 ticks; all-positive signs and index-strided drive remain MODEL_ASSUMPTION. Deterministic spike/edge hashes and memory accounting are retained in `data/neural-scaling.json`; `./scripts/verify.sh` runs `--check` on that section only. Wall times below are one local host snapshot, not gates.
+
+| Prefix nodes | Silent ms/tick | Sparse ms/tick | Dense ms/tick |
+|---:|---:|---:|---:|
+| 2,604 | 0.056 | 0.069 | 0.153 |
+| 10,418 | 0.022 | 0.085 | 0.593 |
+| 41,675 | 0.087 | 0.400 | 2.708 |
+| 83,350 | 0.169 | 0.725 | 5.942 |
+| 166,700 | 0.363 | 2.306 | 13.224 |
+
+| Shared-CSR LIF replicas (~50% prefix, sparse) | Wall ms / tick (all replicas) |
+|---:|---:|
+| 1 | 0.726 |
+| 2 | 1.387 |
+| 4 | 2.717 |
+
+Full-graph WASM rate sparse drive measured 5.887 ms/tick in the same run. Four replicas on a shared ~50% CSR need ~98.7 MiB accounted bytes versus ~375.7 MiB if each copy owned the CSR. Sequential wall time still scales roughly with replica count, so graph sharing saves memory, not CPU work.
+
+**Decision:** do not add shared-graph batches, worker threads, SIMD or GPU for the shipped single-match browser path. Neural integration—not `GameBatch`—is the limiter; one Fly controller does not justify SharedArrayBuffer / WebGPU complexity. Shared-graph batches remain relevant only for multi-environment research/training. Prefix slices are engineering cuts, not biological modules. Implementation-only browser cuts (transferable worker frames, pack-once-per-model-step, sparse WASM input writes, log LUT / dirty GL upload, throttled motor/sensory React bars) leave dynamics and packing semantics unchanged.
+
+## Phone interactive budget — 2026-09-17
+Narrow (≤720 CSS px) or coarse-pointer clients use a presentation-only budget: 30 canvas draws/sec, 1× canvas backing stores and 10 React HUD publications/sec. The game still advances deterministic frames toward 60 Hz and V2 still integrates at 30 Hz; neither changes its state or skips a simulation frame. A 390×844 Chrome regression confirms profile selection, layout, spurious-blur immunity and automatic resume after a visibility pause. This is not a physical-phone throughput measurement.
+
+The full host Chrome suite passed 26/27 tests in this run. Its pre-existing neural-combat performance gate observed 13–18 game fps after graph load and failed the `>=50 game fps` assertion; the isolated rerun reached the damage/tick/running checks before failing only that gate. The other browser tests passed. This remains host-dependent evidence that sustained real-phone controller throughput still needs measurement, not evidence of a 60 fps phone guarantee.

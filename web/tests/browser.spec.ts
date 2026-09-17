@@ -33,7 +33,7 @@ test('worker failure pauses gameplay',async({page})=>{
  await page.addInitScript(()=>{const Original=window.Worker;window.Worker=class extends Original {constructor(url:string|URL,options?:WorkerOptions){super(url,options);setTimeout(()=>this.dispatchEvent(new ErrorEvent('error',{message:'test failure'})),1000);}};});
  await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();await page.getByRole('button',{name:'PLAY',exact:true}).click();await expect(page.getByRole('alert')).toContainText('worker stopped');await expect(page.getByTestId('hud')).toHaveAttribute('data-running','false');
 });
-test('mobile layout has no horizontal overflow',async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/mobile.png',fullPage:true});});
+test('mobile layout has no horizontal overflow',async({page})=>{await page.setViewportSize({width:390,height:844});await page.goto('/?controller=dummy');await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();await expect(page.getByTestId('performance')).toContainText('phone mode');expect(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);await page.screenshot({path:'test-results/mobile.png',fullPage:true});});
 test('mobile browser blur does not pause an active match',async({page})=>{
  await page.setViewportSize({width:390,height:844});
  await page.goto('/?controller=dummy');
@@ -45,6 +45,20 @@ test('mobile browser blur does not pause an active match',async({page})=>{
  await page.evaluate(()=>window.dispatchEvent(new Event('blur')));
  await expect(hud).toHaveAttribute('data-running','true');
  await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(before);
+});
+test('mobile page hide pauses safely and resumes when visible without a click',async({page})=>{
+ await page.setViewportSize({width:390,height:844});
+ await page.goto('/?controller=dummy');
+ await expect(page.getByRole('button',{name:'PLAY',exact:true})).toBeEnabled();
+ await page.getByRole('button',{name:'PLAY',exact:true}).click();
+ const hud=page.getByTestId('hud');
+ await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(5);
+ await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'hidden'});document.dispatchEvent(new Event('visibilitychange'));});
+ await expect(hud).toHaveAttribute('data-running','false');
+ const pausedTick=Number(await hud.getAttribute('data-tick'));
+ await page.evaluate(()=>{Object.defineProperty(document,'visibilityState',{configurable:true,value:'visible'});document.dispatchEvent(new Event('visibilitychange'));});
+ await expect(hud).toHaveAttribute('data-running','true');
+ await expect.poll(async()=>Number(await hud.getAttribute('data-tick'))).toBeGreaterThan(pausedTick);
 });
 test('mobile touch stick moves Fox and HIT attacks',async({page})=>{
  await page.setViewportSize({width:390,height:844});

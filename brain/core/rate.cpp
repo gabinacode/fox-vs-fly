@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <cmath>
 namespace flybrain {
-RateNetwork::RateNetwork(uint32_t n,uint32_t e):offsets(n+1),targets(e),weights(e),input(n),values(n),next(n),totals(n),sums(n){}
+RateNetwork::RateNetwork(uint32_t n,uint32_t e):offsets(n+1),targets(e),weights(e),input(n),values(n),next(n),totals(n),sums(n),packed(n){}
 bool RateNetwork::initialize(){
  const auto n=values.size();if(!n||offsets[0]||offsets[n]!=targets.size())return false;
  std::fill(totals.begin(),totals.end(),0);
@@ -12,7 +12,7 @@ bool RateNetwork::initialize(){
  }
  reset();return true;
 }
-void RateNetwork::reset(){std::fill(values.begin(),values.end(),0);std::fill(input.begin(),input.end(),0);std::fill(sums.begin(),sums.end(),0);}
+void RateNetwork::reset(){std::fill(values.begin(),values.end(),0);std::fill(input.begin(),input.end(),0);std::fill(sums.begin(),sums.end(),0);std::fill(packed.begin(),packed.end(),0);}
 void RateNetwork::step(){
  std::fill(sums.begin(),sums.end(),0);
  for(uint32_t i=0;i<values.size();i++)if(values[i]>=32){
@@ -24,5 +24,13 @@ void RateNetwork::step(){
   next[i]=uint32_t(std::min(65535.0,std::floor(.25*values[i]+.60*incoming+std::min(input[i],uint32_t(65535)))));
  }
  values.swap(next);
+}
+uint32_t RateNetwork::pack_activity(){
+ uint32_t active=0;
+ for(uint32_t i=0;i<values.size();i++){
+  const uint32_t byte=uint32_t(std::min(255.0,std::round(double(values[i])/128.0)));
+  packed[i]=uint8_t(byte);if(byte)active++;
+ }
+ return active;
 }
 }

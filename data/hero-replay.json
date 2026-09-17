@@ -1,0 +1,22 @@
+{
+  "format": "FOX_VS_FLY_HERO_REPLAY_V1",
+  "id": "feint-L-then-R",
+  "seed": 42,
+  "controller": "MaleCNSBrain V2 stable rate + calibrated readout",
+  "graphIdentity": "6b6b40c3bddf84b1281ef0b18db06927c2bf61c5f4cb32a4219ec9b7839dc2e5",
+  "foxInputRle": [[-1000, 0, 18], [1000, 0, 90], [0, 0, 60]],
+  "markers": {
+    "foxApproach": 18,
+    "foxApproachVisibleState": 19,
+    "modelActivityDelta": 19,
+    "modelActivityVisibleState": 20,
+    "sensoryChange": 32,
+    "sensoryVisibleState": 33,
+    "motorLeftAttack": 36,
+    "flyAttackRequest": 36,
+    "flyAttackVisibleState": 37,
+    "flyHitFoxFor8Percent": 42,
+    "nativeHitlagFrames": [42, 43, 44, 45, 46]
+  },
+  "honesty": "The Fox input is scripted. Fly controls and displayed activity are produced by the real authored MaleCNS V2 controller over measured wiring. Interfaces and dynamics are modeling assumptions, not measured biological behavior."
+}
