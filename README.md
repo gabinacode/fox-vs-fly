@@ -2,6 +2,12 @@
 
 # FOX / FLY
 
+[![CI](https://github.com/gabinacode/fox-vs-fly/actions/workflows/ci.yml/badge.svg)](https://github.com/gabinacode/fox-vs-fly/actions/workflows/ci.yml)
+![C++17](https://img.shields.io/badge/C%2B%2B-17-blue)
+![WebAssembly](https://img.shields.io/badge/WebAssembly-WASM-654FF0)
+![React](https://img.shields.io/badge/React-19-61DAFB)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+
 ### Can you beat a fruit fly brain at Melee?
 
 A playable fighting-game experiment where you control Fox and a modeled neural circuit controls Fly.

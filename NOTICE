@@ -1,0 +1,14 @@
+Fox vs Fly — code under MIT (see LICENSE).
+
+Third-party data (not covered by the MIT license of this repository's code):
+
+MaleCNS v1.0 wiring graph, annotations, and soma coordinates
+  License: CC-BY-4.0
+  Attribution: MaleCNS: FlyEM (HHMI Janelia), University of Cambridge, MRC LMB, Google Research
+  Sources: https://male-cns.janelia.org/download/
+  Provenance in this repo: docs/FLY_CONNECTOME.md, data/male-cns-v1.0.sources.json,
+  data/male-cns-v1.0.report.json
+
+Processed/packaged MaleCNS artifacts retain CC-BY-4.0 obligations (attribution).
+Authored neural dynamics, game sensors/readout, and Melee-like simulation code
+are original to this project and MIT-licensed; they are not biological claims.

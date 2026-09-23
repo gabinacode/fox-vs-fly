@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Native CMake configure + build
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j $(nproc)
+      - name: Install web deps
+        run: npm --prefix web ci
+
+  tests:
+    name: tests
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Native build + ctest
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j $(nproc)
+          ctest --test-dir build --output-on-failure
+      - name: Python preprocess deps + unit tests
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install -r brain/preprocess/requirements.txt
+          .venv/bin/python -m unittest discover -s brain/tests -p 'test_*.py'
+      - name: TypeScript + policy tests
+        run: |
+          npm --prefix web ci
+          npm --prefix web test
+          node --test scripts/match_evaluation.test.mjs
+
+  browser:
+    name: browser
+    runs-on: ubuntu-latest
+    needs: tests
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 4.0.15
+      - name: WASM + production web build
+        run: |
+          npm --prefix web ci
+          ./scripts/build_wasm.sh
+          # requires packaged connectome under web/public/connectome-graph/
+          # restore from cache/artifact or fail with a clear message
+          npm --prefix web run build
+      - name: Playwright browsers
+        run: npx --prefix web playwright install --with-deps chromium
+      - name: Browser suite
+        run: npm --prefix web run test:browser
