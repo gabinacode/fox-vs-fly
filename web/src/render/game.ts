@@ -117,6 +117,6 @@ export function drawGame(canvas:HTMLCanvasElement,s:Snapshot,opts?:{clean?:boole
     c.fillStyle=vignette;c.fillRect(0,0,w,h);
   }
   if(!opts?.clean){
-    c.font='10px monospace';c.fillStyle='#9ab0a8';c.textAlign='left';c.fillText('THE CLEARING / 001',20,h-20);c.textAlign='right';c.fillText('3 STOCKS · NO ITEMS',w-20,h-20);
+    c.font='10px monospace';c.fillStyle='#9ab0a8';c.textAlign='left';c.fillText('THE CLEARING / 001',20,h-20);
   }
 }
