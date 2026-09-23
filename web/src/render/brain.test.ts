@@ -15,4 +15,13 @@ describe('gameplay-coupled brain rendering',()=>{
   expect(reaction.pitch).toBeLessThan(0);
   expect(frame.motor_values[3]).toBeCloseTo(.8);
  });
+ it('keeps reaction magnitudes inside the shader-safe presentation envelope',()=>{
+  const fighter={x:0,y:0,vx:0,vy:0,facing:1,grounded:1,action:0,action_frame:0,damage:0,stocks:3,hitlag:0,hitstun:0,jumps:2,invulnerable:0};
+  const far={tick:1,fox:{...fighter,x:200},fly:{...fighter,x:-200,vy:40},winner:-1,hash:1} as Snapshot;
+  const idle={version:1,tick:1,activity:new Uint8Array(),active_neuron_count:0,sensory_values:new Float32Array(6),motor_values:new Float32Array(5)} satisfies BrainFrame;
+  const reaction=brainReaction(far,idle,true);
+  expect(Math.abs(reaction.yaw-.12)).toBeLessThanOrEqual(.2);
+  expect(Math.abs(reaction.pitch)).toBeLessThanOrEqual(.075);
+  expect(reaction.drive).toBe(0);
+ });
 });

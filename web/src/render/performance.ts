@@ -11,17 +11,28 @@ export interface InteractiveRenderProfile {
   constrained:boolean;
 }
 
+/** True for Blink (Chrome/Edge/Brave). ANGLE point sprites on 139k somas cost far more than Firefox. */
+export function blinkPointSpriteHeavy(globalObj:{chrome?:unknown;navigator?:{userAgent?:string;userAgentData?:{brands?:{brand:string}[]}}}=globalThis):boolean {
+  if(globalObj.chrome)return true;
+  const brands=globalObj.navigator?.userAgentData?.brands;
+  if(brands?.some(b=>/Chromium|Google Chrome|Microsoft Edge|Brave/i.test(b.brand)))return true;
+  const ua=globalObj.navigator?.userAgent??'';
+  return /Chrome\/\d/.test(ua)&&!/Firefox\//.test(ua);
+}
+
 /** Keep simulation timing untouched while reducing redundant presentation work.
  * Asset backing-store resolution stays at the desktop 2× cap so sprites/stage stay sharp. */
-export function interactiveRenderProfile(width:number,coarsePointer:boolean,logicalCores=8):InteractiveRenderProfile {
+export function interactiveRenderProfile(width:number,coarsePointer:boolean,logicalCores=8,pointSpriteHeavy=false):InteractiveRenderProfile {
   const mobile=coarsePointer||width<=720;
-  const constrained=mobile||(logicalCores>0&&logicalCores<=4);
+  const constrained=mobile||pointSpriteHeavy||(logicalCores>0&&logicalCores<=4);
   return {
     pixelRatioCap:2,
-    gameFrameIntervalMs:mobile?1000/30:0,
-    brainFrameIntervalMs:1000/(constrained?15:30),
+    // Cap match draws at 60 Hz even on 120 Hz displays; sim target stays 60 Hz.
+    gameFrameIntervalMs:mobile?1000/30:1000/60,
+    // Blink/ANGLE: 10 Hz soma paint — each POINTS draw can still cost milliseconds on Metal.
+    brainFrameIntervalMs:1000/(pointSpriteHeavy?10:constrained?15:30),
     uiIntervalMs:100,
     mobile,
-    constrained,
+    constrained:constrained||pointSpriteHeavy,
   };
 }

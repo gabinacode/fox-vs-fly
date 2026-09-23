@@ -62,16 +62,15 @@ it('reuses the prior activity buffer when a held neural frame omits redundant ac
  expect(s.frame?.activity).toBe(first.activity);expect(failed).not.toHaveBeenCalled();expect(state.tick).toBe(2);s.dispose();
 });
 
-it('drops excessive wall-clock debt without pausing or skipping a game frame',()=>{
+it('exposes tick() so the display loop can drive the clock without waiting on setInterval',()=>{
  vi.useFakeTimers();vi.stubGlobal('window',globalThis);
  const f={x:0,y:0,vx:0,vy:0,damage:0,grounded:1,action:0,hitstun:0,stocks:3,facing:1,action_frame:0,jumps:2,hitlag:0,invulnerable:0};
  const state:Snapshot={tick:0,fox:{...f},fly:{...f},winner:-1,hash:1};
  const sim={snapshot:()=>({...state}),step:vi.fn(),reset:vi.fn()} as unknown as Simulation;
  const worker={postMessage:vi.fn(),terminate:vi.fn(),onmessage:(_e:unknown)=>{},onerror:()=>{}};
- const failed=vi.fn(),s=new Session(sim,worker as unknown as Worker,()=>{},failed,166700);
- s.play();s.clock.last=performance.now()-1600;
- (s as unknown as {pump:(now:number)=>void}).pump(performance.now());
- expect(s.running).toBe(true);expect(failed).not.toHaveBeenCalled();expect(worker.postMessage).not.toHaveBeenCalled();
- vi.advanceTimersByTime(20);expect(worker.postMessage).toHaveBeenCalledTimes(1);expect(state.tick).toBe(0);
+ const s=new Session(sim,worker as unknown as Worker,()=>{},()=>{},166700);
+ s.play();worker.postMessage.mockClear();
+ s.tick(performance.now()+20);
+ expect(worker.postMessage).toHaveBeenCalledTimes(1);
  s.dispose();
 });

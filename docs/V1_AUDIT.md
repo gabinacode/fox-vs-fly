@@ -26,4 +26,4 @@ The original brief, not the most recent small milestone, defines completion. Thi
 
 Completion evidence: the deployment service reports success for the exact V2 runtime commit recorded in data/public-deployment.json, with public access. Fresh native Chrome, without cookies or account login, loaded the V2 rate WASM and calibration assets, showed the Recovery need sensor, dealt 8% damage to a stationary Fox, paused and reset correctly, and emitted no page errors. The canonical suite passed native 5/5, TypeScript 40/40, Python 17/17, and Chrome 22/22 checks. This proves the bounded public implementation while preserving its explicit fidelity, learning, acceleration, and scientific limitations.
 
-Public URL: https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site
+Current public URL: https://fox-vs-fly.pages.dev/ (provided 2026-09-23; current availability was not verified by this audit)

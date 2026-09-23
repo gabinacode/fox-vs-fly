@@ -16,6 +16,7 @@ __pycache__/
 data/generated/
 data/.generated-*/
 web/public/connectome-graph/
+assets/fighters/previews/
 
 # LinkedIn brain cinematic PNG/video export (regenerable)
 web/cinematic-output/

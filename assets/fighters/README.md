@@ -9,3 +9,4 @@ Regenerate public PNGs:
 ```
 
 Outputs land in `web/public/assets/fighters/{fox,fly}/` with a shared canvas size and feet-centered anchor per fighter.
+The extractor also writes visual QA images to `assets/fighters/previews/`; these are regenerable and gitignored.

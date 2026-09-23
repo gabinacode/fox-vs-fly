@@ -16,7 +16,7 @@ import {parseCaptureFlags,isCaptureMode} from './capture/config';
 import {getCapturePreset,getCaptureShot} from './capture/presets';
 import {installCaptureDriver} from './capture/driver';
 import {brainCameraState,gameCameraState} from './capture/camera';
-import {interactiveRenderProfile} from './render/performance';
+import {interactiveRenderProfile,blinkPointSpriteHeavy} from './render/performance';
 import {expandInputRle} from './capture/types';
 import {runtimeAssetUrl} from './capture/runtime_url';
 import {TouchControls} from './components/TouchControls';
@@ -39,7 +39,7 @@ function App(){
  const [captureStatus,setCaptureStatus]=useState(capturePreset?`Capture ${capturePreset.preset} · preparing…`:'');
  const [touchInput,setTouchInput]=useState<PlayerInput|null>(null);
  useEffect(()=>{
-  const renderProfile=interactiveRenderProfile(window.innerWidth,window.matchMedia('(pointer: coarse)').matches,navigator.hardwareConcurrency);
+  const renderProfile=interactiveRenderProfile(window.innerWidth,window.matchMedia('(pointer: coarse)').matches,navigator.hardwareConcurrency,blinkPointSpriteHeavy());
   let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null;
   let lastGame=performance.now()-renderProfile.gameFrameIntervalMs,lastBrain=performance.now()-renderProfile.brainFrameIntervalMs,statTime=performance.now(),draws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null,hudAt=0,lastRunning=false;
   let resumeAfterVisibility=false;
@@ -109,12 +109,20 @@ function App(){
    }
    const render=(now:number)=>{const s=session.current;if(!s||disposed)return;
     if(captureFlags.exportMode){raf=requestAnimationFrame(render);return;}
+    // Post/apply neural work before any canvas paint so ANGLE soma draws cannot delay the controller.
+    if(!capturePreset)s.tick(now);
     if(capturePreset&&captureDraw){const start=captureShot?.startTick??capturePreset.suggestedCaptureWindow.startTick,end=captureShot?.endTick??capturePreset.suggestedCaptureWindow.endTick;captureDraw(Math.max(0,Math.min(end-start,s.state.tick-start)),end-start+1);lastGame=lastBrain=now;draws++;}
     else{
      const gameDue=!renderProfile.gameFrameIntervalMs||now-lastGame>=renderProfile.gameFrameIntervalMs;
-     const brainDue=now-lastBrain>=renderProfile.brainFrameIntervalMs;
+     // Prefer neural apply over soma paint: Chrome ANGLE draws of 139k points delay worker onmessage.
+     const brainDue=!s.pending&&now-lastBrain>=renderProfile.brainFrameIntervalMs;
      if(gameDue){drawGame(gameCanvas.current!,s.state,{pixelRatioCap:renderProfile.pixelRatioCap});lastGame=now;draws++;}
-     if(brainDue){if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}renderer!.syncGameplay(s.state,s.frame,s.running);renderer!.draw(now-lastBrain);lastBrain=now;}
+     if(brainDue){
+      const t0=performance.now();
+      if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}renderer!.syncGameplay(s.state,s.frame,s.running);renderer!.draw(now-lastBrain);
+      // Back off when a draw still took too long so the next neural reply is not delayed.
+      lastBrain=now+Math.max(0,performance.now()-t0-6)*3;
+     }
     }
     if(now-statTime>=1000){const dt=(now-statTime)/1000;if(s.running)setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.max(0,Math.round(((s.frame?.model_tick??s.state.tick)-lastModelTick)/dt))});lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;statTime=now;draws=0;}
     raf=requestAnimationFrame(render);

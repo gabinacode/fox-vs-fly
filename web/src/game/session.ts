@@ -66,5 +66,7 @@ export class Session {
  play(){if(this.state.winner!==-1)this.reset();this.clock.reset(performance.now());this.running=true;this.change();}
  pause(){this.running=false;this.epoch++;this.pending=false;this.input.clear();this.change();}
  reset(){this.pause();this.generation++;this.sim.reset();this.state=this.sim.snapshot();this.frame=null;this.change();}
+ /** Drive the fixed clock from the display loop so Chrome GPU work cannot starve setInterval. */
+ tick(now=performance.now()){this.pump(now);}
  dispose(){window.clearInterval(this.timer);this.worker.terminate();this.input.clear();}
 }

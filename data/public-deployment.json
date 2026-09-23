@@ -1,11 +1,13 @@
 {
-  "date": "2026-09-13",
-  "url": "https://fox-vs-fly.hipcoo-micha-0857.chatgpt.site",
-  "access": "public",
-  "deployment_status": "succeeded",
-  "deployed_commit": "9af59b21a25189bcecf247ecde8a813d9125f301",
-  "version": 2,
-  "anonymous_chrome": {
+  "current_url": "https://fox-vs-fly.pages.dev/",
+  "current_url_status": "Provided by the user on 2026-09-23; not verified by this environment.",
+  "last_verified_deployment": {
+    "date": "2026-09-13",
+    "access": "public",
+    "deployment_status": "succeeded",
+    "deployed_commit": "9af59b21a25189bcecf247ecde8a813d9125f301",
+    "version": 2,
+    "anonymous_chrome": {
     "controller_version": 2,
     "calibration_version": 2,
     "verified_loaded_assets": [
@@ -17,12 +19,13 @@
     "stationary_fox_damage": "8%",
     "pause_reset": true,
     "page_errors": []
-  },
-  "canonical_tests": {
-    "native": 5,
-    "typescript": 40,
-    "python": 17,
-    "chrome": 22
+    },
+    "canonical_tests": {
+      "native": 5,
+      "typescript": 40,
+      "python": 17,
+      "chrome": 22
+    }
   },
   "static_assets": 223,
   "archive_sha256": "e93ca132743a16757845d33191c2e112e3657d8de5602a39838bebc392469199"
