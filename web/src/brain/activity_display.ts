@@ -16,3 +16,13 @@ export function mapRateActivity(activity:Uint8Array,geometry:BrainGeometry,outpu
  }else if(indices)for(let i=0;i<n;i++)output[i]=LOG_LUT[activity[indices[i]]];
  else for(let i=0;i<n;i++)output[i]=LOG_LUT[activity[i]];
 }
+/** Map only the fixed display sample, leaving non-rendered geometry slots at zero. */
+export function mapSampledRateActivity(activity:Uint8Array,geometry:BrainGeometry,output:Uint8Array,sample:Uint32Array,scale:ActivityScale){
+ if(activity.length!==(geometry.neuron_count??geometry.positions.length/3)||output.length!==geometry.positions.length/3)throw Error('Brain frame/geometry mismatch');
+ const indices=geometry.visual_indices;
+ if(scale==='linear'){
+  if(indices)for(let j=0;j<sample.length;j++){const i=sample[j];output[i]=activity[indices[i]];}
+  else for(let j=0;j<sample.length;j++){const i=sample[j];output[i]=activity[i];}
+ }else if(indices)for(let j=0;j<sample.length;j++){const i=sample[j];output[i]=LOG_LUT[activity[indices[i]]];}
+ else for(let j=0;j<sample.length;j++){const i=sample[j];output[i]=LOG_LUT[activity[i]];}
+}

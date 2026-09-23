@@ -35,22 +35,22 @@ function App(){
  const rendererRef=useRef<BrainRenderer|null>(null);
  const [geometry,setGeometry]=useState<BrainGeometry|null>(null),[geometryWarning,setGeometryWarning]=useState('');
  const gameCanvas=useRef<HTMLCanvasElement>(null),brainCanvas=useRef<HTMLCanvasElement>(null),compositeCanvas=useRef<HTMLCanvasElement>(null),session=useRef<Session|null>(null);
- const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[frame,setFrame]=useState<BrainFrame|null>(null),[running,setRunning]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState('Loading'),[fps,setFps]=useState({game:0,render:0,brain:0}),[science,setScience]=useState(false),[preparation,setPreparation]=useState('Loading simulation and anatomy…');
+ const [snapshot,setSnapshot]=useState<Snapshot|null>(null),[frame,setFrame]=useState<BrainFrame|null>(null),[running,setRunning]=useState(false),[error,setError]=useState(''),[mode,setMode]=useState('Loading'),[fps,setFps]=useState({game:0,render:0,brain:0,neural:0}),[science,setScience]=useState(false),[preparation,setPreparation]=useState('Loading simulation and anatomy…');
  const [captureStatus,setCaptureStatus]=useState(capturePreset?`Capture ${capturePreset.preset} · preparing…`:'');
  const [touchInput,setTouchInput]=useState<PlayerInput|null>(null);
  useEffect(()=>{
   const renderProfile=interactiveRenderProfile(window.innerWidth,window.matchMedia('(pointer: coarse)').matches,navigator.hardwareConcurrency,blinkPointSpriteHeavy());
   let worker:Worker|null=null;let disposed=false,raf=0,renderer:BrainRenderer|null=null;
-  let lastGame=performance.now()-renderProfile.gameFrameIntervalMs,lastBrain=performance.now()-renderProfile.brainFrameIntervalMs,statTime=performance.now(),draws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null,hudAt=0,lastRunning=false;
+  let lastGame=performance.now()-renderProfile.gameFrameIntervalMs,lastBrain=performance.now()-renderProfile.brainFrameIntervalMs,statTime=performance.now(),draws=0,brainDraws=0,lastTick=0,lastModelTick=0,lastFrame:BrainFrame|null=null,hudAt=0,lastRunning=false;
   let resumeAfterVisibility=false;
   let captureDispose:(()=>void)|null=null,captureDraw:((localFrame:number,totalFrames:number)=>void)|null=null;
   // The canvas loop reads Session directly; React scoreboard and signal bars publish at ~10 Hz.
-  const change=()=>{const s=session.current;if(!s||disposed)return;const now=performance.now();if(s.running!==lastRunning){lastRunning=s.running;statTime=now;lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;draws=0;}setRunning(s.running);if(s.running&&now-hudAt<renderProfile.uiIntervalMs)return;hudAt=now;setSnapshot(s.state);setFrame(s.frame);};
+  const change=()=>{const s=session.current;if(!s||disposed)return;const now=performance.now();if(s.running!==lastRunning){lastRunning=s.running;statTime=now;lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;draws=brainDraws=0;}setRunning(s.running);if(s.running&&now-hudAt<renderProfile.uiIntervalMs)return;hudAt=now;setSnapshot(s.state);setFrame(s.frame);};
   const failed=(message:string)=>{resumeAfterVisibility=false;setError(message);};
   const init=async()=>{try{
    const [sim,loaded]=await Promise.all([loadSimulation(),loadGeometry(),preloadFighterSprites(),preloadStage()]);if(disposed)return;
    const geometry=loaded.geometry;setGeometry(geometry);setGeometryWarning(loaded.warning);
-   renderer=new BrainRenderer(brainCanvas.current!,geometry,!dummy,renderProfile.pixelRatioCap);rendererRef.current=renderer;setMode(`${renderer.mode}${renderProfile.mobile?' · phone mode':renderProfile.constrained?' · reduced-work mode':''}`);
+   renderer=new BrainRenderer(brainCanvas.current!,geometry,!dummy,renderProfile.pixelRatioCap,capturePreset?1:renderProfile.brainPointStride);rendererRef.current=renderer;setMode(`${renderer.mode}${renderProfile.mobile?' · phone mode':renderProfile.constrained?' · reduced-work mode':''}`);
    if(capturePreset)renderer.setClearColor(0,0,0);
    worker=dummy?new Worker(new URL('./workers/brain.worker.ts',import.meta.url),{type:'module'}):new Worker(new URL('./workers/male_cns.worker.ts',import.meta.url),{type:'module'});
    if(!dummy){
@@ -114,17 +114,19 @@ function App(){
     if(capturePreset&&captureDraw){const start=captureShot?.startTick??capturePreset.suggestedCaptureWindow.startTick,end=captureShot?.endTick??capturePreset.suggestedCaptureWindow.endTick;captureDraw(Math.max(0,Math.min(end-start,s.state.tick-start)),end-start+1);lastGame=lastBrain=now;draws++;}
     else{
      const gameDue=!renderProfile.gameFrameIntervalMs||now-lastGame>=renderProfile.gameFrameIntervalMs;
-     // Prefer neural apply over soma paint: Chrome ANGLE draws of 139k points delay worker onmessage.
-     const brainDue=!s.pending&&now-lastBrain>=renderProfile.brainFrameIntervalMs;
+     // Prefer neural apply over soma paint: full-cloud/population ANGLE draws can delay worker onmessage.
+     // Reduced Blink batches are short enough to keep their animation cadence during worker waits.
+     // Full-cloud draws still yield to an outstanding neural reply so they cannot starve input.
+     const brainDue=now-lastBrain>=renderProfile.brainFrameIntervalMs&&(!s.pending||renderProfile.brainPointStride>1);
      if(gameDue){drawGame(gameCanvas.current!,s.state,{pixelRatioCap:renderProfile.pixelRatioCap});lastGame=now;draws++;}
      if(brainDue){
-      const t0=performance.now();
-      if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}renderer!.syncGameplay(s.state,s.frame,s.running);renderer!.draw(now-lastBrain);
+      if(!s.frame&&lastFrame){renderer!.clear();lastFrame=null;}if(s.frame&&s.frame!==lastFrame){renderer!.ingest(s.frame);lastFrame=s.frame;}renderer!.syncGameplay(s.state,s.frame,s.running);
+      const t0=performance.now();renderer!.draw(now-lastBrain);brainDraws++;
       // Back off when a draw still took too long so the next neural reply is not delayed.
       lastBrain=now+Math.max(0,performance.now()-t0-6)*3;
      }
     }
-    if(now-statTime>=1000){const dt=(now-statTime)/1000;if(s.running)setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.max(0,Math.round(((s.frame?.model_tick??s.state.tick)-lastModelTick)/dt))});lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;statTime=now;draws=0;}
+    if(now-statTime>=1000){const dt=(now-statTime)/1000;if(s.running)setFps({game:Math.max(0,Math.round((s.state.tick-lastTick)/dt)),render:Math.round(draws/dt),brain:Math.round(brainDraws/dt),neural:Math.max(0,Math.round(((s.frame?.model_tick??s.state.tick)-lastModelTick)/dt))});lastTick=s.state.tick;lastModelTick=s.frame?.model_tick??s.state.tick;statTime=now;draws=brainDraws=0;}
     raf=requestAnimationFrame(render);
    };raf=requestAnimationFrame(render);
   }catch(e){worker?.terminate();if(!disposed)setError(`Unable to start the game: ${String(e)}`);}};void init();
@@ -210,7 +212,7 @@ function App(){
    {dummy?<ConnectomeLoader geometry={geometry}/>:<p className="geometry-note">Neural graph loads automatically before PLAY. <a href="?controller=dummy">Open the synthetic demo and optional research diagnostics</a>.</p>}
    {error&&<div className="error" role="alert">{error}</div>}
   </main>
-  <footer><span><i className="dot"/> DETERMINISTIC · 60 HZ TARGET</span><span data-testid="performance">{fps.game} game fps <b>/</b> {fps.render} render fps <b>/</b> {fps.brain} neural fps <b>/</b> {mode}</span><span>Original fighter sprites. Approximate mechanics.</span></footer>
+  <footer><span><i className="dot"/> DETERMINISTIC · 60 HZ TARGET</span><span data-testid="performance">{fps.game} game fps <b>/</b> {fps.render} render fps <b>/</b> {fps.brain} brain fps <b>/</b> {fps.neural} neural fps <b>/</b> {mode}</span><span>Original fighter sprites. Approximate mechanics.</span></footer>
  </div>;
 }
 createRoot(document.getElementById('root')!).render(<App/>);

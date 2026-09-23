@@ -29,3 +29,8 @@ export function mapActivity(activity:Uint8Array,geometry:BrainGeometry,output:Ui
  if(activity.length!==(geometry.neuron_count??geometry.positions.length/3)||output.length!==geometry.positions.length/3)throw Error('Brain frame/geometry mismatch');
  const indices=geometry.visual_indices;for(let i=0;i<output.length;i++)output[i]=Math.max(output[i],activity[indices?indices[i]:i]);
 }
+/** Preserve dummy/LIF peak persistence while mapping only a renderer's fixed point sample. */
+export function mapSampledActivity(activity:Uint8Array,geometry:BrainGeometry,output:Uint8Array,sample:Uint32Array){
+ if(activity.length!==(geometry.neuron_count??geometry.positions.length/3)||output.length!==geometry.positions.length/3)throw Error('Brain frame/geometry mismatch');
+ const indices=geometry.visual_indices;for(let j=0;j<sample.length;j++){const i=sample[j];output[i]=Math.max(output[i],activity[indices?indices[i]:i]);}
+}

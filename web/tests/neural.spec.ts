@@ -59,6 +59,8 @@ test('neural opponent approaches and hits a stationary Fox',async({page})=>{
  await expect.poll(async()=>Number(await page.getByTestId('hud').getAttribute('data-tick')),{timeout:15000}).toBeGreaterThan(240);
  await expect(page.getByTestId('hud')).toHaveAttribute('data-running','true');
  await expect.poll(async()=>Number((await page.getByTestId('performance').innerText()).split(' ')[0]),{timeout:5000}).toBeGreaterThanOrEqual(50);
- console.log('Calibrated controller performance:',await page.getByTestId('performance').innerText());
+ const performance=await page.getByTestId('performance').innerText(),brainFps=Number(performance.match(/\/ (\d+) brain fps/)?.[1]??0);
+ expect(brainFps).toBeGreaterThanOrEqual(20);
+ console.log('Calibrated controller performance:',performance);
  await page.screenshot({path:'test-results/neural-combat.png',fullPage:true});
 });
