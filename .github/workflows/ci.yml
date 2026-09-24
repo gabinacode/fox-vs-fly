@@ -73,12 +73,19 @@ jobs:
         uses: mymindstorm/setup-emsdk@v14
         with:
           version: 4.0.15
+      - name: Cache packaged connectome graph
+        id: graph-cache
+        uses: actions/cache@v4
+        with:
+          path: web/public/connectome-graph
+          key: connectome-graph-${{ hashFiles('data/male-cns-v1.0.transport.json') }}
+      - name: Restore packaged connectome graph
+        run: python3 scripts/restore_graph_package.py
       - name: WASM + production web build
         run: |
           npm --prefix web ci
           ./scripts/build_wasm.sh
-          # requires packaged connectome under web/public/connectome-graph/
-          # restore from cache/artifact or fail with a clear message
+          # prebuild verifies web/public/connectome-graph against the transport lock
           npm --prefix web run build
       - name: Playwright browsers
         run: npx --prefix web playwright install --with-deps chromium

@@ -68,12 +68,26 @@ def package_graph(source, destination):
     print(json.dumps(catalog, indent=2))
     return catalog
 
+def catalog_matches_lock(catalog):
+    lock = ROOT / 'data/male-cns-v1.0.transport.json'
+    if not lock.exists():
+        return True
+    expected = json.loads(lock.read_text())
+    keys = ('format', 'release', 'nodes', 'edges', 'graph_identity',
+            'download_bytes', 'array_bytes', 'manifest')
+    return all(expected.get(k) == catalog.get(k) for k in keys)
+
 if __name__ == '__main__':
     source, destination = ROOT / 'data/generated', ROOT / 'web/public/connectome-graph'
     if (source / 'manifest.json').exists():
         package_graph(source, destination)
     elif (destination / 'catalog.json').exists():
         c = json.loads((destination / 'catalog.json').read_text())
+        if not catalog_matches_lock(c):
+            raise SystemExit(
+                'Packaged graph does not match data/male-cns-v1.0.transport.json; '
+                'run python3 scripts/restore_graph_package.py or regenerate.'
+            )
         manifest_path = destination / c['manifest']['file']
         if not manifest_path.resolve().is_relative_to(destination.resolve()) or sha(manifest_path) != c['manifest']['sha256']:
             raise ValueError('Invalid packaged graph manifest')
